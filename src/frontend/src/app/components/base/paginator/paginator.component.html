@@ -1,0 +1,29 @@
+<div class="paginator">
+    <div class="buttons">
+        <button mat-icon-button class="icon-button" (click)="firstPage()">
+            <mat-icon>first_page</mat-icon>
+        </button>
+        <button mat-icon-button class="icon-button" (click)="previousPage()">
+            <mat-icon>chevron_left</mat-icon>
+        </button>
+        <div class="info">
+            Página {{ pageNumber }} de {{ getTotalPages() }}
+        </div>
+        <button mat-icon-button class="icon-button" (click)="nextPage()">
+            <mat-icon>chevron_right</mat-icon>
+        </button>
+        <button mat-icon-button class="icon-button" (click)="lastPage()">
+            <mat-icon>last_page</mat-icon>
+        </button>
+    </div>
+    <div class="page-size-selector">
+        <span>Itens por página: </span>
+        <mat-select [(value)]="itemsPerPage" (selectionChange)="changeItemsPerPage($event)">
+            <mat-option [value]="5">5</mat-option>
+            <mat-option [value]="10">10</mat-option>
+            <mat-option [value]="15">15</mat-option>
+            <mat-option [value]="25">25</mat-option>
+            <mat-option [value]="50">50</mat-option>
+        </mat-select>
+    </div>
+</div>

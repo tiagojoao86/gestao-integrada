@@ -1,0 +1,43 @@
+.mat-mdc-table {
+    background-color: var(--transparent) !important;
+
+    .mat-mdc-header-cell {
+        color: var(--text-color) !important;
+        font-weight: 500 !important;
+        font-size: var(--text-size) !important;
+        border: 2px solid var(--transparency);
+        background-color: var(--background-color) !important;
+    }
+
+    .mat-mdc-cell {
+        color: var(--text-color) !important;
+        border: 2px solid var(--transparency);
+    }
+
+    .mat-mdc-row {
+        background-color: var(--item-transparency) !important;
+        height: 48px;
+    }
+
+    .mat-mdc-header-row {
+        height: 48px !important;
+    }
+
+    .actions {
+        display: flex;
+        
+        .mat-icon {
+            color: var(--text-color);
+        }
+    }
+
+    .no-row {
+        padding: 5px;
+        background: var(--background-color);        
+        border: 2px solid var(--transparency);
+    }    
+}
+
+.mat-sort-header-stem {
+    color: var(--text-color) !important;
+}

@@ -1,0 +1,9 @@
+<app-base [titulo]="titulo">
+    <div body-content>
+        <table-component [columnDefinition]="colunas" [dataSource]="listaUsuarios" [actions]="acoes" (sortingEvent)="ordenar($event)"></table-component>       
+    </div>
+
+    <div footer-content>
+        <paginator-component (paginationEvent)="paginar($event)" [itemsPerPage]="itensPorPagina" [totalRegisters]="totalRegistros"></paginator-component>
+    </div>
+</app-base>

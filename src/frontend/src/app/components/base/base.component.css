@@ -1,0 +1,44 @@
+.toolbar-base {
+    height: 50px;
+    padding: 5px;
+    background-color: var(--transparency);
+    color: var(--text-color);
+
+    .mat-icon {
+        color: var(--text-color);
+    }
+
+    display: flex;
+
+    .titulo {
+        flex-grow: 1;
+        font-size: var(--subtitulo-size);
+        padding: 0px 5px;
+    }
+
+    .acoes {
+        display: flex;
+    }
+}
+
+.body-base {
+    background-color: var(--transparency);
+    color: var(--text-color);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+    flex-grow: 1;
+}
+
+.footer-base {
+    background-color: var(--transparency);
+    color: var(--text-color);    
+    min-height: 5%;
+    padding: 5px;
+}
+
+.component-base {
+    display: flex;
+    flex-direction: column;
+    height: 100%;    
+}

@@ -1,0 +1,28 @@
+.grupo-menu {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.grupo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: var(--text-color);
+    mat-icon {
+        color: var(--text-color);        
+    }
+
+    .nome {
+        margin-left: 15px;
+        font-size: var(--text-size);
+        margin-top: 1px;
+    }
+
+    margin-top: 5px;    
+}
+
+.grupo:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
