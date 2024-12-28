@@ -1,21 +1,21 @@
 <div class="component-base">
-    <mat-toolbar class="toolbar-base" *ngIf="!ocultarToolbar">
-        <div class="botao-voltar">
-            <button mat-icon-button aria-label="Botão voltar" class="icon-button" (click)="voltar()">
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-        </div>
-        <div class="titulo">
-            <span>{{ titulo }}</span>
-        </div>
-        <div class="acoes">
-            <div *ngFor="let acao of acoes" aria-label="Botão ações do usuário">
-                <button mat-icon-button (click)="acao.acao()" class="icon-button">
-                    <mat-icon>{{ acao.icone }}</mat-icon>
-                </button>
+    <p-toolbar class="toolbar-base" *ngIf="!ocultarToolbar">
+        <ng-template #start>
+            <p-button (click)="voltar()">
+                <span class="material-icons">chevron_left</span>
+            </p-button>
+            <div class="titulo">
+                <span>{{ titulo }}</span>
             </div>
-        </div>
-    </mat-toolbar>
+        </ng-template>
+        <ng-template #end>
+            <div *ngFor="let acao of acoes" aria-label="Botão ações do usuário">
+                <p-button mat-icon-button (click)="acao.acao()" class="icon-button">
+                    <span class="material-icons">{{ acao.icone }}</span>
+                </p-button>
+            </div>
+        </ng-template>
+    </p-toolbar>
     <div class="body-base">
         <ng-content select="[body-content]"></ng-content>
     </div>

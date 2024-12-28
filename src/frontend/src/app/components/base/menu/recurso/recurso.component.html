@@ -1,8 +1,8 @@
 
 <div class="recurso" (click)="goTo(recurso.url)" *ngIf="recurso">
-    <mat-icon>
-        {{ recurso.icone }}
-    </mat-icon>
+    <i>
+        <span class="material-icons" style="font-size: 2.5rem;">{{ recurso.icone }}</span>
+    </i>
     <div class="nome">
         {{ recurso.nome }}
     </div>

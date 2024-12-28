@@ -1,12 +1,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
 
 @Component({
     selector: 'paginator-component',
-    imports: [CommonModule, MatIconModule, MatButtonModule, MatSelectModule],
+    imports: [CommonModule, ButtonModule, SelectModule, FormsModule],
     templateUrl: './paginator.component.html',
     styleUrl: './paginator.component.css'
 })
@@ -17,6 +17,8 @@ export class PaginatorComponent {
     @Input('pageNumber') pageNumber: number = 1;
     @Input('totalRegisters') totalRegisters: number = 1;
     @Input('itemsPerPage') itemsPerPage = PaginationEvent.DEFAULT_PAGE_SIZE;
+
+    itemsPerPageList = [5, 10, 15, 25, 50];
 
     firstPage() {
         if (this.pageNumber === 1) {
@@ -62,7 +64,8 @@ export class PaginatorComponent {
         };
     }
 
-    changeItemsPerPage(event: MatSelectChange) {
+    changeItemsPerPage(event: any) {
+        console.log(event);
         this.itemsPerPage = event.value;
         this.paginationEvent.emit(this.getPaginationEvent());
     }

@@ -1,14 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, EventEmitter, Input, LOCALE_ID, OnInit, Output, ViewChild } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
-import { MatTableModule } from "@angular/material/table";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Ordem, OrdemDirecao } from "../../../model/requisicao-paginada";
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'table-component',
-    imports: [CommonModule, MatTableModule, MatIconModule, MatButtonModule, MatSortModule],
+    imports: [CommonModule, TableModule, ButtonModule],
     templateUrl: './table.component.html',
     styleUrl: './table.component.css',
     providers: []
@@ -32,11 +30,18 @@ export class TableComponent implements OnInit {
         }
     }
 
-    sortChange(sortState: Sort) {
-        let propriedade = sortState.active;
-        let direcao = sortState.direction === 'asc' ? OrdemDirecao.ASC : OrdemDirecao.DESC;
+    sortChange(sortState: any) {        
+        let ordem: Ordem[] = [];
 
-        this.sortingEvent.emit([{ propriedade, direcao }]);
+        sortState.multisortmeta.forEach((sort: any) => {
+            let propriedade = sort.field;
+            let direcao = sort.order === 1 ? OrdemDirecao.ASC : OrdemDirecao.DESC;
+
+            ordem.push({ propriedade, direcao });
+        });
+        
+
+        this.sortingEvent.emit(ordem);
     }
 }
 

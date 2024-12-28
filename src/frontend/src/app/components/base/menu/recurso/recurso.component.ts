@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
 @Component({
     selector: 'recurso',
-    imports: [MatIcon, CommonModule],
+    imports: [CommonModule],
     templateUrl: './recurso.component.html',
     styleUrl: './recurso.component.css'
 })

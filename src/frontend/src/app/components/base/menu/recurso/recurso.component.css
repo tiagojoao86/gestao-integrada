@@ -6,12 +6,9 @@
     align-items: center;
     justify-content: center;    
     cursor: pointer;
-
-    mat-icon {
-        font-size: 40px;
-        height: 40px;
-        width: 40px;
-    }
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    padding: 15px 15px 15px 15px;
 
     .nome {
         margin-top: 5px;
@@ -21,5 +18,9 @@
 .recurso:hover {    
     color: var(--inverted-text-color);
     background-color: var(--secondary-color);
-    box-shadow: 4px 4px 2px 0px var(--background-color);
+
+    i {
+        color: var(--inverted-text-color);
+    }
+
 }

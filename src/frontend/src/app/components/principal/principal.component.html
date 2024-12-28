@@ -1,44 +1,40 @@
 <div class="principal">
     <p-toolbar class="toolbar-principal">
-        <div class="botao-principal">
-            <p-button icon="pi pi-bars" aria-label="Save" (click)="toogleDrawer()" />
-            <button mat-icon-button aria-label="Menu principal" class="icon-button-toolbar-principal" (click)="toogleDrawer()">
-                <i class="pi pi-bars" style="font-size: 2rem"></i>
-            </button>
-        </div>    
-        <div class="titulo">
-            <span>{{ tituloApp }}</span>
-        </div>
-        <div class="acoes">        
-            <button mat-icon-button aria-label="Botão ações do usuário" class="icon-button-toolbar-principal">
-                <mat-icon>person</mat-icon>
-            </button>
-        </div>    
+        <ng-template #start>
+            <p-button (click)="goToHome()" class="logo-button">
+                <img src="/assets/img/logo.png" width="60px">
+            </p-button>            
+        </ng-template>    
+        <ng-template #end>
+            <p-button severity="secondary">
+                <span class="material-icons" style="font-size: 2.0rem;" (click)="toogleDrawer()">person</span>
+            </p-button>
+        </ng-template>
     </p-toolbar>
     <div class="principal-conteudo">
-        <div class="drawer" [@openClose]="showDrawer ? 'open' : 'closed'">
+        <div class="side-menu">
+            <div class="itens">                
+                <menu-principal-item *ngFor="let item of menu" [grupo]="item" [somenteIcone]="true"></menu-principal-item>
+            </div>
+        </div>        
+        <div class="conteudo">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="drawer" [@openClose]="showDrawer ? 'open' : 'closed'">        
             <ng-container *ngIf="showDrawer">
                 <div class="titulo">
                     <div class="foto">
-                        <img src="assets/img/useravatar.png"/>
+                        <img src="assets/img/useravatar.png" />
                     </div>
                     <div class="dados">
                         <div class="info">Usuário da Silva</div>
                         <div class="info">usuario.silva&#64;email.com</div>
                     </div>
                     <div class="close">
-                        <button mat-icon-button aria-label="Fechar menu lateral" class="icon-button-menu-lateral" (click)="toogleDrawer()">
-                            <mat-icon>close</mat-icon>
-                        </button>
+                        <p-button icon="pi pi-times" severity="info" (click)="toogleDrawer()" />
                     </div>
                 </div>
-                <div class="itens">
-                    <menu-principal-item *ngFor="let item of menu" [grupo]="item" (onGoToEvent)="onGoToEvent()"></menu-principal-item>
-                </div>
             </ng-container>
-        </div>
-        <div class="conteudo">
-            <router-outlet></router-outlet>
         </div>
     </div>
 </div>

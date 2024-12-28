@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { GrupoMenu, MenuPrincipalItemComponent } from '../base/menu/menu-principal-item/menu-principal-item.component';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -14,10 +14,10 @@ import { ButtonModule } from 'primeng/button';
     animations: [
         trigger('openClose', [
             state('open', style({
-                transform: 'translateX(0)'
+                transform: 'translateY(0)'
             })),
             state('closed', style({
-                transform: 'translateX(-100%)'
+                transform: 'translateY(-200%)'
             })),
             transition('open => closed', [animate('0.2s')]),
             transition('closed => open', [animate('0.2s')]),
@@ -30,10 +30,15 @@ export class PrincipalComponent {
 
   tituloApp: string = 'Gestão Integrada';
 
+  openDrawerMenu = {
+    nome: 'Menu',
+    icone: 'menu',    
+  }
+
   menu: GrupoMenu[] = [
     {
-      nome: 'Cadastros',        
-      icone: 'manufacturing',
+      nome: 'Cadastros',
+      icone: 'widgets',
       url: '/cadastro'
     },
     {
@@ -48,12 +53,18 @@ export class PrincipalComponent {
     }
   ];
 
+  constructor(private router: Router) { }
+
   toogleDrawer() {    
     this.showDrawer = !this.showDrawer;
   }
 
   onGoToEvent() {
     this.toogleDrawer();
+  }
+
+  goToHome() {
+    this.router.navigate(["/"]);
   }
   
 }

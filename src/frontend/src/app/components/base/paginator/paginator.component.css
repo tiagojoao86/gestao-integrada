@@ -3,7 +3,6 @@
     justify-items: center;
     justify-content: center;
     align-items: center;
-    width: 98vw;
 
     .buttons {
         display: flex;
@@ -35,32 +34,4 @@
             text-align: center;
         }
     }
-}
-
-::ng-deep .mat-mdc-select-arrow {
-    color: var(--text-color) !important;
-}
-
-::ng-deep .mat-mdc-select-panel {
-    background-color: var(--background-color) !important;
-}
-
-::ng-deep .mat-mdc-option {
-    color: var(--text-color) !important;
-}
-
-::ng-deep .mdc-list-item--selected {
-    background-color: var(--secondary-color) !important;
-}
-
-::ng-deep .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
-    color: var(--inverted-text-color) !important;
-}
-
-::ng-deep .mat-mdc-option .mat-pseudo-checkbox {
-    --mat-minimal-pseudo-checkbox-selected-checkmark-color: var(--inverted-text-color) !important;
-}
-
-::ng-depp .mat-sort-header-arrow {
-    color: var(--text-color) !important;
 }

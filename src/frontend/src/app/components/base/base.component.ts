@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, LOCALE_ID, ViewEncapsulation } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { Location } from '@angular/common'
+import { Component, Input} from '@angular/core';
+import { Location } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { Toolbar } from 'primeng/toolbar';
 
 @Component({
     selector: 'app-base',
-    imports: [MatToolbarModule, MatButtonModule, MatIconModule, CommonModule],
+    imports: [CommonModule, ButtonModule, Toolbar],
     templateUrl: './base.component.html',
     styleUrl: './base.component.css'
 })
