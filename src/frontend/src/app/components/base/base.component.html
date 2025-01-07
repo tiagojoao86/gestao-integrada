@@ -1,25 +1,33 @@
 <div class="component-base">
-    <p-toolbar class="toolbar-base" *ngIf="!ocultarToolbar">
-        <ng-template #start>
-            <p-button (click)="voltar()">
-                <span class="material-icons">chevron_left</span>
-            </p-button>
-            <div class="titulo">
-                <span>{{ titulo }}</span>
-            </div>
-        </ng-template>
-        <ng-template #end>
-            <div *ngFor="let acao of acoes" aria-label="Botão ações do usuário">
-                <p-button mat-icon-button (click)="acao.acao()" class="icon-button">
-                    <span class="material-icons">{{ acao.icone }}</span>
-                </p-button>
-            </div>
-        </ng-template>
-    </p-toolbar>
-    <div class="body-base">
-        <ng-content select="[body-content]"></ng-content>
-    </div>
-    <div class="footer-base" *ngIf="!ocultarFooter">
-        <ng-content select="[footer-content]"></ng-content>
-    </div>
+  <p-toolbar class="toolbar-base" *ngIf="!ocultarToolbar">
+    <ng-template #start>
+      <p-button (click)="voltar()">
+        <span class="material-icons">chevron_left</span>
+      </p-button>
+      <div class="titulo">
+        <span>{{ titulo }}</span>
+      </div>
+    </ng-template>
+    <ng-template #end>
+      <div *ngFor="let acao of acoes" aria-label="Botão ações do usuário">
+        <div class="badge" (click)="acao.acao()" [title]="acao.titulo">
+          <i *ngIf="acao.valor" pBadge [value]="acao.valor">
+            <span class="material-icons">{{ acao.icone }}</span>
+          </i>
+          <i *ngIf="!acao.valor">
+            <span class="material-icons">{{ acao.icone }}</span>
+          </i>
+        </div>
+        <!-- <p-button mat-icon-button (click)="acao.acao()" class="icon-button">
+          <span class="material-icons">{{ acao.icone }}</span>
+        </p-button> -->
+      </div>
+    </ng-template>
+  </p-toolbar>
+  <div class="body-base">
+    <ng-content select="[body-content]"></ng-content>
+  </div>
+  <div class="footer-base" *ngIf="!ocultarFooter">
+    <ng-content select="[footer-content]"></ng-content>
+  </div>
 </div>

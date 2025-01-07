@@ -1,9 +1,24 @@
-<app-base [titulo]="titulo">
-    <div body-content>
-        <table-component [columnDefinition]="colunas" [dataSource]="listaUsuarios" [actions]="acoes" (sortingEvent)="ordenar($event)"></table-component>       
-    </div>
+<app-base [titulo]="titulo" [acoes]="acoesTela">
+  <div body-content>
+    <filtro-component
+      [filtros]="filtros"
+      [hidden]="ocultarFiltros"
+      (filtrar)="filtrar($event)"
+      (cancelar)="cancelar()"
+    ></filtro-component>
+    <table-component
+      [columnDefinition]="colunas"
+      [dataSource]="listaUsuarios"
+      [actions]="acoesTabela"
+      (sortingEvent)="ordenar($event)"
+    ></table-component>
+  </div>
 
-    <div footer-content>
-        <paginator-component (paginationEvent)="paginar($event)" [itemsPerPage]="itensPorPagina" [totalRegisters]="totalRegistros"></paginator-component>
-    </div>
+  <div footer-content>
+    <paginator-component
+      (paginationEvent)="paginar($event)"
+      [itemsPerPage]="itensPorPagina"
+      [totalRegisters]="totalRegistros"
+    ></paginator-component>
+  </div>
 </app-base>

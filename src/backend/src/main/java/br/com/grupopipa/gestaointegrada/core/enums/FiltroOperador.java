@@ -8,5 +8,8 @@ public enum FiltroOperador {
     MAIOR_IGUAL,
     MENOR_IGUAL,
     CONTEM,
-    IN;
+    NAO_CONTEM,
+    IN,
+    NOT_IN,
+    ENTRE;
 }

@@ -4,11 +4,7 @@
             <th *ngFor="let col of columnDefinition" [pSortableColumn]="col.name" pResizableColumn>
                 <span class="header">{{ col.label }}</span><p-sortIcon [field]="col.name" />
             </th>
-            <th *ngIf="actions" style="display: flex;">
-                <div class="actions">
-                    Ações
-                </div>                
-            </th>
+            <th *ngIf="actions">Ações</th>
         </tr>        
     </ng-template>
     <ng-template #body let-rowData let-columns="columnDefinition">
@@ -16,7 +12,7 @@
             <td *ngFor="let col of columnDefinition">
                 {{ col.getValue(rowData) }}
             </td>
-            <td *ngIf="actions" style="display: flex;">
+            <td *ngIf="actions">
                 <div class="actions">
                     <ng-container *ngFor="let action of actions">
                         <p-button (click)="action.action(rowData)">

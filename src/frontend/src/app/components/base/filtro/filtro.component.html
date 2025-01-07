@@ -1,0 +1,66 @@
+<div class="filtro-component">
+  <span class="titulo">Filtros</span>
+  <div class="seletor" [formGroup]="seletorForm">
+    <div class="formulario-grupo-input w-25">
+      <label for="campo">Adicionar filtro</label>
+      <p-select
+        class="w-100"
+        [options]="filtros"
+        (onChange)="adicionarFiltro($event.value)"
+        id="campo"
+        formControlName="campo"
+        placeholder="Selecione um campo"
+      />
+    </div>
+    <div
+      class="formulario-grupo-input w-15"
+      *ngIf="filtrosSelecionados.length > 1"
+    >
+      <label for="campo">Operador Lógico</label>
+      <p-select
+        class="w-100"
+        [options]="operadoresLogicos"
+        formControlName="operadorLogico"
+      />
+    </div>
+  </div>
+  <div [formGroup]="form" class="filtros">
+    <div *ngFor="let filtro of filtrosSelecionados" class="item">
+      <div class="label">
+        <span class="nome">{{ filtro.label }}:</span>
+        <div class="valores">
+          <p-select
+            [formControlName]="filtro.nome + '_operacao'"
+            [options]="getOperacoes(filtro.tipoCampoFiltro)"
+          />
+          <input
+            *ngIf="filtro.tipoCampoFiltro === TipoCampoFiltro.TEXTO"
+            pInputText
+            [id]="filtro.nome + '_id'"
+            [formControlName]="filtro.nome"
+            autocomplete="off"
+          />
+          <p-datepicker
+            class="w-full"
+            [style]="{ width: '100%' }"
+            *ngIf="filtro.tipoCampoFiltro === TipoCampoFiltro.DATA"
+            [formControlName]="filtro.nome"
+          />
+        </div>
+        <p-button (click)="removerFiltro(filtro)">
+          <span class="material-icons">close</span>
+        </p-button>
+      </div>
+    </div>
+  </div>
+  <div class="acoes">
+    <button pButton class="secundario" (click)="onCancelar()">
+      <span class="material-icons">close</span>
+      <span pButtonLabel>Cancelar</span>
+    </button>
+    <button pButton class="primario" (click)="onFiltrar()">
+      <span class="material-icons">search</span>
+      <span pButtonLabel>Filtrar</span>
+    </button>
+  </div>
+</div>
