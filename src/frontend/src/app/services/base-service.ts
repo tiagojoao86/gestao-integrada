@@ -42,7 +42,7 @@ export class BaseService<G, D> {
       .pipe(take(1));
   }
 
-  getUrl(contexto?: string): string {
+  getUrl(contexto: string = ''): string {
     return this.urlBase + this.dominio + contexto;
   }
 

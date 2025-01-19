@@ -3,7 +3,7 @@
 -- grant all privileges on schema pipa to pipa;
 
 CREATE TABLE usuario (
-    id uuid,
+    id uuid primary key,
     nome VARCHAR,
     login VARCHAR,
     senha VARCHAR,

@@ -1,40 +1,54 @@
 <div class="principal">
-    <p-toolbar class="toolbar-principal">
-        <ng-template #start>
-            <p-button (click)="goToHome()" class="logo-button">
-                <img src="/assets/img/logo.png" width="60px">
-            </p-button>            
-        </ng-template>    
-        <ng-template #end>
-            <p-button severity="secondary">
-                <span class="material-icons" style="font-size: 2.0rem;" (click)="toogleDrawer()">person</span>
-            </p-button>
-        </ng-template>
-    </p-toolbar>
-    <div class="principal-conteudo">
-        <div class="side-menu">
-            <div class="itens">                
-                <menu-principal-item *ngFor="let item of menu" [grupo]="item" [somenteIcone]="true"></menu-principal-item>
-            </div>
-        </div>        
-        <div class="conteudo">
-            <router-outlet></router-outlet>
-        </div>
-        <div class="drawer" [@openClose]="showDrawer ? 'open' : 'closed'">        
-            <ng-container *ngIf="showDrawer">
-                <div class="titulo">
-                    <div class="foto">
-                        <img src="assets/img/useravatar.png" />
-                    </div>
-                    <div class="dados">
-                        <div class="info">Usuário da Silva</div>
-                        <div class="info">usuario.silva&#64;email.com</div>
-                    </div>
-                    <div class="close">
-                        <p-button icon="pi pi-times" severity="info" (click)="toogleDrawer()" />
-                    </div>
-                </div>
-            </ng-container>
-        </div>
+  <p-toolbar class="toolbar-principal">
+    <ng-template #start>
+      <p-button (click)="goToHome()" class="logo-button">
+        <img src="/assets/img/logo.png" width="60px" />
+      </p-button>
+    </ng-template>
+    <ng-template #end>
+      <p-button severity="secondary">
+        <span
+          class="material-icons"
+          style="font-size: 2rem"
+          (click)="toogleDrawer()"
+          >person</span
+        >
+      </p-button>
+    </ng-template>
+  </p-toolbar>
+  <div class="principal-conteudo">
+    <div class="side-menu">
+      <div class="itens">
+        <menu-principal-item
+          *ngFor="let item of menu"
+          [grupo]="item"
+          [somenteIcone]="true"
+        ></menu-principal-item>
+      </div>
     </div>
+    <div class="conteudo">
+      <messages></messages>
+      <router-outlet></router-outlet>
+    </div>
+    <div class="drawer" [@openClose]="showDrawer ? 'open' : 'closed'">
+      <ng-container *ngIf="showDrawer">
+        <div class="titulo">
+          <div class="foto">
+            <img src="assets/img/useravatar.png" />
+          </div>
+          <div class="dados">
+            <div class="info">Usuário da Silva</div>
+            <div class="info">usuario.silva&#64;email.com</div>
+          </div>
+          <div class="close">
+            <p-button
+              icon="pi pi-times"
+              severity="info"
+              (click)="toogleDrawer()"
+            />
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 </div>

@@ -5,10 +5,11 @@ import { GrupoMenu, MenuPrincipalItemComponent } from '../base/menu/menu-princip
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
+import { MessagesComponent } from '../base/messages/messages.component';
 
 @Component({
     selector: 'principal-component',
-    imports: [RouterModule, CommonModule, MenuPrincipalItemComponent, Toolbar, ButtonModule],
+    imports: [RouterModule, CommonModule, MenuPrincipalItemComponent, Toolbar, ButtonModule, MessagesComponent],
     templateUrl: './principal.component.html',
     styleUrl: './principal.component.css',
     animations: [

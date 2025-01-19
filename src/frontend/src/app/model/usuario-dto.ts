@@ -2,9 +2,10 @@ export interface UsuarioDTO {
   id: string;
   nome: string;
   login: string;
-  criadoEm: Date;
+  senha: string;
+  criadoEm?: Date;
   atualizadoEm?: Date;
-  criadoPor: string;
+  criadoPor?: string;
   atualizadoPor?: string;
 }
 
@@ -23,6 +24,11 @@ export class UsuarioDTOBuilder {
 
   login(login: string): UsuarioDTOBuilder {
     this.usuarioDTO.login = login;
+    return this;
+  }
+
+  senha(senha: string): UsuarioDTOBuilder {
+    this.usuarioDTO.senha = senha;
     return this;
   }
 
