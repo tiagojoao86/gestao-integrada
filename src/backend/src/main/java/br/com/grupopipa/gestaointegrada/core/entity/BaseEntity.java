@@ -1,8 +1,10 @@
 package br.com.grupopipa.gestaointegrada.core.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
+import br.com.grupopipa.gestaointegrada.core.Session;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,11 +37,24 @@ public abstract class BaseEntity {
         LocalDateTime now = LocalDateTime.now();
         this.criadoEm = now;
         this.atualizadoEm = now;
+        this.criadoPor = Session.getUser();
     }
 
     @PreUpdate
     public void update() {
-        this.atualizadoEm = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        String user = Session.getUser();
+
+        if (Objects.isNull(criadoEm)) {
+            this.criadoEm = now;
+        }
+
+        if (Objects.isNull(this.criadoPor)) {
+            this.criadoPor = user;
+        }
+
+        this.atualizadoEm = now;
+        this.atualizadoPor = user;
     }
 
 }

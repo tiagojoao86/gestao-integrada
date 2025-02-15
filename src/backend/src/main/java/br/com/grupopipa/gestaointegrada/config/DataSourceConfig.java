@@ -21,7 +21,10 @@ public class DataSourceConfig {
 
     public static final String POSTGRES_DRIVER = "org.postgresql.Driver";
 
-    private static final String ENTITY_PACKAGE = "br.com.grupopipa.gestaointegrada.core.entity";
+    private static final String[] ENTITY_PACKAGES = new String[] {
+            "br.com.grupopipa.gestaointegrada.core.entity",
+            "br.com.grupopipa.gestaointegrada.cadastro.entity"
+    };
 
     @Value("${spring.datasource.url}")
     private String dbUrl;
@@ -54,15 +57,20 @@ public class DataSourceConfig {
         vendorAdapter.setShowSql(showSql);
 
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.physical_naming_strategy",
-                "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
-        properties.put("hibernate.implicit_naming_strategy",
-                "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy");
+        // properties.put("hibernate.physical_naming_strategy",
+        // "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+        // properties.put("hibernate.implicit_naming_strategy",
+        // "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy");
+        properties.put("hibernate.show_sql", "true");
+        properties.put("hibernate.format_sql", "true");
+        properties.put("hibernate.type.descriptor.sql.BasicBinder", "TRACE");
+        properties.put("logging.level.org.hibernate.SQL", "DEBUG");
+        properties.put("logging.level.org.hibernate.orm.jdbc.bind", "TRACE");
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        // factory.setJpaPropertyMap(properties);
-        factory.setPackagesToScan(ENTITY_PACKAGE);
+        factory.setJpaPropertyMap(properties);
+        factory.setPackagesToScan(ENTITY_PACKAGES);
         factory.setDataSource(dataSource());
         return factory;
     }

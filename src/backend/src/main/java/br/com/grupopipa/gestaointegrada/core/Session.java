@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Session {
 
-    public String getUser() {
+    public static String getUser() {
         // TODO: implements
         return "";
     }

@@ -2,6 +2,10 @@ package br.com.grupopipa.gestaointegrada.core.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import br.com.grupopipa.gestaointegrada.core.business.CrudBusiness;
 import br.com.grupopipa.gestaointegrada.core.dto.DTO;
 import br.com.grupopipa.gestaointegrada.core.dto.GridDTO;
-import br.com.grupopipa.gestaointegrada.core.dto.RequisicaoPaginada;
+import br.com.grupopipa.gestaointegrada.core.dto.OrderDTO;
+import br.com.grupopipa.gestaointegrada.core.dto.PageRequest;
 import br.com.grupopipa.gestaointegrada.core.exception.EntidadeNaoEncontradaException;
 
 import java.util.UUID;
@@ -33,9 +38,12 @@ public abstract class BaseRest<D extends DTO, G extends GridDTO> {
     protected CrudBusiness<D, G> business;
 
     @PostMapping(R_QUERY)
-    public Response list(@RequestBody RequisicaoPaginada requisicao) {
+    public Response list(@RequestBody PageRequest request) {
         try {
-            return ok(business.list(requisicao));
+            Sort sort = Sort.by(request.getOrder().stream().map(OrderDTO::getOrder).toList());
+            Pageable pageable = org.springframework.data.domain.PageRequest.of(request.getPage(), request.getSize(),
+                    sort);
+            return ok(business.list(request.getFilter(), pageable));
         } catch (Exception e) {
             return internalServerError(String.format("Causa: %s - Mensagem: %s", e.getCause(), e.getMessage()));
         }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AcaoToolbarCadastro, BaseComponent } from '../../base/base.component';
 import { UsuarioService } from '../../../services/usuario-service';
-import { Ordem, RequisicaoPaginada } from '../../../model/requisicao-paginada';
+import { Order, PageRequest } from '../../../model/page-request';
 import { UsuarioGridDTO } from '../../../model/usuario-grid-dto';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
@@ -14,11 +14,11 @@ import {
   PaginatorComponent,
 } from '../../base/paginator/paginator.component';
 import {
-  FiltroCampo,
+  FilterProperty,
   FiltroComponent,
-  TipoCampoFiltro,
-} from '../../base/filtro/filtro.component';
-import { Filtro } from '../../../model/filtro';
+  FilterType,
+} from '../../base/filter/filter.component';
+import { FilterDTO, FilterLogicOperator } from '../../../model/filter-dto';
 import { Router } from '@angular/router';
 
 @Component({
@@ -38,10 +38,10 @@ export class UsuariosComponent {
   titulo: string = 'Cadastro de usuários';
 
   itensPorPagina = PaginationEvent.DEFAULT_PAGE_SIZE;
-  totalRegistros = 0;
-  ocultarFiltros = true;
+  totalElements = 0;
+  hideFilters = true;
 
-  listaUsuarios: UsuarioGridDTO[] = [];
+  usuariosList: UsuarioGridDTO[] = [];
 
   colunas: DataSourceColumn[] = [
     {
@@ -102,25 +102,30 @@ export class UsuariosComponent {
     },
   ];
 
-  filtros: FiltroCampo[] = [
+  filtros: FilterProperty[] = [
     {
-      nome: 'login',
+      property: 'login',
       label: 'Login',
-      tipoCampoFiltro: TipoCampoFiltro.TEXTO,
+      filterType: FilterType.TEXTO,
     },
     {
-      nome: 'nome',
+      property: 'nome',
       label: 'Nome',
-      tipoCampoFiltro: TipoCampoFiltro.TEXTO,
+      filterType: FilterType.TEXTO,
     },
     {
-      nome: 'criadoEm',
+      property: 'criadoEm',
       label: 'Criado em',
-      tipoCampoFiltro: TipoCampoFiltro.DATA,
+      filterType: FilterType.DATA,
     },
   ];
 
-  requisicao = new RequisicaoPaginada(null, this.itensPorPagina, 1, []);
+  request = new PageRequest(
+    { filterLogicOperator: FilterLogicOperator.AND.getKey(), items: [] },
+    this.itensPorPagina,
+    0,
+    []
+  );
 
   constructor(
     private service: UsuarioService,
@@ -131,41 +136,41 @@ export class UsuariosComponent {
   }
 
   listarUsuarios() {
-    this.service.list(this.requisicao).subscribe((response) => {
+    this.service.list(this.request).subscribe((response) => {
       if (response.body) {
-        this.listaUsuarios = response.body.dados;
-        this.totalRegistros = response.body.totalRegistros;
+        this.usuariosList = response.body.content;
+        this.totalElements = response.body.totalElements;
       }
     });
   }
 
-  ordenar(ordenacao: Ordem[]) {
-    this.requisicao.ordenacao = ordenacao;
+  ordenar(order: Order[]) {
+    this.request.order = order;
     this.listarUsuarios();
   }
 
-  paginar(paginacao: PaginationEvent) {
-    this.requisicao.paginaNumero = paginacao.pageNumber;
-    this.requisicao.paginaTamanho = paginacao.itemsPerPage;
+  paginar(page: PaginationEvent) {
+    this.request.page = page.pageNumber;
+    this.request.size = page.itemsPerPage;
 
     this.listarUsuarios();
   }
 
-  filtrar(filtro: Filtro) {
-    this.requisicao.filtro = filtro;
+  filtrar(filter: FilterDTO) {
+    this.request.filter = filter;
     this.listarUsuarios();
-    this.ajustaBadgePesquisa(filtro);
+    this.ajustaBadgePesquisa(filter);
   }
 
   cancelar() {
     this.alternarMostrarFiltros();
   }
 
-  ajustaBadgePesquisa(filtro: Filtro) {
+  ajustaBadgePesquisa(filter: FilterDTO) {
     let acao = this.acoesTela.filter((it) => it.icone === 'search');
     if (acao.length > 0) {
-      if (filtro) {
-        acao[0].valor = filtro.items.length + '';
+      if (filter) {
+        acao[0].valor = filter.items.length + '';
         return;
       }
       acao[0].valor = '0';
@@ -173,6 +178,6 @@ export class UsuariosComponent {
   }
 
   alternarMostrarFiltros() {
-    this.ocultarFiltros = !this.ocultarFiltros;
+    this.hideFilters = !this.hideFilters;
   }
 }

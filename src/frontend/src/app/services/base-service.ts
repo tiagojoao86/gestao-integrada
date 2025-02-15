@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
-import { RequisicaoPaginada } from '../model/requisicao-paginada';
+import { PageRequest } from '../model/page-request';
 import { Response } from '../model/response';
 import { HttpConstants } from '../constants/http-constants';
 
@@ -11,9 +11,9 @@ export class BaseService<G, D> {
 
   constructor(private httpClient: HttpClient, private dominio: String) {}
 
-  list(requisicao: RequisicaoPaginada): Observable<Response> {
+  list(request: PageRequest): Observable<Response> {
     return this.httpClient
-      .post<Response>(this.getUrl(HttpConstants.R_QUERY), requisicao, {
+      .post<Response>(this.getUrl(HttpConstants.R_QUERY), request, {
         headers: this.getHeaders(),
       })
       .pipe(take(1));

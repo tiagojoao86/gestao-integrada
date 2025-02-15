@@ -9,6 +9,7 @@
             "name": "GestaoIntegradaApplication",
             "request": "launch",
             "mainClass": "br.com.grupopipa.gestaointegrada.GestaoIntegradaApplication",
+            "vmArgs": "-Dorg.hibernate.type.descriptor.sql.BasicBinder=TRACE -Dlogging.level.org.hibernate.orm.jdbc.bind=TRACE",
             "projectName": "gestao-integrada"
         }
     ]

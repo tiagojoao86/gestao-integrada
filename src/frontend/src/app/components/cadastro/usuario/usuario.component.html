@@ -1,14 +1,14 @@
 <app-base [titulo]="titulo" [acoes]="acoesTela">
   <div body-content>
-    <filtro-component
-      [filtros]="filtros"
-      [hidden]="ocultarFiltros"
-      (filtrar)="filtrar($event)"
-      (cancelar)="cancelar()"
-    ></filtro-component>
+    <filter-component
+      [filters]="filtros"
+      [hidden]="hideFilters"
+      (doFilter)="filtrar($event)"
+      (cancel)="cancelar()"
+    ></filter-component>
     <table-component
       [columnDefinition]="colunas"
-      [dataSource]="listaUsuarios"
+      [dataSource]="usuariosList"
       [actions]="acoesTabela"
       (sortingEvent)="ordenar($event)"
     ></table-component>
@@ -18,7 +18,7 @@
     <paginator-component
       (paginationEvent)="paginar($event)"
       [itemsPerPage]="itensPorPagina"
-      [totalRegisters]="totalRegistros"
+      [totalRegisters]="totalElements"
     ></paginator-component>
   </div>
 </app-base>

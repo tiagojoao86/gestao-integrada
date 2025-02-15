@@ -14,23 +14,23 @@ export class PaginatorComponent {
   @Output('paginationEvent') paginationEvent: EventEmitter<PaginationEvent> =
     new EventEmitter();
 
-  @Input('pageNumber') pageNumber: number = 1;
+  @Input('pageNumber') pageNumber: number = 0;
   @Input('totalRegisters') totalRegisters: number = 1;
   @Input('itemsPerPage') itemsPerPage = PaginationEvent.DEFAULT_PAGE_SIZE;
 
   itemsPerPageList = [5, 10, 15, 25, 50];
 
   firstPage() {
-    if (this.pageNumber === 1) {
+    if (this.pageNumber === 0) {
       return;
     }
 
-    this.pageNumber = 1;
+    this.pageNumber = 0;
     this.paginationEvent.emit(this.getPaginationEvent());
   }
 
   previousPage() {
-    if (this.pageNumber === 1) {
+    if (this.pageNumber === 0) {
       return;
     }
 
@@ -39,7 +39,7 @@ export class PaginatorComponent {
   }
 
   nextPage() {
-    if (this.pageNumber === this.getTotalPages()) {
+    if (this.pageNumber === this.getTotalPages() - 1) {
       return;
     }
 
@@ -48,11 +48,11 @@ export class PaginatorComponent {
   }
 
   lastPage() {
-    if (this.pageNumber === this.getTotalPages()) {
+    if (this.pageNumber === this.getTotalPages() - 1) {
       return;
     }
 
-    this.pageNumber = this.getTotalPages();
+    this.pageNumber = this.getTotalPages() - 1;
     this.paginationEvent.emit(this.getPaginationEvent());
   }
 

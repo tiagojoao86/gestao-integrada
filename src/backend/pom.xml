@@ -17,7 +17,6 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<jooq.version>3.19.15</jooq.version>
 		<db.url>jdbc:postgresql://localhost:5432/gestao-integrada?currentSchema=pipa</db.url>
 		<db.username>pipa</db.username>
 		<db.password>pipa123</db.password>
@@ -29,11 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jooq</artifactId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
 		<dependency>
@@ -93,38 +92,6 @@
 					<locations>
 						<location>filesystem:src/main/resources/db/migration</location>
 					</locations>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.jooq</groupId>
-				<artifactId>jooq-codegen-maven</artifactId>
-				<version>${jooq.version}</version>
-
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<jdbc>
-						<url>${db.url}</url>
-						<user>${db.username}</user>
-						<password>${db.password}</password>
-					</jdbc>
-					<generator>
-						<database>
-							<includes>.*</includes>
-							<inputSchema>pipa</inputSchema>
-						</database>
-						<target>
-							<packageName>br.com.grupopipa.gestaointegrada.flyway.db.postgresql</packageName>
-							<directory>target/generated-sources/tables</directory>
-						</target>
-					</generator>
 				</configuration>
 			</plugin>
 		</plugins>
