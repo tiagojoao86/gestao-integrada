@@ -23,11 +23,11 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private LocalDateTime criadoEm;
-    private LocalDateTime atualizadoEm;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    private String criadoPor;
-    private String atualizadoPor;
+    private String createdBy;
+    private String updatedBy;
 
     public BaseEntity() {
     }
@@ -35,26 +35,26 @@ public abstract class BaseEntity {
     @PrePersist
     public void create() {
         LocalDateTime now = LocalDateTime.now();
-        this.criadoEm = now;
-        this.atualizadoEm = now;
-        this.criadoPor = Session.getUser();
+        this.createdAt = now;
+        this.updatedAt = now;
+        this.createdBy = Session.getAppUserUsername();
     }
 
     @PreUpdate
     public void update() {
         LocalDateTime now = LocalDateTime.now();
-        String user = Session.getUser();
+        String user = Session.getAppUserUsername();
 
-        if (Objects.isNull(criadoEm)) {
-            this.criadoEm = now;
+        if (Objects.isNull(createdAt)) {
+            this.createdAt = now;
         }
 
-        if (Objects.isNull(this.criadoPor)) {
-            this.criadoPor = user;
+        if (Objects.isNull(this.createdBy)) {
+            this.createdBy = user;
         }
 
-        this.atualizadoEm = now;
-        this.atualizadoPor = user;
+        this.updatedAt = now;
+        this.updatedBy = user;
     }
 
 }

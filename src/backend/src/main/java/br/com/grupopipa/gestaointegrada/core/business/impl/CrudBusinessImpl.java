@@ -29,7 +29,7 @@ public abstract class CrudBusinessImpl<D extends DTO, G extends GridDTO, T exten
         implements CrudBusiness<D, G> {
 
     @Autowired
-    private R repository;
+    protected R repository;
 
     @Autowired
     private Specifications<T> specifications;

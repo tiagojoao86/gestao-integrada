@@ -7,13 +7,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "usuario")
-public class UsuarioEntity extends BaseEntity {
+@Entity(name = "appuser")
+public class AppUserEntity extends BaseEntity {
 
-    private String nome;
-    private String login;
-    private String senha;
+    private String name;
+    private String username;
+    private String password;
 
-    public UsuarioEntity() {
+    public AppUserEntity() {
     }
 }

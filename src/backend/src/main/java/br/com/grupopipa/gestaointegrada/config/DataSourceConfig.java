@@ -1,5 +1,6 @@
 package br.com.grupopipa.gestaointegrada.config;
 
+import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -80,5 +81,14 @@ public class DataSourceConfig {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory);
         return txManager;
+    }
+
+    @Bean
+    public Flyway flyway(DataSource dataSource) {
+        return Flyway.configure()
+                .baselineOnMigrate(true)
+                .dataSource(dataSource)
+                .locations("classpath:db/migration")
+                .load();
     }
 }

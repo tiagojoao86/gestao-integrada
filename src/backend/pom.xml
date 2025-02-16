@@ -17,9 +17,6 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<db.url>jdbc:postgresql://localhost:5432/gestao-integrada?currentSchema=pipa</db.url>
-		<db.username>pipa</db.username>
-		<db.password>pipa123</db.password>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -33,6 +30,17 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+			<version>11.3.2</version>
 		</dependency>
 
 		<dependency>
@@ -70,28 +78,6 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<version>3.0</version>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>migrate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<url>${db.url}</url>
-					<user>${db.username}</user>
-					<password>${db.password}</password>
-					<locations>
-						<location>filesystem:src/main/resources/db/migration</location>
-					</locations>
 				</configuration>
 			</plugin>
 		</plugins>
