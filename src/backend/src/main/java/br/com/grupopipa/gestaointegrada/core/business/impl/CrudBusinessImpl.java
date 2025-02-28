@@ -42,7 +42,7 @@ public abstract class CrudBusinessImpl<D extends DTO, G extends GridDTO, T exten
                 return this.buildDTOFromEntity(repository.save(this.mergeEntityAndDTO(entity, dto)));
             }
         }
-        return this.buildDTOFromEntity(repository.save(this.buildEntityFromDTO(dto)));
+        return this.buildDTOFromEntity(repository.save(this.mergeEntityAndDTO(null, dto)));
     }
 
     public UUID delete(UUID id) {
@@ -111,11 +111,9 @@ public abstract class CrudBusinessImpl<D extends DTO, G extends GridDTO, T exten
         }
 
         return list;
-    }
+    }   
 
     protected abstract T mergeEntityAndDTO(T entity, D dto);
-
-    protected abstract T buildEntityFromDTO(D dto);
 
     protected abstract D buildDTOFromEntity(T entity);
 

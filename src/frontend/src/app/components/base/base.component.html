@@ -5,17 +5,17 @@
         <span class="material-icons">chevron_left</span>
       </p-button>
       <div class="titulo">
-        <span>{{ titulo }}</span>
+        <span>{{ title }}</span>
       </div>
     </ng-template>
     <ng-template #end>
-      <div *ngFor="let acao of acoes" aria-label="Botão ações do usuário">
-        <div class="badge" (click)="acao.acao()" [title]="acao.titulo">
-          <i *ngIf="acao.valor" pBadge [value]="acao.valor">
-            <span class="material-icons">{{ acao.icone }}</span>
+      <div *ngFor="let action of actions" aria-label="Botão ações do usuário">
+        <div class="badge" (click)="action.action()" [title]="action.title">
+          <i *ngIf="action.value" pBadge [value]="action.value">
+            <span class="material-icons">{{ action.icon }}</span>
           </i>
-          <i *ngIf="!acao.valor">
-            <span class="material-icons">{{ acao.icone }}</span>
+          <i *ngIf="!action.value">
+            <span class="material-icons">{{ action.icon }}</span>
           </i>
         </div>
         <!-- <p-button mat-icon-button (click)="acao.acao()" class="icon-button">

@@ -14,8 +14,8 @@ import { BadgeModule } from 'primeng/badge';
 export class BaseComponent {
   constructor(private location: Location) {}
 
-  @Input('titulo') titulo: string = 'Título';
-  @Input('acoes') acoes: AcaoToolbarCadastro[] = [];
+  @Input('title') title: string = 'Título';
+  @Input('actions') actions: RegisterActionToolbar[] = [];
   @Input('ocultarFooter') ocultarFooter: boolean = false;
   @Input('ocultarToolbar') ocultarToolbar: boolean = false;
 
@@ -24,9 +24,9 @@ export class BaseComponent {
   }
 }
 
-export interface AcaoToolbarCadastro {
-  acao: Function;
-  icone: string;
-  titulo: string;
-  valor?: string;
+export interface RegisterActionToolbar {
+  action: Function;
+  icon: string;
+  title: string;
+  value?: string;
 }

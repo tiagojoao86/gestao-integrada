@@ -30,4 +30,8 @@ public class Response {
         return builder().errorMessage(message).statusCode(HttpStatus.NOT_FOUND.value()).build();
     }
 
+    public static Response forbidden(String message) {
+        return builder().errorMessage(message).statusCode(HttpStatus.FORBIDDEN.value()).build();
+    }
+
 }

@@ -37,8 +37,8 @@
             <img src="assets/img/useravatar.png" />
           </div>
           <div class="dados">
-            <div class="info">Usuário da Silva</div>
-            <div class="info">usuario.silva&#64;email.com</div>
+            <div class="info">{{ getUsername() }}</div>
+            <div class="info">{{ getName() }}</div>
           </div>
           <div class="close">
             <p-button
@@ -46,6 +46,13 @@
               severity="info"
               (click)="toogleDrawer()"
             />
+            <div class="logout-button">
+              <p-button
+                icon="pi pi-sign-out"
+                severity="info"
+                (click)="logout()"
+              />
+            </div>
           </div>
         </div>
       </ng-container>

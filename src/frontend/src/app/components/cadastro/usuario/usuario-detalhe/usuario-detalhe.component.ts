@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouteConstants } from '../../../../constants/route-constants';
-import { UsuarioService } from '../../../../services/usuario-service';
-import { UsuarioDTO } from '../../../../model/usuario-dto';
+import { AppUserService } from '../../../../services/app-user.service';
 import {
-  AcaoToolbarCadastro,
+  RegisterActionToolbar,
   BaseComponent,
 } from '../../../base/base.component';
 import { CommonModule, Location } from '@angular/common';
@@ -12,7 +11,6 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -21,9 +19,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import {
   MessageService,
-  MessageType,
 } from '../../../base/messages/messages.service';
 import { messageServiceProvider } from '../../../base/messages/message.factory';
+import { UserAppDTO } from '../../../../model/userapp-dto';
 
 @Component({
   selector: 'app-usuario-detalhe',
@@ -38,37 +36,37 @@ import { messageServiceProvider } from '../../../base/messages/message.factory';
   templateUrl: './usuario-detalhe.component.html',
   styleUrl: './usuario-detalhe.component.css',
   providers: [
-    UsuarioService,
+    AppUserService,
     { provide: MessageService, useFactory: messageServiceProvider },
   ],
 })
 export class UsuarioDetalheComponent {
   form: FormGroup = new FormGroup([]);
   modoEdicao: boolean = false;
-  usuario: UsuarioDTO = {} as UsuarioDTO;
+  usuario: UserAppDTO = {} as UserAppDTO;
 
   titulo = 'Usuário: ';
 
-  acoesTela: AcaoToolbarCadastro[] = [
+  acoesTela: RegisterActionToolbar[] = [
     {
-      acao: () => {
+      action: () => {
         this.location.back();
       },
-      icone: 'close',
-      titulo: 'Cancelar',
+      icon: 'close',
+      title: 'Cancelar',
     },
     {
-      acao: () => {
+      action: () => {
         this.salvar();
       },
-      icone: 'save',
-      titulo: 'Salvar',
+      icon: 'save',
+      title: 'Salvar',
     },
   ];
 
   constructor(
     private route: ActivatedRoute,
-    private service: UsuarioService,
+    private service: AppUserService,
     private location: Location,
     private messages: MessageService
   ) {
@@ -82,7 +80,7 @@ export class UsuarioDetalheComponent {
       this.modoEdicao = true;
       this.service.findById(id!).subscribe((response) => {
         this.usuario = response.body;
-        this.titulo += this.usuario.nome;
+        this.titulo += this.usuario.name;
         this.fillForm();
       });
     }
@@ -96,9 +94,9 @@ export class UsuarioDetalheComponent {
   }
 
   fillForm() {
-    this.form.get('nome')?.setValue(this.usuario.nome);
-    this.form.get('login')?.setValue(this.usuario.login);
-    this.form.get('senha')?.setValue(this.usuario.senha);
+    this.form.get('nome')?.setValue(this.usuario.name);
+    this.form.get('login')?.setValue(this.usuario.username);
+    this.form.get('senha')?.setValue(this.usuario.password);
   }
 
   salvar() {
@@ -107,9 +105,9 @@ export class UsuarioDetalheComponent {
       return;
     }
 
-    this.usuario.nome = this.form.value.nome;
-    this.usuario.login = this.form.value.login;
-    this.usuario.senha = this.form.value.senha;
+    this.usuario.name = this.form.value.nome;
+    this.usuario.username = this.form.value.login;
+    this.usuario.password = this.form.value.senha;
 
     this.service.save(this.usuario).subscribe((response) => {
       this.usuario = response.body;

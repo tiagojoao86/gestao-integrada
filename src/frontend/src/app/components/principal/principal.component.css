@@ -44,7 +44,7 @@
 
   .drawer {
     height: 9rem;
-    width: 30vw;
+    width: 35vw;
     max-width: 40vw;
     background-color: var(--text-color);
     top: 54px;
@@ -52,7 +52,7 @@
     z-index: 9999;
     border: 1px solid;
     border-color: var(--border-color);
-    left: 70vw;
+    left: 65vw;
 
     .titulo {
       font-size: var(--subtitulo-size);
@@ -86,6 +86,16 @@
         flex-grow: 1;
         .info {
           color: var(--inverted-text-color);
+        }
+      }
+
+      .close {
+        display: flex;
+        flex-direction: column;
+
+        .logout-button {
+          margin-top: 2rem;
+          margin-bottom: 2rem;
         }
       }
     }

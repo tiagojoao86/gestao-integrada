@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { AcaoToolbarCadastro, BaseComponent } from '../../base/base.component';
-import { UsuarioService } from '../../../services/usuario-service';
+import {
+  RegisterActionToolbar,
+  BaseComponent,
+} from '../../base/base.component';
+import { AppUserService } from '../../../services/app-user.service';
 import { Order, PageRequest } from '../../../model/page-request';
-import { UsuarioGridDTO } from '../../../model/usuario-grid-dto';
+import { UserAppGridDTO } from '../../../model/userapp-grid-dto';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   Action,
@@ -30,7 +33,7 @@ import { Router } from '@angular/router';
     PaginatorComponent,
     FiltroComponent,
   ],
-  providers: [UsuarioService, DatePipe],
+  providers: [AppUserService, DatePipe],
   templateUrl: './usuario.component.html',
   styleUrl: './usuario.component.css',
 })
@@ -41,28 +44,28 @@ export class UsuariosComponent {
   totalElements = 0;
   hideFilters = true;
 
-  usuariosList: UsuarioGridDTO[] = [];
+  usuariosList: UserAppGridDTO[] = [];
 
   colunas: DataSourceColumn[] = [
     {
-      name: 'nome',
+      name: 'name',
       label: 'Nome',
-      getValue: (element: UsuarioGridDTO) => {
-        return element.nome;
+      getValue: (element: UserAppGridDTO) => {
+        return element.name;
       },
     },
     {
-      name: 'login',
+      name: 'username',
       label: 'Login',
-      getValue: (element: UsuarioGridDTO) => {
-        return element.login;
+      getValue: (element: UserAppGridDTO) => {
+        return element.username;
       },
     },
     {
-      name: 'criadoEm',
+      name: 'createdAt',
       label: 'Criado em',
-      getValue: (element: UsuarioGridDTO) => {
-        return this.datePipe.transform(element.criadoEm, 'dd/MM/yyyy');
+      getValue: (element: UserAppGridDTO) => {
+        return this.datePipe.transform(element.createdAt, 'dd/MM/yyyy');
       },
     },
   ];
@@ -70,13 +73,13 @@ export class UsuariosComponent {
   acoesTabela: Action[] = [
     {
       icon: 'edit_note',
-      action: (element: UsuarioGridDTO) => {
+      action: (element: UserAppGridDTO) => {
         this.router.navigate(['/cadastro/usuario/' + element.id]);
       },
     },
     {
       icon: 'delete',
-      action: (element: UsuarioGridDTO) => {
+      action: (element: UserAppGridDTO) => {
         this.service
           .delete(element.id)
           .subscribe((it) => this.listarUsuarios());
@@ -84,37 +87,44 @@ export class UsuariosComponent {
     },
   ];
 
-  acoesTela: AcaoToolbarCadastro[] = [
+  acoesTela: RegisterActionToolbar[] = [
     {
-      acao: () => {
-        this.router.navigate(['/cadastro/usuario/add']);
+      action: () => {
+        this.refreshList();
       },
-      icone: 'add',
-      titulo: 'Adicionar',
+      icon: 'refresh',
+      title: 'Atualizar',
     },
     {
-      acao: () => {
+      action: () => {
+        this.router.navigate(['/cadastro/usuario/add']);
+      },
+      icon: 'add',
+      title: 'Adicionar',
+    },
+    {
+      action: () => {
         this.alternarMostrarFiltros();
       },
-      icone: 'search',
-      titulo: 'Pesquisar',
-      valor: '0',
+      icon: 'search',
+      title: 'Pesquisar',
+      value: '0',
     },
   ];
 
   filtros: FilterProperty[] = [
     {
-      property: 'login',
+      property: 'username',
       label: 'Login',
       filterType: FilterType.TEXTO,
     },
     {
-      property: 'nome',
+      property: 'name',
       label: 'Nome',
       filterType: FilterType.TEXTO,
     },
     {
-      property: 'criadoEm',
+      property: 'createdAt',
       label: 'Criado em',
       filterType: FilterType.DATA,
     },
@@ -128,7 +138,7 @@ export class UsuariosComponent {
   );
 
   constructor(
-    private service: UsuarioService,
+    private service: AppUserService,
     private datePipe: DatePipe,
     private router: Router
   ) {
@@ -167,17 +177,21 @@ export class UsuariosComponent {
   }
 
   ajustaBadgePesquisa(filter: FilterDTO) {
-    let acao = this.acoesTela.filter((it) => it.icone === 'search');
+    let acao = this.acoesTela.filter((it) => it.icon === 'search');
     if (acao.length > 0) {
       if (filter) {
-        acao[0].valor = filter.items.length + '';
+        acao[0].value = filter.items.length + '';
         return;
       }
-      acao[0].valor = '0';
+      acao[0].value = '0';
     }
   }
 
   alternarMostrarFiltros() {
     this.hideFilters = !this.hideFilters;
+  }
+
+  refreshList() {
+    this.listarUsuarios();
   }
 }

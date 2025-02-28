@@ -1,1 +1,40 @@
-<p>login works!</p>
+<div class="login-container">
+  <div class="login-banner">
+    <h1>Bem-vindo!</h1>
+    <p>Acesse sua conta para continuar.</p>
+  </div>
+  <div class="login-form">
+    <h2>Login</h2>
+    <form (ngSubmit)="login()">
+      <div class="p-field">
+        <label for="username">Usuário</label>
+        <input
+          id="username"
+          type="text"
+          pInputText
+          [(ngModel)]="username"
+          name="username"
+          required
+        />
+      </div>
+      <div class="p-field">
+        <label for="password">Senha</label>
+        <input
+          id="password"
+          type="password"
+          pPassword
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
+      <button
+        type="button"
+        pButton
+        label="Entrar"
+        [disabled]="!username || !password"
+        (click)="login()"
+      ></button>
+    </form>
+  </div>
+</div>

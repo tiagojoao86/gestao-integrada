@@ -1,8 +1,12 @@
 package br.com.grupopipa.gestaointegrada.cadastro.business;
 
 import java.util.List;
+import java.util.Objects;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
 import br.com.grupopipa.gestaointegrada.cadastro.dao.AppUserRepository;
 import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.AppUserDTO;
 import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.AppUserGridDTO;
@@ -13,24 +17,39 @@ import br.com.grupopipa.gestaointegrada.core.business.impl.CrudBusinessImpl;
 public class AppUserBusiness
         extends CrudBusinessImpl<AppUserDTO, AppUserGridDTO, AppUserEntity, AppUserRepository> {
 
+    private PasswordEncoder passwordEncoder;
+
+    public AppUserBusiness(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public AppUserDTO findAppUserDtoByUsername(String username) {
+        AppUserEntity entity = this.repository.findAppUserByUsername(username)
+                .orElseThrow(() -> new RuntimeException(String.format("Cannot found user with username %s", username)));
+
+        return buildDTOFromEntity(entity);
+    }
+
     @Override
-    protected AppUserEntity buildEntityFromDTO(AppUserDTO dto) {
-        AppUserEntity entity = new AppUserEntity();
+    protected AppUserEntity mergeEntityAndDTO(AppUserEntity entity, AppUserDTO dto) {
+        if (Objects.isNull(entity)) {
+            entity = new AppUserEntity();
+        }
+
         entity.setName(dto.getName());
         entity.setUsername(dto.getUsername());
-        entity.setPassword(getSenha(dto.getPassword()));
-        entity.setPassword(dto.getPassword());
+        entity.setPassword(generatePassword(dto.getPassword(), entity.getPassword()));
         entity.setId(dto.getId());
 
         return entity;
     }
 
-    private String getSenha(String plainPassword) {
-        return "";
-    }
+    private String generatePassword(String dtoPassword, String entityPassword) {
+        if (ObjectUtils.isEmpty(entityPassword) || !dtoPassword.equals(entityPassword)) {
+            return passwordEncoder.encode(dtoPassword);
+        }
 
-    private boolean hasChangedSenha(String password) {
-        return false;
+        return entityPassword;
     }
 
     @Override
@@ -68,13 +87,4 @@ public class AppUserBusiness
     protected Class<AppUserEntity> getEntityClass() {
         return AppUserEntity.class;
     }
-
-    @Override
-    protected AppUserEntity mergeEntityAndDTO(AppUserEntity entity, AppUserDTO dto) {
-        entity.setUsername(dto.getUsername());
-        entity.setName(dto.getName());
-
-        return entity;
-    }
-
 }
