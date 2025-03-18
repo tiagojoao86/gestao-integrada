@@ -1,5 +1,5 @@
 export interface Response {
-    body: any | null,
-    statusCode: number,
-    erroMessage: string | null;
+  body: any | null;
+  statusCode: number;
+  errorMessage: string | null;
 }

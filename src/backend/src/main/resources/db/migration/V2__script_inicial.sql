@@ -6,9 +6,9 @@
 
 CREATE TABLE appuser (
     id uuid primary key,
-    name VARCHAR,
-    username VARCHAR,
-    password VARCHAR,
+    name VARCHAR NOT NULL,
+    username VARCHAR UNIQUE NOT NULL,
+    password VARCHAR NOT NULL,
     createdAt timestamp(6) NULL,
     createdBy varchar(255) NULL,
     updatedAt timestamp(6) NULL,

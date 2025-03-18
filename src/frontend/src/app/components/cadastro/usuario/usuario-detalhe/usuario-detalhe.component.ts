@@ -17,9 +17,7 @@ import {
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import {
-  MessageService,
-} from '../../../base/messages/messages.service';
+import { MessageService } from '../../../base/messages/messages.service';
 import { messageServiceProvider } from '../../../base/messages/message.factory';
 import { UserAppDTO } from '../../../../model/userapp-dto';
 
@@ -110,9 +108,14 @@ export class UsuarioDetalheComponent {
     this.usuario.password = this.form.value.senha;
 
     this.service.save(this.usuario).subscribe((response) => {
-      this.usuario = response.body;
-      this.messages.sucesso('Usuário salvo com sucesso.');
-      this.location.back();
+      if (response.statusCode === 200) {
+        this.usuario = response.body;
+        this.messages.sucesso('Usuário salvo com sucesso.');
+        this.location.back();
+      } else if (response.statusCode === 500) {
+        console.log(response);
+        this.messages.erro(response.errorMessage!);
+      }
     });
   }
 

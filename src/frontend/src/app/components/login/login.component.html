@@ -1,40 +1,49 @@
 <div class="login-container">
   <div class="login-banner">
-    <h1>Bem-vindo!</h1>
-    <p>Acesse sua conta para continuar.</p>
+    <img src="assets/img/login-banner.png" />
   </div>
   <div class="login-form">
-    <h2>Login</h2>
-    <form (ngSubmit)="login()">
-      <div class="p-field">
-        <label for="username">Usuário</label>
+    <div class="message error-message" *ngIf="showError">
+      <div class="text">
+        {{ errorMessage }}
+      </div>
+      <div class="button">
+        <button pButton (click)="closeMessage()">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
+    <form (ngSubmit)="login()" [formGroup]="form">
+      <span class="title">Gestão Integrada - Acesso</span>
+      <p-iftalabel class="w-100">
+        <input pInputText id="username" formControlName="username" />
+        <label for="username">Login</label>
+        <small *ngIf="formUtils.isControlInvalid('username', form)"
+          >Esse campo não pode ser em branco.</small
+        >
+      </p-iftalabel>
+      <p-iftalabel class="w-100">
         <input
-          id="username"
-          type="text"
           pInputText
-          [(ngModel)]="username"
-          name="username"
-          required
-        />
-      </div>
-      <div class="p-field">
-        <label for="password">Senha</label>
-        <input
           id="password"
+          formControlName="password"
           type="password"
-          pPassword
-          [(ngModel)]="password"
-          name="password"
-          required
         />
-      </div>
+        <label for="password">Senha</label>
+        <small *ngIf="formUtils.isControlInvalid('password', form)"
+          >Esse campo não pode ser em branco.</small
+        >
+      </p-iftalabel>
       <button
-        type="button"
         pButton
-        label="Entrar"
-        [disabled]="!username || !password"
+        class="primario"
+        [disabled]="form.invalid"
         (click)="login()"
-      ></button>
+        style="height: 2rem"
+      >
+        <span class="material-icons">login</span>
+        <span pButtonLabel>Entrar</span>
+      </button>
     </form>
   </div>
 </div>

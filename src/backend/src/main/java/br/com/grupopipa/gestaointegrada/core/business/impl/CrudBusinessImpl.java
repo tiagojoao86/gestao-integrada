@@ -111,7 +111,7 @@ public abstract class CrudBusinessImpl<D extends DTO, G extends GridDTO, T exten
         }
 
         return list;
-    }   
+    }
 
     protected abstract T mergeEntityAndDTO(T entity, D dto);
 

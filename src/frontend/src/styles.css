@@ -316,6 +316,23 @@ button.secundario {
   font-size: var(--text-size) !important;
 }
 
+input:-internal-autofill-selected {
+  background-color: var(--inverted-text-color) !important;
+  color: var(--text-color) !important;
+  font-size: var(--text-size) !important;
+  border-color: var(--border-color) !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  background-color: var(--inverted-text-color) !important;
+  color: var(--text-color) !important;
+  font-size: var(--text-size) !important;
+  border-color: var(--border-color) !important;
+}
+
 .p-floatlabel:has(input:focus) label {
   color: var(--text-color) !important;
   font-size: 12px !important;
@@ -338,6 +355,15 @@ button.secundario {
   font-weight: 400 !important;
 }
 
+.p-iftalabel:has(input:-webkit-autofill) label {
+  color: var(--text-color) !important;
+  font-weight: 400 !important;
+}
+
 .ng-touched .ng-invalid {
   border-color: var(--error-color) !important;
+}
+
+router-outlet + * {
+  flex-grow: 1;
 }

@@ -34,6 +34,8 @@
   .conteudo {
     flex-grow: 1;
     width: 93vw;
+    display: flex;
+    flex-direction: column;
   }
 
   .side-menu {
@@ -92,10 +94,10 @@
       .close {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
 
         .logout-button {
-          margin-top: 2rem;
-          margin-bottom: 2rem;
+          margin-bottom: 0.2rem;
         }
       }
     }

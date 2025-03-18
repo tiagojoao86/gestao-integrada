@@ -17,6 +17,7 @@ import br.com.grupopipa.gestaointegrada.core.dto.GridDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.OrderDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.PageRequest;
 import br.com.grupopipa.gestaointegrada.core.exception.EntidadeNaoEncontradaException;
+import br.com.grupopipa.gestaointegrada.core.exception.TranslateExceptionService;
 
 import java.util.UUID;
 
@@ -35,6 +36,9 @@ public abstract class BaseRest<D extends DTO, G extends GridDTO> {
     @Autowired
     protected CrudBusiness<D, G> business;
 
+    @Autowired
+    protected TranslateExceptionService translateExceptionService;
+
     @PostMapping(R_QUERY)
     public Response list(@RequestBody PageRequest request) {
         try {
@@ -52,7 +56,7 @@ public abstract class BaseRest<D extends DTO, G extends GridDTO> {
         try {
             return ok(business.save(body));
         } catch (Exception e) {
-            return internalServerError(e.getMessage());
+            return buildErrorMessage(e);
         }
     }
 
@@ -76,6 +80,18 @@ public abstract class BaseRest<D extends DTO, G extends GridDTO> {
         } catch (Exception e) {
             return internalServerError(e.getMessage());
         }
+    }
+
+    protected Response buildErrorMessage(Exception e) {
+        String error = "";
+
+        try {
+            error = translateExceptionService.translateErrorMessage(e.getMessage());
+        } catch (Exception oe) {
+            error = e.getMessage();
+        }
+
+        return internalServerError(error);
     }
 
 }

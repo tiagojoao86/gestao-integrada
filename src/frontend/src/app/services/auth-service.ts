@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, tap } from 'rxjs';
+import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { Response } from '../model/response';
 
 @Injectable({
@@ -26,7 +26,7 @@ export class AuthService {
           this.router.navigate(['/']);
         }),
         catchError((e) => {
-          throw new Error('Error');
+          throw e;
         })
       );
   }

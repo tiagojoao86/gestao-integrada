@@ -1,41 +1,77 @@
 // login.component.ts
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth-service';
+import { IftaLabelModule } from 'primeng/iftalabel';
+import { FormUtilsService } from '../form-utils.service';
+import { MessageService } from '../base/messages/messages.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    ToastModule,
+    IftaLabelModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, FormUtilsService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
-  username = '';
-  password = '';
+export class LoginComponent implements OnInit {
+  form: FormGroup = new FormGroup({});
+  formUtils;
+  showError = false;
+  errorMessage = '';
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    private formUtilsService: FormUtilsService
+  ) {
+    this.formUtils = this.formUtilsService;
+  }
+
+  ngOnInit(): void {
+    const fb = new FormBuilder().nonNullable;
+    this.form.addControl('username', fb.control(null, [Validators.required]));
+    this.form.addControl('password', fb.control(null, [Validators.required]));
+  }
 
   login() {
-    this.authService.login(this.username, this.password).subscribe();
+    let username = this.form.value.username;
+    let password = this.form.value.password;
+
+    if (username && password) {
+      this.authService.login(username, password).subscribe({
+        next: () => {
+          console.log('Login bem-sucedido');
+        },
+        error: (error) => {
+          this.showError = true;
+          if (error.status === 401) {
+            this.errorMessage = 'Login ou senha inválidos';
+          } else {
+            this.errorMessage = 'Erro inesperado, tente novamente mais tarde';
+          }
+        },
+      });
+    }
+  }
+
+  closeMessage() {
+    this.showError = false;
   }
 }

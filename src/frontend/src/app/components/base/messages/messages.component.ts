@@ -31,7 +31,7 @@ export class MessagesComponent implements OnInit {
 
       this.timer = setTimeout(() => {
         this.show = false;
-      }, 3000);
+      }, 10000);
     });
   }
 
