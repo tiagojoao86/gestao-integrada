@@ -5,21 +5,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.grupopipa.gestaointegrada.cadastro.dao.AppUserRepository;
+import br.com.grupopipa.gestaointegrada.cadastro.dao.UsuarioEntityRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private AppUserRepository repository;
+    private UsuarioEntityRepository repository;
 
-    public UserDetailsServiceImpl(AppUserRepository repository) {
+    public UserDetailsServiceImpl(UsuarioEntityRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository
-                .findAppUserByUsername(username)
+                .findUsuarioByLogin(username)
                 .map(UserAuthenticated::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
     }

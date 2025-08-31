@@ -11,9 +11,9 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class AppUserGridDTO implements GridDTO {
+public class UsuarioGridDTO implements GridDTO {
     private UUID id;
-    private String name;
-    private String username;
+    private String nome;
+    private String login;
     private LocalDateTime createdAt;
 }

@@ -46,16 +46,16 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     const fb = new FormBuilder().nonNullable;
-    this.form.addControl('username', fb.control(null, [Validators.required]));
-    this.form.addControl('password', fb.control(null, [Validators.required]));
+    this.form.addControl('login', fb.control(null, [Validators.required]));
+    this.form.addControl('senha', fb.control(null, [Validators.required]));
   }
 
   login() {
-    let username = this.form.value.username;
-    let password = this.form.value.password;
+    let login = this.form.value.login;
+    let senha = this.form.value.senha;
 
-    if (username && password) {
-      this.authService.login(username, password).subscribe({
+    if (login && senha) {
+      this.authService.login(login, senha).subscribe({
         next: () => {
           console.log('Login bem-sucedido');
         },

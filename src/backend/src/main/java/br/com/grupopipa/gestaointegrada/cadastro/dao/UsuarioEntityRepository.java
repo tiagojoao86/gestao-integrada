@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import br.com.grupopipa.gestaointegrada.cadastro.entity.AppUserEntity;
+import br.com.grupopipa.gestaointegrada.cadastro.entity.UsuarioEntity;
 
 @Repository
-public interface AppUserRepository extends JpaRepository<AppUserEntity, UUID>, JpaSpecificationExecutor<AppUserEntity> {
+public interface UsuarioEntityRepository extends JpaRepository<UsuarioEntity, UUID>, JpaSpecificationExecutor<UsuarioEntity> {
 
-    public Optional<AppUserEntity> findAppUserByUsername(String username);
+    public Optional<UsuarioEntity> findUsuarioByLogin(String login);
 
 }

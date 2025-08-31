@@ -8,18 +8,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity(name = "appuser")
-public class AppUserEntity extends BaseEntity {
+@Entity(name = "usuario")
+public class UsuarioEntity extends BaseEntity {
 
     @Column(nullable = false)
-    private String name;
+    private String nome;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String login;
 
     @Column(nullable = false)
-    private String password;
+    private String senha;
 
-    public AppUserEntity() {
+    public UsuarioEntity() {
     }
 }

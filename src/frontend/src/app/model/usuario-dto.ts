@@ -1,8 +1,8 @@
-export interface UserAppDTO {
+export interface UsuarioDTO {
   id: string;
-  name: string;
-  username: string;
-  password: string;
+  nome: string;
+  login: string;
+  senha: string;
   createdat?: Date;
   updatedAt?: Date;
   createdBy?: string;

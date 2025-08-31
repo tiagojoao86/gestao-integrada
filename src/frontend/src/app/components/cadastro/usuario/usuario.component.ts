@@ -3,9 +3,9 @@ import {
   RegisterActionToolbar,
   BaseComponent,
 } from '../../base/base.component';
-import { AppUserService } from '../../../services/app-user.service';
+import { UsuarioService } from '../../../services/usuario.service';
 import { Order, PageRequest } from '../../../model/page-request';
-import { UserAppGridDTO } from '../../../model/userapp-grid-dto';
+import { UsuarioGridDTO } from '../../../model/usuario-grid-dto';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   Action,
@@ -33,7 +33,7 @@ import { Router } from '@angular/router';
     PaginatorComponent,
     FiltroComponent,
   ],
-  providers: [AppUserService, DatePipe],
+  providers: [UsuarioService, DatePipe],
   templateUrl: './usuario.component.html',
   styleUrl: './usuario.component.css',
 })
@@ -44,27 +44,27 @@ export class UsuariosComponent {
   totalElements = 0;
   hideFilters = true;
 
-  usuariosList: UserAppGridDTO[] = [];
+  usuariosList: UsuarioGridDTO[] = [];
 
   colunas: DataSourceColumn[] = [
     {
-      name: 'name',
+      name: 'nome',
       label: 'Nome',
-      getValue: (element: UserAppGridDTO) => {
-        return element.name;
+      getValue: (element: UsuarioGridDTO) => {
+        return element.nome;
       },
     },
     {
-      name: 'username',
+      name: 'login',
       label: 'Login',
-      getValue: (element: UserAppGridDTO) => {
-        return element.username;
+      getValue: (element: UsuarioGridDTO) => {
+        return element.login;
       },
     },
     {
       name: 'createdAt',
       label: 'Criado em',
-      getValue: (element: UserAppGridDTO) => {
+      getValue: (element: UsuarioGridDTO) => {
         return this.datePipe.transform(element.createdAt, 'dd/MM/yyyy');
       },
     },
@@ -73,13 +73,13 @@ export class UsuariosComponent {
   acoesTabela: Action[] = [
     {
       icon: 'edit_note',
-      action: (element: UserAppGridDTO) => {
+      action: (element: UsuarioGridDTO) => {
         this.router.navigate(['/cadastro/usuario/' + element.id]);
       },
     },
     {
       icon: 'delete',
-      action: (element: UserAppGridDTO) => {
+      action: (element: UsuarioGridDTO) => {
         this.service
           .delete(element.id)
           .subscribe((it) => this.listarUsuarios());
@@ -114,12 +114,12 @@ export class UsuariosComponent {
 
   filtros: FilterProperty[] = [
     {
-      property: 'username',
+      property: 'login',
       label: 'Login',
       filterType: FilterType.TEXTO,
     },
     {
-      property: 'name',
+      property: 'nome',
       label: 'Nome',
       filterType: FilterType.TEXTO,
     },
@@ -138,7 +138,7 @@ export class UsuariosComponent {
   );
 
   constructor(
-    private service: AppUserService,
+    private service: UsuarioService,
     private datePipe: DatePipe,
     private router: Router
   ) {

@@ -6,24 +6,24 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.grupopipa.gestaointegrada.cadastro.entity.AppUserEntity;
+import br.com.grupopipa.gestaointegrada.cadastro.entity.UsuarioEntity;
 
 public class UserAuthenticated implements UserDetails {
 
-  private final AppUserEntity user;
+  private final UsuarioEntity user;
 
-  public UserAuthenticated(AppUserEntity user) {
+  public UserAuthenticated(UsuarioEntity user) {
     this.user = user;
   }
 
   @Override
   public String getUsername() {
-    return user.getUsername();
+    return user.getLogin();
   }
 
   @Override
   public String getPassword() {
-    return user.getPassword();
+    return user.getSenha();
   }
 
   @Override

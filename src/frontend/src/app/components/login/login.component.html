@@ -16,21 +16,21 @@
     <form (ngSubmit)="login()" [formGroup]="form">
       <span class="title">Gestão Integrada - Acesso</span>
       <p-iftalabel class="w-100">
-        <input pInputText id="username" formControlName="username" />
-        <label for="username">Login</label>
-        <small *ngIf="formUtils.isControlInvalid('username', form)"
+        <input pInputText id="login" formControlName="login" />
+        <label for="login">Login</label>
+        <small *ngIf="formUtils.isControlInvalid('login', form)"
           >Esse campo não pode ser em branco.</small
         >
       </p-iftalabel>
       <p-iftalabel class="w-100">
         <input
           pInputText
-          id="password"
-          formControlName="password"
-          type="password"
+          id="senha"
+          formControlName="senha"
+          type="senha"
         />
-        <label for="password">Senha</label>
-        <small *ngIf="formUtils.isControlInvalid('password', form)"
+        <label for="senha">Senha</label>
+        <small *ngIf="formUtils.isControlInvalid('senha', form)"
           >Esse campo não pode ser em branco.</small
         >
       </p-iftalabel>

@@ -11,12 +11,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class AppUserDTO implements DTO {
+public class UsuarioDTO implements DTO {
 
     private UUID id;
-    private String name;
-    private String username;
-    private String password;
+    private String nome;
+    private String login;
+    private String senha;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

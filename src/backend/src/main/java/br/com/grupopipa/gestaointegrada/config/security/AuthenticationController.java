@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.grupopipa.gestaointegrada.cadastro.business.AppUserBusiness;
-import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.AppUserDTO;
+import br.com.grupopipa.gestaointegrada.cadastro.business.UsuarioEntityBusiness;
+import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.UsuarioDTO;
 import br.com.grupopipa.gestaointegrada.core.rest.Response;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,13 +29,13 @@ import static br.com.grupopipa.gestaointegrada.cadastro.constants.Constants.R_AU
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;
-    private AppUserBusiness appUserBusiness;
+    private UsuarioEntityBusiness usuarioBusiness;
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationController(AuthenticationService authenticationService, AppUserBusiness appUserBusiness,
+    public AuthenticationController(AuthenticationService authenticationService, UsuarioEntityBusiness appUserBusiness,
             AuthenticationManager authenticationManager) {
         this.authenticationService = authenticationService;
-        this.appUserBusiness = appUserBusiness;
+        this.usuarioBusiness = appUserBusiness;
         this.authenticationManager = authenticationManager;
     }
 
@@ -57,9 +57,9 @@ public class AuthenticationController {
         refreshCookie.setPath("/api/authenticate/refresh");
         response.addCookie(refreshCookie);
 
-        AppUserDTO userDTO = this.appUserBusiness.findAppUserDtoByUsername(authentication.getName());
+        UsuarioDTO userDTO = this.usuarioBusiness.findUsuarioDtoByLogin(authentication.getName());
 
-        AuthResponse authResponse = new AuthResponse(accessToken, userDTO.getUsername(), userDTO.getName());
+        AuthResponse authResponse = new AuthResponse(accessToken, userDTO.getLogin(), userDTO.getNome());
 
         return ok(authResponse);
 
@@ -74,9 +74,9 @@ public class AuthenticationController {
         String username = authenticationService.getUsernameFromToken(refreshToken);
         String newAccessToken = authenticationService.authenticate(username, List.of(() -> "read"));
 
-        AppUserDTO userDTO = this.appUserBusiness.findAppUserDtoByUsername(username);
+        UsuarioDTO userDTO = this.usuarioBusiness.findUsuarioDtoByLogin(username);
 
-        AuthResponse authResponse = new AuthResponse(newAccessToken, userDTO.getUsername(), userDTO.getName());
+        AuthResponse authResponse = new AuthResponse(newAccessToken, userDTO.getLogin(), userDTO.getNome());
 
         return ok(authResponse);
     }

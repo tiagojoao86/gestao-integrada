@@ -8,7 +8,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class UserFilter extends FilterDTO {
+public class UsuarioFilter extends FilterDTO {
 
     private String login;
 
