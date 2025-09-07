@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouteConstants } from '../../../../constants/route-constants';
 import { UsuarioService } from '../../../../services/usuario.service';
@@ -38,17 +38,19 @@ import { UsuarioDTO } from '../../../../model/usuario-dto';
     { provide: MessageService, useFactory: messageServiceProvider },
   ],
 })
-export class UsuarioDetalheComponent {
+export class UsuarioDetalheComponent implements OnInit {
   form: FormGroup = new FormGroup([]);
   modoEdicao: boolean = false;
   usuario: UsuarioDTO = {} as UsuarioDTO;
+  @Input('detailId') detailId: string | null = null;
+  @Output('closeDetail') closeDetail = new EventEmitter<void>();
 
   titulo = 'Usuário: ';
 
   acoesTela: RegisterActionToolbar[] = [
     {
       action: () => {
-        this.location.back();
+        this.goBackFn();
       },
       icon: 'close',
       title: 'Cancelar',
@@ -62,21 +64,20 @@ export class UsuarioDetalheComponent {
     },
   ];
 
-  constructor(
-    private route: ActivatedRoute,
-    private service: UsuarioService,
-    private location: Location,
+  constructor(    
+    private service: UsuarioService,    
     private messages: MessageService
-  ) {
-    this.initForm();
-    const id = this.route.snapshot.paramMap.get('id');
+  ) { }
 
-    if (id === RouteConstants.P_ADD) {
+  ngOnInit(): void {
+    this.initForm();
+
+    if (this.detailId === RouteConstants.P_ADD) {
       this.modoEdicao = false;
       this.titulo += 'Novo';
     } else {
       this.modoEdicao = true;
-      this.service.findById(id!).subscribe((response) => {
+      this.service.findById(this.detailId!).subscribe((response) => {
         this.usuario = response.body;
         this.titulo += this.usuario.nome;
         this.fillForm();
@@ -111,7 +112,7 @@ export class UsuarioDetalheComponent {
       if (response.statusCode === 200) {
         this.usuario = response.body;
         this.messages.sucesso('Usuário salvo com sucesso.');
-        this.location.back();
+        this.goBackFn();
       } else if (response.statusCode === 500) {
         console.log(response);
         this.messages.erro(response.errorMessage!);
@@ -128,4 +129,8 @@ export class UsuarioDetalheComponent {
 
     return false;
   }
+
+  goBackFn = () => {
+    this.closeDetail.emit();
+  };
 }

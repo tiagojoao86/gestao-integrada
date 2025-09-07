@@ -1,7 +1,7 @@
 <div class="component-base">
-  <p-toolbar class="toolbar-base" *ngIf="!ocultarToolbar">
+  <p-toolbar class="toolbar-base" *ngIf="!hideToolbar">
     <ng-template #start>
-      <p-button (click)="voltar()">
+      <p-button (click)="goBack()">
         <span class="material-icons">chevron_left</span>
       </p-button>
       <div class="titulo">
@@ -24,7 +24,7 @@
   <div class="body-base">
     <ng-content select="[body-content]"></ng-content>
   </div>
-  <div class="footer-base" *ngIf="!ocultarFooter">
+  <div class="footer-base" *ngIf="!hideFooter">
     <ng-content select="[footer-content]"></ng-content>
   </div>
 </div>

@@ -53,7 +53,7 @@ public class DataSourceConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+        //vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
         vendorAdapter.setGenerateDdl(false);
         vendorAdapter.setShowSql(showSql);
 

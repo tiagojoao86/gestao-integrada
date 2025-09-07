@@ -13,11 +13,4 @@ export const routes: Routes = [
         (app) => app.UsuariosComponent
       ),
   },
-  {
-    path: 'usuario/:id',
-    loadComponent: () =>
-      import('./usuario/usuario-detalhe/usuario-detalhe.component').then(
-        (app) => app.UsuarioDetalheComponent
-      ),
-  },
 ];

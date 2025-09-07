@@ -16,10 +16,16 @@ export class BaseComponent {
 
   @Input('title') title: string = 'Título';
   @Input('actions') actions: RegisterActionToolbar[] = [];
-  @Input('ocultarFooter') ocultarFooter: boolean = false;
-  @Input('ocultarToolbar') ocultarToolbar: boolean = false;
+  @Input('hideFooter') hideFooter: boolean = false;
+  @Input('hideToolbar') hideToolbar: boolean = false;
+  @Input('goBackFn') goBackFn: Function | null = null;
+  
+  goBack() {
+    if (this.goBackFn) {
+      this.goBackFn();
+      return;
+    }
 
-  voltar() {
     this.location.back();
   }
 }

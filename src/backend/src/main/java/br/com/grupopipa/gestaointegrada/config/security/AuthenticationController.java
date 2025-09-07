@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.grupopipa.gestaointegrada.cadastro.business.UsuarioEntityBusiness;
+import br.com.grupopipa.gestaointegrada.cadastro.business.impl.UsuarioEntityBusinessImpl;
 import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.UsuarioDTO;
 import br.com.grupopipa.gestaointegrada.core.rest.Response;
 import jakarta.servlet.http.Cookie;
@@ -29,13 +29,13 @@ import static br.com.grupopipa.gestaointegrada.cadastro.constants.Constants.R_AU
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;
-    private UsuarioEntityBusiness usuarioBusiness;
+    private UsuarioEntityBusinessImpl usuarioBusiness;
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationController(AuthenticationService authenticationService, UsuarioEntityBusiness appUserBusiness,
+    public AuthenticationController(AuthenticationService authenticationService, UsuarioEntityBusinessImpl usuarioEntityBusiness,
             AuthenticationManager authenticationManager) {
         this.authenticationService = authenticationService;
-        this.usuarioBusiness = appUserBusiness;
+        this.usuarioBusiness = usuarioEntityBusiness;
         this.authenticationManager = authenticationManager;
     }
 

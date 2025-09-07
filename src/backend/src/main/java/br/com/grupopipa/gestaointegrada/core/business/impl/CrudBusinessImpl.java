@@ -21,6 +21,7 @@ import br.com.grupopipa.gestaointegrada.core.business.CrudBusiness;
 import br.com.grupopipa.gestaointegrada.core.dto.DTO;
 import br.com.grupopipa.gestaointegrada.core.dto.FilterDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.GridDTO;
+import br.com.grupopipa.gestaointegrada.core.dto.PageDTO;
 import br.com.grupopipa.gestaointegrada.core.entity.BaseEntity;
 import br.com.grupopipa.gestaointegrada.core.enums.FilterLogicOperator;
 
@@ -52,12 +53,12 @@ public abstract class CrudBusinessImpl<D extends DTO, G extends GridDTO, T exten
     }
 
     @SuppressWarnings("unchecked")
-    public Page<G> list(FilterDTO filter, Pageable pageable) {
+    public PageDTO<G> list(FilterDTO filter, Pageable pageable) {
         Specification<T> specification = this.buildSpecification(filter);
 
         if (this.repository instanceof JpaSpecificationExecutor) {
             Page<T> page = ((JpaSpecificationExecutor<T>) this.repository).findAll(specification, pageable);
-            return new PageImpl<>(
+            return new PageDTO<G>(
                     page.getContent().stream().map(this::buildGridDTOFromEntity).toList(),
                     page.getPageable(),
                     page.getTotalElements());

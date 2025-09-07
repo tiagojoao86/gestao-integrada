@@ -1,4 +1,4 @@
-<app-base [title]="titulo" [actions]="acoesTela">
+<app-base [title]="titulo" [actions]="acoesTela" [goBackFn]="goBackFn.bind(this)">
   <div body-content>
     <div class="form" [formGroup]="form">
       <p-iftalabel class="w-49">
