@@ -18,12 +18,9 @@ public class FilterDTO {
             return null;
         }
 
-        List<FilterItemDTO> filteredList = items.stream().filter(it -> it.getProperty().equals(property)).toList();
-
-        if (!ObjectUtils.isEmpty(filteredList)) {
-            return filteredList.get(0);
-        }
-
-        return null;
+        return items.stream()
+                .filter(it -> it.getProperty().equals(property))
+                .findFirst()
+                .orElse(null);
     }
 }
