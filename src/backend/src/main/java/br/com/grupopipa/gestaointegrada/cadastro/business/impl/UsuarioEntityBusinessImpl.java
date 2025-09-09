@@ -26,7 +26,7 @@ public class UsuarioEntityBusinessImpl
     }
 
     @Override
-    public UsuarioDTO findUsuarioDtoByLogin(String login) {
+    public UsuarioDTO findUsuarioDTOByLogin(String login) {
         UsuarioEntity entity = this.repository.findUsuarioByLogin(login)
                 .orElseThrow(() -> new RuntimeException(String.format("Não foi possível localizar o usuário com o login %s", login)));
 
@@ -34,7 +34,7 @@ public class UsuarioEntityBusinessImpl
     }
 
     @Override
-    protected UsuarioEntity mergeEntityAndDTO(UsuarioEntity entity, UsuarioDTO dto) {
+    protected UsuarioEntity mergeEntityAndDTO(UsuarioEntity entity, UsuarioDTO dto) {        
         if (Objects.isNull(entity)) {
             entity = new UsuarioEntity();
         }
@@ -42,8 +42,7 @@ public class UsuarioEntityBusinessImpl
         entity.setNome(dto.getNome());
         entity.setLogin(dto.getLogin());
         entity.setSenha(generatePassword(dto.getSenha(), entity.getSenha()));
-        entity.setId(dto.getId());
-
+        
         return entity;
     }
 

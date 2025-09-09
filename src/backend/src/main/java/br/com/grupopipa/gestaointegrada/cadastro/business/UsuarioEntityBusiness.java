@@ -6,6 +6,6 @@ import br.com.grupopipa.gestaointegrada.core.business.CrudBusiness;
 
 public interface UsuarioEntityBusiness extends CrudBusiness<UsuarioDTO, UsuarioGridDTO> {
 
-    UsuarioDTO findUsuarioDtoByLogin(String login);
+    UsuarioDTO findUsuarioDTOByLogin(String login);
     
 }

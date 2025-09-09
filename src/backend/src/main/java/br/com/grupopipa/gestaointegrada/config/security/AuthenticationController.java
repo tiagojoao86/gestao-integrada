@@ -58,7 +58,7 @@ public class AuthenticationController {
         refreshCookie.setPath("/api/authenticate/refresh");
         response.addCookie(refreshCookie);
 
-        UsuarioDTO userDTO = this.usuarioBusiness.findUsuarioDtoByLogin(authentication.getName());
+        UsuarioDTO userDTO = this.usuarioBusiness.findUsuarioDTOByLogin(authentication.getName());
 
         AuthResponse authResponse = new AuthResponse(accessToken, userDTO.getLogin(), userDTO.getNome());
 
@@ -75,7 +75,7 @@ public class AuthenticationController {
         String username = authenticationService.getUsernameFromToken(refreshToken);
         String newAccessToken = authenticationService.authenticate(username, List.of(() -> "read"));
 
-        UsuarioDTO userDTO = this.usuarioBusiness.findUsuarioDtoByLogin(username);
+        UsuarioDTO userDTO = this.usuarioBusiness.findUsuarioDTOByLogin(username);
 
         AuthResponse authResponse = new AuthResponse(newAccessToken, userDTO.getLogin(), userDTO.getNome());
 

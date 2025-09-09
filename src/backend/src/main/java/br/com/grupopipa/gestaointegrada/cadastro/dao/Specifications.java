@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.util.ObjectUtils;
 
 import br.com.grupopipa.gestaointegrada.core.dto.FilterItemDTO;
 import br.com.grupopipa.gestaointegrada.core.entity.BaseEntity;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -35,13 +38,10 @@ public class Specifications<T extends BaseEntity> {
             case NEQ:
                 return buildPredicateNeq(item, criteriaBuilder, root, klazz);
             case GT:
-                return buildPredicateGt(item, criteriaBuilder, root, klazz);
             case LT:
-                return buildPredicateLt(item, criteriaBuilder, root, klazz);
             case GE:
-                return buildPredicateGe(item, criteriaBuilder, root, klazz);
             case LE:
-                return buildPredicateLe(item, criteriaBuilder, root, klazz);
+                return buildRelationalPredicate(item, criteriaBuilder, root, klazz);
             case CONTAINS:
                 return buildPredicateContains(item, criteriaBuilder, root, klazz);
             case NOT_CONTAINS:
@@ -57,153 +57,159 @@ public class Specifications<T extends BaseEntity> {
         }
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private Predicate buildPredicateEq(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
             Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
+        String property = item.getProperty();
+        Class<?> targetType = getFieldType(klazz, property);
+        Object value = convertValue(property, item.getValues().get(0), klazz, targetType);
 
-        if (targetType.equals(LocalDate.class) || targetType.equals(LocalDateTime.class)) {
-            return criteriaBuilder.between(root.get(item.getProperty()), getStartOfDay(targetType, value),
-                    getEndOfDay(targetType, value));
+        if (targetType.equals(LocalDateTime.class)) {
+            // Para LocalDateTime, 'igual' significa 'dentro do mesmo dia'
+            Expression<Comparable> propertyExpression = root.get(property);
+            Comparable startOfDay = getStartOfDay(value);
+            Comparable endOfDay = getEndOfDay(value);
+            return criteriaBuilder.between(propertyExpression, startOfDay, endOfDay);
         }
 
-        return criteriaBuilder.equal(root.get(item.getProperty()), value);
+        return criteriaBuilder.equal(root.get(property), value); // Para LocalDate e outros tipos, a comparação é direta.
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private Predicate buildPredicateNeq(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
             Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
+        String property = item.getProperty();
+        Class<?> targetType = getFieldType(klazz, property);
+        Object value = convertValue(property, item.getValues().get(0), klazz, targetType);
 
-        if (targetType.equals(LocalDate.class) || targetType.equals(LocalDateTime.class)) {
-            return criteriaBuilder.not(criteriaBuilder.between(root.get(item.getProperty()),
-                    getStartOfDay(targetType, value), getEndOfDay(targetType, value)));
+        if (targetType.equals(LocalDateTime.class)) {
+            Expression<Comparable> propertyExpression = root.get(property);
+            Comparable startOfDay = getStartOfDay(value);
+            Comparable endOfDay = getEndOfDay(value);
+            return criteriaBuilder.not(criteriaBuilder.between(propertyExpression, startOfDay, endOfDay));
         }
 
-        return criteriaBuilder.notEqual(root.get(item.getProperty()), value);
+        return criteriaBuilder.notEqual(root.get(property), value);
     }
 
-    private Predicate buildPredicateGt(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
-            Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private Predicate buildRelationalPredicate(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root, Class<T> klazz) {
+        String property = item.getProperty();
+        Class<?> targetType = getFieldType(klazz, property);
+        Comparable value = (Comparable) convertValue(property, item.getValues().get(0), klazz, targetType);
+        Expression<Comparable> propertyExpression = root.get(property);
 
-        if (targetType.equals(LocalDate.class) || targetType.equals(LocalDateTime.class)) {
-            return criteriaBuilder.greaterThan(root.get(item.getProperty()), getEndOfDay(targetType, value));
+        switch (item.getOperator()) {
+            case GT:
+                if (targetType.equals(LocalDateTime.class)) {
+                    Comparable endOfDay = getEndOfDay(value);
+                    return criteriaBuilder.greaterThan(propertyExpression, endOfDay);
+                }
+                return criteriaBuilder.greaterThan(propertyExpression, value);
+            case LT:
+                if (targetType.equals(LocalDateTime.class)) {
+                    Comparable startOfDay = getStartOfDay(value);
+                    return criteriaBuilder.lessThan(propertyExpression, startOfDay);
+                }
+                return criteriaBuilder.lessThan(propertyExpression, value);
+            case GE:
+                if (targetType.equals(LocalDateTime.class)) {
+                    Comparable startOfDay = getStartOfDay(value);
+                    return criteriaBuilder.greaterThanOrEqualTo(propertyExpression, startOfDay);
+                }
+                return criteriaBuilder.greaterThanOrEqualTo(propertyExpression, value);
+            case LE:
+                if (targetType.equals(LocalDateTime.class)) {
+                    Comparable endOfDay = getEndOfDay(value);
+                    return criteriaBuilder.lessThanOrEqualTo(propertyExpression, endOfDay);
+                }
+                return criteriaBuilder.lessThanOrEqualTo(propertyExpression, value);
+            default:
+                throw new IllegalArgumentException("Operador relacional inválido: " + item.getOperator());
         }
-
-        return criteriaBuilder.greaterThan(root.get(item.getProperty()), value.toString());
-    }
-
-    private Predicate buildPredicateLt(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
-            Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
-
-        if (targetType.equals(LocalDate.class) || targetType.equals(LocalDateTime.class)) {
-            return criteriaBuilder.lessThan(root.get(item.getProperty()), getStartOfDay(targetType, value));
-        }
-
-        return criteriaBuilder.lessThan(root.get(item.getProperty()), value.toString());
-    }
-
-    private Predicate buildPredicateGe(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
-            Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
-
-        if (targetType.equals(LocalDate.class) || targetType.equals(LocalDateTime.class)) {
-            return criteriaBuilder.greaterThanOrEqualTo(root.get(item.getProperty()), getStartOfDay(targetType, value));
-        }
-
-        return criteriaBuilder.greaterThanOrEqualTo(root.get(item.getProperty()), value.toString());
-    }
-
-    private Predicate buildPredicateLe(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
-            Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
-
-        if (targetType.equals(LocalDate.class) || targetType.equals(LocalDateTime.class)) {
-            return criteriaBuilder.lessThanOrEqualTo(root.get(item.getProperty()), getEndOfDay(targetType, value));
-        }
-
-        return criteriaBuilder.lessThanOrEqualTo(root.get(item.getProperty()), value.toString());
     }
 
     private Predicate buildPredicateContains(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
             Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
+        String property = item.getProperty();
+        Class<?> targetType = getFieldType(klazz, property);
+        Object value = convertValue(property, item.getValues().get(0), klazz, targetType);
 
-        return criteriaBuilder.like(criteriaBuilder.lower(root.get(item.getProperty())),
+        return criteriaBuilder.like(criteriaBuilder.lower(root.get(property).as(String.class)),
                 "%" + value.toString().toLowerCase() + "%");
     }
 
     private Predicate buildPredicateNotContains(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
             Class<T> klazz) {
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
+        String property = item.getProperty();
+        Class<?> targetType = getFieldType(klazz, property);
+        Object value = convertValue(property, item.getValues().get(0), klazz, targetType);
 
-        return criteriaBuilder.notLike(criteriaBuilder.lower(root.get(item.getProperty())),
+        return criteriaBuilder.notLike(criteriaBuilder.lower(root.get(property).as(String.class)),
                 "%" + value.toString().toLowerCase() + "%");
     }
 
     private Predicate buildPredicateIn(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
             Class<T> klazz) {
-        return root.get(item.getProperty()).in(item.getValues().stream().map(Object::toString).toList());
+        Class<?> targetType = getFieldType(klazz, item.getProperty());
+        List<?> convertedValues = item.getValues().stream()
+                .map(val -> convertValue(item.getProperty(), val, klazz, targetType))
+                .toList();
+        return root.get(item.getProperty()).in(convertedValues);
     }
 
     private Predicate buildPredicateNotIn(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
             Class<T> klazz) {
-        return criteriaBuilder
-                .not(root.get(item.getProperty()).in(item.getValues().stream().map(Object::toString).toList()));
+        Class<?> targetType = getFieldType(klazz, item.getProperty());
+        List<?> convertedValues = item.getValues().stream()
+                .map(val -> convertValue(item.getProperty(), val, klazz, targetType)).toList();
+        return criteriaBuilder.not(root.get(item.getProperty()).in(convertedValues));
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private Predicate buildPredicateBetween(FilterItemDTO item, CriteriaBuilder criteriaBuilder, Root<T> root,
             Class<T> klazz) {
         if (ObjectUtils.isEmpty(item.getValues()) || item.getValues().size() < 2) {
             return null;
         }
 
-        Class<?> targetType = getFieldType(klazz, item.getProperty());
-        Object value1 = convertValue(item.getProperty(), item.getValues().get(0), klazz, targetType);
-        Object value2 = convertValue(item.getProperty(), item.getValues().get(1), klazz, targetType);
+        String property = item.getProperty();
+        Class<?> targetType = getFieldType(klazz, property);
+        Expression<Comparable> propertyExpression = root.get(property);
 
-        if (targetType.equals(LocalDate.class) || targetType.equals(LocalDateTime.class)) {
-            return criteriaBuilder.between(root.get(item.getProperty()), getStartOfDay(targetType, value1),
-                    getEndOfDay(targetType, value2));
-        }
+        Comparable value1 = (Comparable) convertValue(property, item.getValues().get(0), klazz, targetType);
+        Comparable value2 = (Comparable) convertValue(property, item.getValues().get(1), klazz, targetType);
 
-        return criteriaBuilder.between(root.get(item.getProperty()), value1.toString(), value2.toString());
-    }
-
-    private LocalDateTime getStartOfDay(Class<?> targetType, Object value) {
-        LocalDateTime start = null;
         if (targetType.equals(LocalDateTime.class)) {
-            start = ((LocalDateTime) value).toLocalDate().atStartOfDay();
+            Comparable startOfDay = getStartOfDay(value1);
+            Comparable endOfDay = getEndOfDay(value2);
+            return criteriaBuilder.between(propertyExpression, startOfDay, endOfDay);
         }
 
-        if (targetType.equals(LocalDate.class)) {
-            start = ((LocalDate) value).atStartOfDay();
-        }
-
-        return start;
+        return criteriaBuilder.between(propertyExpression, value1, value2); // Para LocalDate e outros tipos, o between é direto.
     }
 
-    private LocalDateTime getEndOfDay(Class<?> targetType, Object value) {
-        LocalDateTime end = null;
-        if (targetType.equals(LocalDateTime.class)) {
-            end = ((LocalDateTime) value).toLocalDate().atTime(LocalTime.MAX);
+    private LocalDateTime getStartOfDay(Object value) {
+        if (value instanceof LocalDateTime) {
+            return ((LocalDateTime) value).toLocalDate().atStartOfDay();
         }
-
-        if (targetType.equals(LocalDate.class)) {
-            end = ((LocalDate) value).atTime(LocalTime.MAX);
+        if (value instanceof LocalDate) {
+            return ((LocalDate) value).atStartOfDay();
         }
-
-        return end;
+        throw new IllegalArgumentException("Tipo de data inesperado para getStartOfDay: " + value.getClass().getName());
     }
 
+    private LocalDateTime getEndOfDay(Object value) {
+        if (value instanceof LocalDateTime) {
+            return ((LocalDateTime) value).toLocalDate().atTime(LocalTime.MAX);
+        }
+        if (value instanceof LocalDate) {
+            return ((LocalDate) value).atTime(LocalTime.MAX);
+        }
+        throw new IllegalArgumentException("Tipo de data inesperado para getEndOfDay: " + value.getClass().getName());
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private Object convertValue(String property, Object value, Class<T> klazz, Class<?> targetType) {
         if (value == null) {
             return null;
@@ -225,6 +231,10 @@ public class Specifications<T extends BaseEntity> {
                 return LocalDateTime.parse(stringValue, DateTimeFormatter.ISO_DATE_TIME);
             } else if (targetType.equals(String.class)) {
                 return stringValue;
+            } else if (targetType.equals(UUID.class)) {
+                return UUID.fromString(stringValue);
+            } else if (targetType.isEnum()) {
+                return Enum.valueOf((Class<Enum>) targetType, stringValue);
             }
         } catch (Exception e) {
             throw new IllegalArgumentException(
@@ -235,15 +245,15 @@ public class Specifications<T extends BaseEntity> {
     }
 
     private Class<?> getFieldType(Class<?> klazz, String fieldName) {
-        try {
-            return klazz.getDeclaredField(fieldName).getType();
-        } catch (NoSuchFieldException e) {
-            if (klazz == BaseEntity.class) {
-                throw new RuntimeException("Campo não encontrado: " + fieldName);
+        Class<?> currentClass = klazz;
+        while (currentClass != null && currentClass != Object.class) {
+            try {
+                return currentClass.getDeclaredField(fieldName).getType();
+            } catch (NoSuchFieldException e) {
+                currentClass = currentClass.getSuperclass();
             }
-
-            return getFieldType(BaseEntity.class, fieldName);
         }
+        throw new RuntimeException("Campo não encontrado: " + fieldName + " na entidade " + klazz.getSimpleName() + " ou em suas superclasses.");
     }
 
 }
