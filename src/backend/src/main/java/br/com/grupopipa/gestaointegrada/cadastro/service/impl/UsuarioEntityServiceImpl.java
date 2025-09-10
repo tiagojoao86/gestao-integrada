@@ -1,4 +1,4 @@
-package br.com.grupopipa.gestaointegrada.cadastro.business.impl;
+package br.com.grupopipa.gestaointegrada.cadastro.service.impl;
 
 import java.util.List;
 import java.util.Objects;
@@ -7,21 +7,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import br.com.grupopipa.gestaointegrada.cadastro.business.UsuarioEntityBusiness;
 import br.com.grupopipa.gestaointegrada.cadastro.dao.UsuarioEntityRepository;
 import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.UsuarioDTO;
 import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.UsuarioGridDTO;
 import br.com.grupopipa.gestaointegrada.cadastro.entity.UsuarioEntity;
-import br.com.grupopipa.gestaointegrada.core.business.impl.CrudBusinessImpl;
+import br.com.grupopipa.gestaointegrada.cadastro.service.UsuarioEntityService;
+import br.com.grupopipa.gestaointegrada.core.service.impl.CrudServiceImpl;
 
 @Service
-public class UsuarioEntityBusinessImpl
-        extends CrudBusinessImpl<UsuarioDTO, UsuarioGridDTO, UsuarioEntity, UsuarioEntityRepository>
-        implements UsuarioEntityBusiness {
+public class UsuarioEntityServiceImpl
+        extends CrudServiceImpl<UsuarioDTO, UsuarioGridDTO, UsuarioEntity, UsuarioEntityRepository>
+        implements UsuarioEntityService {
 
     private PasswordEncoder passwordEncoder;
 
-    public UsuarioEntityBusinessImpl(PasswordEncoder passwordEncoder) {
+    public UsuarioEntityServiceImpl(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 

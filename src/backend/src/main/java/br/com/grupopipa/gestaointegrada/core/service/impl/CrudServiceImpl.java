@@ -1,4 +1,4 @@
-package br.com.grupopipa.gestaointegrada.core.business.impl;
+package br.com.grupopipa.gestaointegrada.core.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +16,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import br.com.grupopipa.gestaointegrada.cadastro.dao.Specifications;
-import br.com.grupopipa.gestaointegrada.core.business.CrudBusiness;
 import br.com.grupopipa.gestaointegrada.core.dto.DTO;
 import br.com.grupopipa.gestaointegrada.core.dto.FilterDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.GridDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.PageDTO;
 import br.com.grupopipa.gestaointegrada.core.entity.BaseEntity;
 import br.com.grupopipa.gestaointegrada.core.enums.FilterLogicOperator;
+import br.com.grupopipa.gestaointegrada.core.exception.EntidadeNaoEncontradaException;
+import br.com.grupopipa.gestaointegrada.core.service.CrudService;
 
 @Service
-public abstract class CrudBusinessImpl<D extends DTO, G extends GridDTO, T extends BaseEntity, R extends JpaRepository<T, UUID>>
-        implements CrudBusiness<D, G> {
+public abstract class CrudServiceImpl<D extends DTO, G extends GridDTO, T extends BaseEntity, R extends JpaRepository<T, UUID>>
+        implements CrudService<D, G> {
 
     @Autowired
     protected R repository;
@@ -68,23 +69,12 @@ public abstract class CrudBusinessImpl<D extends DTO, G extends GridDTO, T exten
     }
 
     public D findById(UUID id) {
-        Optional<T> optional = repository.findById(id);
-
-        if (optional.isPresent()) {
-            return buildDTOFromEntity(optional.get());
-        }
-
-        return null;
+        return buildDTOFromEntity(this.findEntityById(id));
     }
 
     public T findEntityById(UUID id) {
-        Optional<T> optional = repository.findById(id);
-
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-
-        return null;
+        return repository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException(getEntityClass().getSimpleName(), id));
     }
 
     protected Specification<T> buildSpecification(FilterDTO filter) {

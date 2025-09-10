@@ -1,10 +1,6 @@
 package br.com.grupopipa.gestaointegrada.config.security;
 
-import static br.com.grupopipa.gestaointegrada.core.rest.Response.ok;
-
 import java.util.List;
-
-import static br.com.grupopipa.gestaointegrada.core.rest.Response.forbidden;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,25 +11,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.grupopipa.gestaointegrada.cadastro.business.UsuarioEntityBusiness;
 import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.UsuarioDTO;
-import br.com.grupopipa.gestaointegrada.core.rest.Response;
+import br.com.grupopipa.gestaointegrada.cadastro.service.UsuarioEntityService;
+import br.com.grupopipa.gestaointegrada.core.controller.Response;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 
 import static br.com.grupopipa.gestaointegrada.cadastro.constants.Constants.R_AUTHENTICATE;
+import static br.com.grupopipa.gestaointegrada.core.controller.Response.forbidden;
+import static br.com.grupopipa.gestaointegrada.core.controller.Response.ok;
 
 @RestController
 @RequestMapping(R_AUTHENTICATE)
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;
-    private UsuarioEntityBusiness usuarioBusiness;
+    private UsuarioEntityService usuarioBusiness;
     private AuthenticationManager authenticationManager;
 
     public AuthenticationController(AuthenticationService authenticationService, 
-            UsuarioEntityBusiness usuarioEntityBusiness,
+            UsuarioEntityService usuarioEntityBusiness,
             AuthenticationManager authenticationManager) {
         this.authenticationService = authenticationService;
         this.usuarioBusiness = usuarioEntityBusiness;

@@ -1,4 +1,4 @@
-package br.com.grupopipa.gestaointegrada.core.rest;
+package br.com.grupopipa.gestaointegrada.core.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import br.com.grupopipa.gestaointegrada.core.business.CrudBusiness;
 import br.com.grupopipa.gestaointegrada.core.dto.DTO;
 import br.com.grupopipa.gestaointegrada.core.dto.GridDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.OrderDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.PageRequest;
 import br.com.grupopipa.gestaointegrada.core.exception.EntidadeNaoEncontradaException;
+import br.com.grupopipa.gestaointegrada.core.service.CrudService;
 
 import java.util.UUID;
 
@@ -25,15 +25,15 @@ import static br.com.grupopipa.gestaointegrada.core.constants.Constants.F_ID;
 import static br.com.grupopipa.gestaointegrada.core.constants.Constants.PV_ID;
 import static br.com.grupopipa.gestaointegrada.core.constants.Constants.R_FIND_BY_ID;
 import static br.com.grupopipa.gestaointegrada.core.constants.Constants.R_QUERY;
-import static br.com.grupopipa.gestaointegrada.core.rest.Response.internalServerError;
-import static br.com.grupopipa.gestaointegrada.core.rest.Response.notFoundException;
-import static br.com.grupopipa.gestaointegrada.core.rest.Response.ok;
+import static br.com.grupopipa.gestaointegrada.core.controller.Response.internalServerError;
+import static br.com.grupopipa.gestaointegrada.core.controller.Response.notFoundException;
+import static br.com.grupopipa.gestaointegrada.core.controller.Response.ok;
 
 @Slf4j
-public abstract class BaseRest<D extends DTO, G extends GridDTO> {
+public abstract class BaseController<D extends DTO, G extends GridDTO> {
 
     @Autowired
-    protected CrudBusiness<D, G> business;
+    protected CrudService<D, G> business;
 
     @PostMapping(R_QUERY)
     public Response list(@RequestBody PageRequest request) {

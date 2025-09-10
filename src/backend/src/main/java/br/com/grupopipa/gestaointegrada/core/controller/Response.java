@@ -1,4 +1,4 @@
-package br.com.grupopipa.gestaointegrada.core.rest;
+package br.com.grupopipa.gestaointegrada.core.controller;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -6,14 +6,6 @@
 
 -- Script para criar a tabela 'usuario' no PostgreSQL
 
--- Remove a tabela se ela já existir, para facilitar a recriação durante o desenvolvimento.
--- Em produção, esta linha deve ser usada com cautela.
-DROP TABLE IF EXISTS usuario;
-
--- Cria a tabela 'usuario'
--- As colunas id, created_at, etc., são uma suposição baseada na existência
--- de uma 'BaseEntity' no seu projeto Java.
-
 CREATE TABLE usuario (
     id          UUID            NOT NULL,
     created_at  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -31,9 +23,6 @@ CONSTRAINT pk_usuario PRIMARY KEY (id),
 -- Constraint de unicidade para a coluna 'login' com nome definido
 CONSTRAINT uk_usuario_login UNIQUE (login) );
 
--- Adiciona constraints de verificação (CHECK) para garantir que os campos não sejam brancos/vazios.
--- Isto é mais robusto que apenas NOT NULL, pois também impede strings que contenham apenas espaços.
--- O tratamento de erro no backend pode capturar o nome da constraint para dar uma mensagem específica.
 
 -- Constraint para o campo 'nome' não ser branco/vazio
 ALTER TABLE usuario
@@ -53,7 +42,6 @@ ADD CONSTRAINT ck_usuario_login_not_blank CHECK (
     ) <> ''
 );
 
--- Adiciona comentários na tabela e colunas para documentação do banco de dados.
 COMMENT ON
 TABLE usuario IS 'Tabela para armazenar os usuários do sistema.';
 COMMENT ON COLUMN usuario.id IS 'Identificador único do usuário (Chave primária).';

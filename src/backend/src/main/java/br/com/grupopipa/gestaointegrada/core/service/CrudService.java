@@ -1,4 +1,4 @@
-package br.com.grupopipa.gestaointegrada.core.business;
+package br.com.grupopipa.gestaointegrada.core.service;
 
 import java.util.UUID;
 
@@ -9,7 +9,7 @@ import br.com.grupopipa.gestaointegrada.core.dto.PageDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.FilterDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.GridDTO;
 
-public interface CrudBusiness<D extends DTO, G extends GridDTO> {
+public interface CrudService<D extends DTO, G extends GridDTO> {
 
     public D save(D dto);
 
