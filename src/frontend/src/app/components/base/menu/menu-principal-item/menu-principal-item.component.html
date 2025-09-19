@@ -1,0 +1,11 @@
+<div class="grupo-menu" *ngIf="grupo">
+    <div class="grupo" (click)="goTo(grupo.url)">
+        <i [title]="grupo.nome">
+            <span class="material-icons">{{ grupo.icone }}</span>
+        </i>
+        <div class="nome" *ngIf="!somenteIcone">
+            {{ grupo.nome }}
+        </div>
+    </div>    
+</div>
+

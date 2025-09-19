@@ -1,0 +1,2 @@
+<app-usuario-grid *ngIf="viewMode === 'GRID'" (openDetail)="openDetail($event)"></app-usuario-grid>
+<app-usuario-detalhe *ngIf="viewMode === 'DETAIL'" [detailId]="detailId" (closeDetail)="toggleView();"></app-usuario-detalhe>

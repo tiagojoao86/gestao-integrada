@@ -1,0 +1,29 @@
+<app-base [title]="titulo" [actions]="acoesTela" [goBackFn]="goBackFn.bind(this)">
+  <div body-content>
+    <div class="form" [formGroup]="form">
+      <p-iftalabel class="w-49">
+        <input pInputText id="nomeUsuario" formControlName="nome" />
+        <label for="nomeUsuario">Nome</label>
+        <small *ngIf="isControlInvalid('nome')"
+          >Esse campo não pode ser em branco.</small
+        >
+      </p-iftalabel>
+      <p-iftalabel class="w-49">
+        <input pInputText id="loginUsuario" formControlName="login" />
+        <label for="loginUsuario">Login</label>
+        <small *ngIf="isControlInvalid('login')"
+          >Esse campo não pode ser em branco.</small
+        >
+      </p-iftalabel>
+      <p-iftalabel class="w-49">
+        <input
+          pInputText
+          id="senhaUsuario"
+          formControlName="senha"
+          type="password"
+        />
+        <label for="senhaUsuario">Senha</label>
+      </p-iftalabel>
+    </div>
+  </div>
+</app-base>
