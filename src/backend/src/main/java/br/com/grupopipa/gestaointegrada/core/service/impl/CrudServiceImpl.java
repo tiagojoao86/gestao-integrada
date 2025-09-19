@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -14,25 +13,27 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import br.com.grupopipa.gestaointegrada.cadastro.dao.Specifications;
+import br.com.grupopipa.gestaointegrada.core.dao.Specifications;
 import br.com.grupopipa.gestaointegrada.core.dto.DTO;
 import br.com.grupopipa.gestaointegrada.core.dto.FilterDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.GridDTO;
 import br.com.grupopipa.gestaointegrada.core.dto.PageDTO;
 import br.com.grupopipa.gestaointegrada.core.entity.BaseEntity;
 import br.com.grupopipa.gestaointegrada.core.enums.FilterLogicOperator;
-import br.com.grupopipa.gestaointegrada.core.exception.EntidadeNaoEncontradaException;
+import br.com.grupopipa.gestaointegrada.core.exception.EntityNotFoundException;
 import br.com.grupopipa.gestaointegrada.core.service.CrudService;
 
 @Service
 public abstract class CrudServiceImpl<D extends DTO, G extends GridDTO, T extends BaseEntity, R extends JpaRepository<T, UUID>>
         implements CrudService<D, G> {
-
-    @Autowired
-    protected R repository;
-
-    @Autowired
+    
+    protected R repository;    
     private Specifications<T> specifications;
+
+    public CrudServiceImpl(R repository, Specifications<T> specifications) {
+        this.repository = repository;
+        this.specifications = specifications;
+    }
 
     public D save(D dto) {
         if (Objects.nonNull(dto.getId())) {
@@ -73,7 +74,7 @@ public abstract class CrudServiceImpl<D extends DTO, G extends GridDTO, T extend
 
     public T findEntityById(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(getEntityClass().getSimpleName(), id));
+                .orElseThrow(() -> new EntityNotFoundException(getEntityClass().getSimpleName(), id));
     }
 
     protected Specification<T> buildSpecification(FilterDTO filter) {

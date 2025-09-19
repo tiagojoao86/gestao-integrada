@@ -34,4 +34,8 @@ public class Response {
         return builder().errorMessage(message).statusCode(HttpStatus.FORBIDDEN.value()).build();
     }
 
+    public static Response badRequest(String message) {
+        return builder().errorMessage(message).statusCode(HttpStatus.BAD_REQUEST.value()).build();
+    }
+
 }

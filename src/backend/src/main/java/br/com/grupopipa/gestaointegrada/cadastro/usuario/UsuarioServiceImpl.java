@@ -1,58 +1,49 @@
-package br.com.grupopipa.gestaointegrada.cadastro.service.impl;
+package br.com.grupopipa.gestaointegrada.cadastro.usuario;
 
 import java.util.List;
 import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
-import br.com.grupopipa.gestaointegrada.cadastro.dao.UsuarioEntityRepository;
-import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.UsuarioDTO;
-import br.com.grupopipa.gestaointegrada.cadastro.dto.usuario.UsuarioGridDTO;
-import br.com.grupopipa.gestaointegrada.cadastro.entity.UsuarioEntity;
-import br.com.grupopipa.gestaointegrada.cadastro.service.UsuarioEntityService;
-import br.com.grupopipa.gestaointegrada.core.exception.EntidadeNaoEncontradaException;
+import br.com.grupopipa.gestaointegrada.cadastro.usuario.entity.UsuarioEntity;
+import br.com.grupopipa.gestaointegrada.core.dao.Specifications;
+import br.com.grupopipa.gestaointegrada.core.exception.EntityNotFoundException;
 import br.com.grupopipa.gestaointegrada.core.service.impl.CrudServiceImpl;
 
 @Service
-public class UsuarioEntityServiceImpl
-        extends CrudServiceImpl<UsuarioDTO, UsuarioGridDTO, UsuarioEntity, UsuarioEntityRepository>
-        implements UsuarioEntityService {
+public class UsuarioServiceImpl
+        extends CrudServiceImpl<UsuarioDTO, UsuarioGridDTO, UsuarioEntity, UsuarioRepository>
+        implements UsuarioService {
 
     private PasswordEncoder passwordEncoder;
 
-    public UsuarioEntityServiceImpl(PasswordEncoder passwordEncoder) {
+    public UsuarioServiceImpl(PasswordEncoder passwordEncoder, UsuarioRepository repository,
+            Specifications<UsuarioEntity> specifications) {
+        super(repository, specifications);
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UsuarioDTO findUsuarioDTOByLogin(String login) {
-        UsuarioEntity entity = this.repository.findUsuarioByLogin(login)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(getEntityClass().getSimpleName(), "login", login));
+        UsuarioEntity entity = this.repository.findUsuarioByLoginValue(login)
+                .orElseThrow(() -> new EntityNotFoundException(getEntityClass().getSimpleName(), "login", login));
 
         return buildDTOFromEntity(entity);
     }
 
     @Override
-    protected UsuarioEntity mergeEntityAndDTO(UsuarioEntity entity, UsuarioDTO dto) {        
+    protected UsuarioEntity mergeEntityAndDTO(UsuarioEntity entity, UsuarioDTO dto) {
         if (Objects.isNull(entity)) {
-            entity = new UsuarioEntity();
+            return new UsuarioEntity.Builder()
+                    .nome(dto.getNome())
+                    .login(dto.getLogin())
+                    .senha(dto.getSenha())
+                    .build(this.passwordEncoder);
         }
 
-        entity.setNome(dto.getNome());
-        entity.setLogin(dto.getLogin());
-        entity.setSenha(generatePassword(dto.getSenha(), entity.getSenha()));
-        
+        entity.updateUsuarioFromDTO(dto, passwordEncoder);
         return entity;
-    }
-
-    private String generatePassword(String dtoPassword, String entityPassword) {
-        if (ObjectUtils.isEmpty(entityPassword) || !dtoPassword.equals(entityPassword)) {
-            return passwordEncoder.encode(dtoPassword);
-        }
-
-        return entityPassword;
     }
 
     @Override

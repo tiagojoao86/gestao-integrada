@@ -1,4 +1,4 @@
-package br.com.grupopipa.gestaointegrada.cadastro.dao;
+package br.com.grupopipa.gestaointegrada.core.dao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

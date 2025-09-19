@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.com.grupopipa.gestaointegrada.cadastro.entity.UsuarioEntity;
+import br.com.grupopipa.gestaointegrada.cadastro.usuario.entity.UsuarioEntity;
 
 public class UserAuthenticated implements UserDetails {
 

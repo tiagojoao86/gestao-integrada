@@ -1,4 +1,4 @@
-package br.com.grupopipa.gestaointegrada.cadastro.dto.usuario;
+package br.com.grupopipa.gestaointegrada.cadastro.usuario;
 
 import br.com.grupopipa.gestaointegrada.core.dto.FilterDTO;
 import lombok.Builder;
