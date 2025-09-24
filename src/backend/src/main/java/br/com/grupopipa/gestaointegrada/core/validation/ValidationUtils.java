@@ -2,7 +2,6 @@ package br.com.grupopipa.gestaointegrada.core.validation;
 
 import java.util.Set;
 import java.util.function.Supplier;
-
 import br.com.grupopipa.gestaointegrada.core.exception.beanvalidation.BeanValidationException;
 import br.com.grupopipa.gestaointegrada.core.exception.beanvalidation.BeanValidationMessage;
 

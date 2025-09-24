@@ -76,7 +76,7 @@ public class UsuarioEntity extends BaseEntity {
         }
 
         if (!violations.isEmpty()) {
-            throw new BeanValidationException(violations);
+            throw new BeanValidationException("usuario", violations);
         }
         return new ValidatedData(nome, login, senha);
     }

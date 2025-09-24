@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class BeanValidationMessage {
 
-    private String key;
-    private String message;
-    
+    private final String key;
+    private final String message;
+
 }

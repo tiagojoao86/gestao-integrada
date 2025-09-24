@@ -15,7 +15,7 @@ public class ApiError {
     private Integer status;
     private OffsetDateTime timestamp;
     private String title;
-    private String detail;
+    private List<String> detail;
     private List<String> userMessageKey;
     private List<Field> fields;
 
