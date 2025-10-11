@@ -9,28 +9,28 @@ export class MessageService {
     this.stateSubject.next(message);
   }
 
-  info(message: string) {
+  info(message: string | string[]) {
     this.mostrarMensagem({
       message: message,
       messageType: MessageType.INFO,
     });
   }
 
-  sucesso(message: string) {
+  sucesso(message: string | string[]) {
     this.mostrarMensagem({
       message: message,
       messageType: MessageType.SUCCESS,
     });
   }
 
-  alerta(message: string) {
+  alerta(message: string | string[]) {
     this.mostrarMensagem({
       message: message,
       messageType: MessageType.WARNING,
     });
   }
 
-  erro(message: string) {
+  erro(message: string | string[]) {
     this.mostrarMensagem({
       message: message,
       messageType: MessageType.ERROR,
@@ -39,7 +39,7 @@ export class MessageService {
 }
 
 export interface Message {
-  message: string;
+  message: string | string[];
   messageType: MessageType;
 }
 

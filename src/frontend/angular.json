@@ -4,6 +4,12 @@
   "newProjectRoot": "projects",
   "projects": {
     "frontend": {
+      "i18n": {
+        "sourceLocale": "pt",
+        "locales": {
+          "en-US": "src/locale/messages.en.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -53,6 +59,12 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "en-US": {
+              "localize": ["en-US"]
+            },
+            "pt": {
+              "localize": ["pt"]
             }
           },
           "defaultConfiguration": "production"
@@ -61,10 +73,16 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend:build:production"
+              "buildTarget": "frontend:build:production,en-US"
             },
             "development": {
               "buildTarget": "frontend:build:development"
+            },
+            "en-US": {
+              "buildTarget": "frontend:build:development,en-US"
+            },
+            "pt": {
+              "buildTarget": "frontend:build:development,pt"
             }
           },
           "defaultConfiguration": "development"

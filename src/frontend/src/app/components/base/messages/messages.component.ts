@@ -12,7 +12,7 @@ import { messageServiceProvider } from './message.factory';
   providers: [{ provide: MessageService, useFactory: messageServiceProvider }],
 })
 export class MessagesComponent implements OnInit {
-  message: string = '';
+  messages: string[] = [];
   messageType: MessageType = MessageType.INFO;
 
   show: boolean = false;
@@ -24,7 +24,11 @@ export class MessagesComponent implements OnInit {
   ngOnInit() {
     this.service.stateSubject.subscribe((message) => {
       if (message) {
-        this.message = message.message;
+        if (Array.isArray(message.message)) {
+          this.messages = message.message;
+        } else {
+          this.messages = [message.message];
+        }
         this.messageType = message.messageType;
         this.show = true;
       }

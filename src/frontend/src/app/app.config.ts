@@ -2,6 +2,7 @@ import {
   ApplicationConfig,
   inject,
   provideZoneChangeDetection,
+  LOCALE_ID,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -19,7 +20,12 @@ import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { AuthService } from './services/auth-service';
-import { AuthInterceptor } from './services/auth-interceptor';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+import { MessageService } from './components/base/messages/messages.service';
+import { messageServiceProvider } from './components/base/messages/message.factory';
+
+registerLocaleData(localePt);
 
 var isRefreshing = false;
 
@@ -34,6 +40,8 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideHttpClient(withInterceptors([refreshTokenInterceptor])),
+    { provide: LOCALE_ID, useValue: 'pt' },
+    { provide: MessageService, useFactory: messageServiceProvider },
   ],
 };
 

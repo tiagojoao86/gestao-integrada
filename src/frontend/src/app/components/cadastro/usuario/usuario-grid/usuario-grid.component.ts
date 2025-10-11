@@ -38,7 +38,7 @@ import { Router } from '@angular/router';
   styleUrl: './usuario-grid.component.css',
 })
 export class UsuarioGridComponent {
-  titulo: string = 'Cadastro de usuários';
+  titulo: string = $localize `Cadastro de usuários`;
 
   @Output() openDetail = new EventEmitter<string>();
 
@@ -51,21 +51,21 @@ export class UsuarioGridComponent {
   colunas: DataSourceColumn[] = [
     {
       name: 'nome',
-      label: 'Nome',
+      label: $localize `Nome`,
       getValue: (element: UsuarioGridDTO) => {
         return element.nome;
       },
     },
     {
       name: 'login',
-      label: 'Login',
+      label: $localize `Login`,
       getValue: (element: UsuarioGridDTO) => {
         return element.login;
       },
     },
     {
       name: 'createdAt',
-      label: 'Criado em',
+      label: $localize `Criado em`,
       getValue: (element: UsuarioGridDTO) => {
         return this.datePipe.transform(element.createdAt, 'dd/MM/yyyy');
       },
@@ -95,21 +95,21 @@ export class UsuarioGridComponent {
         this.refreshList();
       },
       icon: 'refresh',
-      title: 'Atualizar',
+      title: $localize `Atualizar`,
     },
     {
       action: () => {
         this.openDetail.emit('add');
       },
       icon: 'add',
-      title: 'Adicionar',
+      title: $localize `Adicionar`,
     },
     {
       action: () => {
         this.alternarMostrarFiltros();
       },
       icon: 'search',
-      title: 'Pesquisar',
+      title: $localize `Pesquisar`,
       value: '0',
     },
   ];
@@ -117,17 +117,17 @@ export class UsuarioGridComponent {
   filtros: FilterProperty[] = [
     {
       property: 'login',
-      label: 'Login',
+      label: $localize `Login`,
       filterType: FilterType.TEXTO,
     },
     {
       property: 'nome',
-      label: 'Nome',
+      label: $localize `Nome`,
       filterType: FilterType.TEXTO,
     },
     {
       property: 'createdAt',
-      label: 'Criado em',
+      label: $localize `Criado em`,
       filterType: FilterType.DATA,
     },
   ];

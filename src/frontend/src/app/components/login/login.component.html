@@ -17,9 +17,9 @@
       <span class="title">Gestão Integrada - Acesso</span>
       <p-iftalabel class="w-100">
         <input pInputText id="login" formControlName="login" />
-        <label for="login">Login</label>
+        <label for="login" i18n>Login</label>
         <small *ngIf="formUtils.isControlInvalid('login', form)"
-          >Esse campo não pode ser em branco.</small
+          i18n>Esse campo não pode ser em branco.</small
         >
       </p-iftalabel>
       <p-iftalabel class="w-100">
@@ -29,9 +29,9 @@
           formControlName="senha"
           type="senha"
         />
-        <label for="senha">Senha</label>
+        <label for="senha" i18n>Senha</label>
         <small *ngIf="formUtils.isControlInvalid('senha', form)"
-          >Esse campo não pode ser em branco.</small
+          i18n>Esse campo não pode ser em branco.</small
         >
       </p-iftalabel>
       <button
@@ -42,7 +42,7 @@
         style="height: 2rem"
       >
         <span class="material-icons">login</span>
-        <span pButtonLabel>Entrar</span>
+        <span pButtonLabel i18n>Entrar</span>
       </button>
     </form>
   </div>

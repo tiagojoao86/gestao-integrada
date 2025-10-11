@@ -51,26 +51,26 @@ import { AuthService } from '../../services/auth-service';
 export class PrincipalComponent {
   showDrawer: boolean = false;
 
-  tituloApp: string = 'Gestão Integrada';
+  tituloApp: string = $localize `Gestão Integrada`;
 
   openDrawerMenu = {
-    nome: 'Menu',
+    nome: $localize `Menu`,
     icone: 'menu',
   };
 
   menu: GrupoMenu[] = [
     {
-      nome: 'Cadastros',
+      nome: $localize `Cadastros`,
       icone: 'widgets',
       url: '/cadastro',
     },
     {
-      nome: 'Financeiro',
+      nome: $localize `Financeiro`,
       icone: 'attach_money',
       url: '/financeiro',
     },
     {
-      nome: 'Atendimento',
+      nome: $localize `Atendimento`,
       icone: 'child_care',
       url: '/atendimento',
     },

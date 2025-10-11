@@ -11,7 +11,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
-
 @Component({
   selector: 'filter-component',
   imports: [

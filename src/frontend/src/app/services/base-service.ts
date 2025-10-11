@@ -1,15 +1,27 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
 import { PageRequest } from '../model/page-request';
 import { Response } from '../model/response';
 import { HttpConstants } from '../constants/http-constants';
+import { MessageService } from '../components/base/messages/messages.service';
+import { AbstractTraslateBackendMessageService } from './backend-messsages/abstract-translate-backend-message.service';
+
+export interface ExecutionCallbacks<T> {
+  onSuccess: (data: T) => void;
+  onError?: (error: HttpErrorResponse) => void;
+}
 
 @Injectable()
-export class BaseService<G, D> {
+export class BaseService<G,D> {
   urlBase: string = '/api/';
 
-  constructor(private httpClient: HttpClient, private dominio: String) {}
+  constructor(
+    private httpClient: HttpClient,
+    private dominio: String,
+    private messageService: MessageService,
+    private backendMessageService: AbstractTraslateBackendMessageService
+  ) {}
 
   list(request: PageRequest): Observable<Response> {
     return this.httpClient
@@ -19,10 +31,20 @@ export class BaseService<G, D> {
       .pipe(take(1));
   }
 
-  save(dto: D): Observable<Response> {
-    return this.httpClient
+  save(dto: D, callbacks: ExecutionCallbacks<D>) {
+    this.httpClient
       .post<Response>(this.getUrl(), dto, { headers: this.getHeaders() })
-      .pipe(take(1));
+      .pipe(take(1))
+      .subscribe({
+        next: (response) => {
+          callbacks.onSuccess(response.body);
+        },
+        error: (error: HttpErrorResponse) => {
+          if (callbacks.onError) {
+            callbacks.onError(error);
+          } else this.handleError(error);
+        },
+      });
   }
 
   findById(id: string): Observable<Response> {
@@ -51,5 +73,19 @@ export class BaseService<G, D> {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
     });
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 400 && error.error?.fields) {
+      const translatedErrors = this.backendMessageService.getMessages(
+        error.error.fields.map((it:any) => it.userMessageKey)
+      );
+      this.messageService.erro(translatedErrors);
+    } else {
+      const genericMessage =
+        error.error?.title ||
+        $localize`:@@erro.generico.inesperado:Ocorreu um erro inesperado.`;
+      this.messageService.erro(genericMessage);
+    }
   }
 }

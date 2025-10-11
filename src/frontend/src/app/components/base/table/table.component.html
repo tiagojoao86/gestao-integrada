@@ -4,7 +4,7 @@
             <th *ngFor="let col of columnDefinition" [pSortableColumn]="col.name" pResizableColumn>
                 <span class="header">{{ col.label }}</span><p-sortIcon [field]="col.name" />
             </th>
-            <th *ngIf="actions">Ações</th>
+            <th *ngIf="actions" i18n>Ações</th>
         </tr>        
     </ng-template>
     <ng-template #body let-rowData let-columns="columnDefinition">

@@ -62,9 +62,9 @@ export class LoginComponent implements OnInit {
         error: (error) => {
           this.showError = true;
           if (error.status === 401) {
-            this.errorMessage = 'Login ou senha inválidos';
+            this.errorMessage = $localize `Login ou senha inválidos`;
           } else {
-            this.errorMessage = 'Erro inesperado, tente novamente mais tarde';
+            this.errorMessage = $localize `Erro inesperado, tente novamente mais tarde`;
           }
         },
       });

@@ -3,16 +3,16 @@
     <div class="form" [formGroup]="form">
       <p-iftalabel class="w-49">
         <input pInputText id="nomeUsuario" formControlName="nome" />
-        <label for="nomeUsuario">Nome</label>
+        <label for="nomeUsuario" i18n>Nome</label>
         <small *ngIf="isControlInvalid('nome')"
-          >Esse campo não pode ser em branco.</small
+          i18n>Esse campo não pode ser em branco.</small
         >
       </p-iftalabel>
       <p-iftalabel class="w-49">
         <input pInputText id="loginUsuario" formControlName="login" />
-        <label for="loginUsuario">Login</label>
+        <label for="loginUsuario" i18n>Login</label>
         <small *ngIf="isControlInvalid('login')"
-          >Esse campo não pode ser em branco.</small
+          i18n>Esse campo não pode ser em branco.</small
         >
       </p-iftalabel>
       <p-iftalabel class="w-49">
@@ -22,7 +22,7 @@
           formControlName="senha"
           type="password"
         />
-        <label for="senhaUsuario">Senha</label>
+        <label for="senhaUsuario" i18n>Senha</label>
       </p-iftalabel>
     </div>
   </div>

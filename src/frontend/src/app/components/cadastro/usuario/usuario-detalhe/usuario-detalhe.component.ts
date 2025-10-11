@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { RouteConstants } from '../../../../constants/route-constants';
 import { UsuarioService } from '../../../../services/usuario.service';
 import {
@@ -20,6 +20,7 @@ import { PasswordModule } from 'primeng/password';
 import { MessageService } from '../../../base/messages/messages.service';
 import { messageServiceProvider } from '../../../base/messages/message.factory';
 import { UsuarioDTO } from '../../../../model/usuario-dto';
+import { UsuarioBackendMessages } from '../usuario-backend-message.service';
 
 @Component({
   selector: 'app-usuario-detalhe',
@@ -34,8 +35,7 @@ import { UsuarioDTO } from '../../../../model/usuario-dto';
   templateUrl: './usuario-detalhe.component.html',
   styleUrl: './usuario-detalhe.component.css',
   providers: [
-    UsuarioService,
-    { provide: MessageService, useFactory: messageServiceProvider },
+    UsuarioService,    
   ],
 })
 export class UsuarioDetalheComponent implements OnInit {
@@ -45,7 +45,7 @@ export class UsuarioDetalheComponent implements OnInit {
   @Input('detailId') detailId: string | null = null;
   @Output('closeDetail') closeDetail = new EventEmitter<void>();
 
-  titulo = 'Usuário: ';
+  titulo = $localize `Usuário: `;
 
   acoesTela: RegisterActionToolbar[] = [
     {
@@ -53,20 +53,22 @@ export class UsuarioDetalheComponent implements OnInit {
         this.goBackFn();
       },
       icon: 'close',
-      title: 'Cancelar',
+      title: $localize `Cancelar`,
     },
     {
       action: () => {
         this.salvar();
       },
       icon: 'save',
-      title: 'Salvar',
+      title: $localize `Salvar`,
     },
   ];
 
   constructor(    
     private service: UsuarioService,    
-    private messages: MessageService
+    private messages: MessageService,
+    private translateBackendMessages: UsuarioBackendMessages,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -74,7 +76,7 @@ export class UsuarioDetalheComponent implements OnInit {
 
     if (this.detailId === RouteConstants.P_ADD) {
       this.modoEdicao = false;
-      this.titulo += 'Novo';
+      this.titulo += $localize `Novo`;
     } else {
       this.modoEdicao = true;
       this.service.findById(this.detailId!).subscribe((response) => {
@@ -87,8 +89,8 @@ export class UsuarioDetalheComponent implements OnInit {
 
   initForm() {
     const fb = new FormBuilder().nonNullable;
-    this.form.addControl('nome', fb.control(null, [Validators.required]));
-    this.form.addControl('login', fb.control(null, [Validators.required]));
+    this.form.addControl('nome', fb.control(null));
+    this.form.addControl('login', fb.control(null));
     this.form.addControl('senha', fb.control(null));
   }
 
@@ -100,7 +102,7 @@ export class UsuarioDetalheComponent implements OnInit {
 
   salvar() {
     if (!this.form.valid) {
-      this.messages.erro('Existem campo inválidos.');
+      this.messages.erro($localize `Existem campo inválidos.`);
       return;
     }
 
@@ -108,15 +110,12 @@ export class UsuarioDetalheComponent implements OnInit {
     this.usuario.login = this.form.value.login;
     this.usuario.senha = this.form.value.senha;
 
-    this.service.save(this.usuario).subscribe((response) => {
-      if (response.statusCode === 200) {
-        this.usuario = response.body;
-        this.messages.sucesso('Usuário salvo com sucesso.');
+    this.service.save(this.usuario, {
+      onSuccess: (data: UsuarioDTO) => {
+        this.usuario = data;
+        this.messages.sucesso($localize`Usuário salvo com sucesso.`);
         this.goBackFn();
-      } else if (response.statusCode === 500) {
-        console.log(response);
-        this.messages.erro(response.errorMessage!);
-      }
+      },
     });
   }
 

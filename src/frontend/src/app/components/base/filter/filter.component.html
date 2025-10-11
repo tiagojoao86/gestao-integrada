@@ -1,8 +1,8 @@
 <div class="filtro-component">
-  <span class="titulo">Filtros</span>
+  <span class="titulo" i18n>Filtros</span>
   <div class="seletor" [formGroup]="formSelector">
     <div class="formulario-grupo-input w-25">
-      <label for="property">Adicionar filtro</label>
+      <label for="property" i18n>Adicionar filtro</label>
       <p-select
         class="w-100"
         [options]="filters"
@@ -10,10 +10,11 @@
         id="property"
         formControlName="property"
         placeholder="Selecione um campo"
+        i18n-placeholder
       />
     </div>
     <div class="formulario-grupo-input w-15" *ngIf="selectedFilters.length > 1">
-      <label for="filterLogicOperator">Operador Lógico</label>
+      <label for="filterLogicOperator" i18n>Operador Lógico</label>
       <p-select
         class="w-100"
         [options]="logicOperators"
@@ -54,11 +55,11 @@
   <div class="acoes">
     <button pButton class="secundario" (click)="onCancelar()">
       <span class="material-icons">close</span>
-      <span pButtonLabel>Cancelar</span>
+      <span pButtonLabel i18n>Cancelar</span>
     </button>
     <button pButton class="primario" (click)="onFiltrar()">
       <span class="material-icons">search</span>
-      <span pButtonLabel>Filtrar</span>
+      <span pButtonLabel i18n>Filtrar</span>
     </button>
   </div>
 </div>

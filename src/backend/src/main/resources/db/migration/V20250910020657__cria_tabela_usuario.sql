@@ -1,7 +1,7 @@
 -- CREATE USER pipa WITH PASSWORD 'pipa123';
-
--- grant all privileges on schema pipa to pipa;
-
+-- CREATE DATABASE gestao-integrada OWNER pipa;
+-- GRANT CONNECT ON DATABASE gestao_integrada TO pipa;
+-- GRANT ALL PRIVILEGES ON DATABASE gestao_integrada TO pipa;
 -- admin password: @RLthotr$&u=Huge1e-r
 
 -- Script para criar a tabela 'usuario' no PostgreSQL

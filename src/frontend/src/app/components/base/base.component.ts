@@ -14,7 +14,7 @@ import { BadgeModule } from 'primeng/badge';
 export class BaseComponent {
   constructor(private location: Location) {}
 
-  @Input('title') title: string = 'Título';
+  @Input('title') title: string = $localize `Título`;
   @Input('actions') actions: RegisterActionToolbar[] = [];
   @Input('hideFooter') hideFooter: boolean = false;
   @Input('hideToolbar') hideToolbar: boolean = false;

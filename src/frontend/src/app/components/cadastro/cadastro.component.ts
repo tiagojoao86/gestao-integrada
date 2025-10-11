@@ -11,10 +11,10 @@ import { GrupoRecurso, RecursoGrupoComponent } from "../base/menu/recurso-grupo/
 })
 export class CadastroComponent {
 
-    titulo: string = 'Cadastros';
+    titulo: string = $localize `Cadastros`;
 
     recursos: GrupoRecurso[] = [
-        {nome: 'Geral', recursos: [{nome: 'Usuários', icone: 'person', url: '/cadastro/usuario'}]}
+        {nome: $localize `Geral`, recursos: [{nome: $localize `Usuários`, icone: 'person', url: '/cadastro/usuario'}]}
     ];
     
 }
