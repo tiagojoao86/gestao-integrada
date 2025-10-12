@@ -1,15 +1,16 @@
 package br.com.grupopipa.gestaointegrada.core.controller;
 
+import br.com.grupopipa.gestaointegrada.core.dao.DatabaseConstraintsEnum;
 import br.com.grupopipa.gestaointegrada.core.exception.EntityNotFoundException;
 import br.com.grupopipa.gestaointegrada.core.exception.beanvalidation.BeanValidationException;
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -55,18 +56,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(v -> String.format("'%s': %s", v.getKey(), v.getMessage()))
                 .collect(Collectors.joining(",\n"));
 
-        List<ApiError.Field> fields = ex.getViolations().stream()
+        List<String> userMessageKey = ex.getViolations().stream()
                 .map(v -> {
-                    String key = v.getKey();
-                    String name = key.contains(".") ? key.substring(0, key.indexOf(".")) : key;
-                    String userMessageKey = StringUtils.hasText(ex.getEntityName())
+                    String key = v.getKey();                    
+                    return StringUtils.hasText(ex.getEntityName())
                             ? ex.getEntityName() + "." + key
                             : key;
-
-                    return ApiError.Field.builder()
-                            .name(name)
-                            .userMessageKey(userMessageKey)
-                            .build();
                 })
                 .toList();
 
@@ -74,7 +69,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(status.value())
                 .timestamp(OffsetDateTime.now())
                 .title(title)
-                .fields(fields)
+                .userMessageKey(userMessageKey)
                 .build();
 
         log.error(title + ": " + detail);
@@ -82,18 +77,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), status, request);
     }
 
-    @ExceptionHandler(TransactionSystemException.class)
-    public ResponseEntity<Object> handleTransactionSystemException(TransactionSystemException ex, WebRequest request) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        String title = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(
+            DataIntegrityViolationException ex,
+            WebRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String title = INVALID_DATA;
         String detail = ex.getMessage();
         List<String> userMessageKeys = List.of(ErrorKeys.INTERNAL_SERVER_ERROR);
 
-        if (ex.getCause().getClass().getName().equals("jakarta.persistence.RollbackException") &&
-                ex.getCause().getCause().getClass().getName()
-                        .equals("jakarta.validation.ConstraintViolationException")) {
-
-            ((ConstraintViolationException) ex.getCause().getCause()).getConstraintViolations();
+        if (ex.getCause().getClass().getName().equals("org.hibernate.exception.ConstraintViolationException")) {
+            userMessageKeys = List.of(
+                    DatabaseConstraintsEnum.getByKey(
+                        ((ConstraintViolationException) ex.getCause()).getConstraintName())
+                        .getUserMessageKey()
+                    );
         }
 
         ApiError apiError = ApiError.builder()
@@ -103,8 +101,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .userMessageKey(userMessageKeys)
                 .detail(List.of(detail))
                 .build();
-
-        log.error(title + ": " + detail);
 
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), status, request);
     }

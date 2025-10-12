@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 @Injectable({
   providedIn: 'root',
 })
-export abstract class AbstractTraslateBackendMessageService {
+export abstract class AbstractBackendMessageService {
   constructor() {}
 
   getMessage(code: string): string {

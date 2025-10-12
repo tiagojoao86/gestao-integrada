@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { AbstractTraslateBackendMessageService } from "../../../services/backend-messsages/abstract-translate-backend-message.service";
+import { AbstractBackendMessageService } from "../../../services/backend-messsages/abstract-backend-message.service";
 
 @Injectable({
   providedIn: 'root',
 })
-export class UsuarioBackendMessages extends AbstractTraslateBackendMessageService {
+export class UsuarioBackendMessages extends AbstractBackendMessageService {
   messages(): { [key: string]: string } {
     return {
       'usuario.nome.notBlank': $localize`:@@usuario.nome.notBlank:O nome do usuário não pode ser em branco.`,

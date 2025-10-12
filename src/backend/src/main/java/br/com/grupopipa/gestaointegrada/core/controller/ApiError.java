@@ -17,12 +17,4 @@ public class ApiError {
     private String title;
     private List<String> detail;
     private List<String> userMessageKey;
-    private List<Field> fields;
-
-    @Getter
-    @Builder
-    public static class Field {
-        private String name;
-        private String userMessageKey;
-    }
 }

@@ -31,10 +31,8 @@ export class BaseComponent {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    console.log('key', event);
     const key = event.key.toLowerCase();
     const shortcut = this.buildShortcutString(event);
-    console.log('shortcut', shortcut);
 
     const action = this.actions.find(a => a.shortcut?.toLowerCase() === shortcut);
 

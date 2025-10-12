@@ -5,7 +5,7 @@ import { PageRequest } from '../model/page-request';
 import { Response } from '../model/response';
 import { HttpConstants } from '../constants/http-constants';
 import { MessageService } from '../components/base/messages/messages.service';
-import { AbstractTraslateBackendMessageService } from './backend-messsages/abstract-translate-backend-message.service';
+import { AbstractBackendMessageService } from './backend-messsages/abstract-backend-message.service';
 
 export interface ExecutionCallbacks<T> {
   onSuccess: (data: T) => void;
@@ -20,7 +20,7 @@ export class BaseService<G,D> {
     private httpClient: HttpClient,
     private dominio: String,
     private messageService: MessageService,
-    private backendMessageService: AbstractTraslateBackendMessageService
+    private backendMessageService: AbstractBackendMessageService
   ) {}
 
   list(request: PageRequest): Observable<Response> {
@@ -76,9 +76,9 @@ export class BaseService<G,D> {
   }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.status === 400 && error.error?.fields) {
+    if (error.status === 400 && error.error?.userMessageKey) {
       const translatedErrors = this.backendMessageService.getMessages(
-        error.error.fields.map((it:any) => it.userMessageKey)
+        error.error.userMessageKey
       );
       this.messageService.erro(translatedErrors);
     } else {
