@@ -34,9 +34,7 @@ import { UsuarioBackendMessages } from '../usuario-backend-message.service';
   ],
   templateUrl: './usuario-detalhe.component.html',
   styleUrl: './usuario-detalhe.component.css',
-  providers: [
-    UsuarioService,    
-  ],
+  providers: [UsuarioService],
 })
 export class UsuarioDetalheComponent implements OnInit {
   form: FormGroup = new FormGroup([]);
@@ -45,7 +43,7 @@ export class UsuarioDetalheComponent implements OnInit {
   @Input('detailId') detailId: string | null = null;
   @Output('closeDetail') closeDetail = new EventEmitter<void>();
 
-  titulo = $localize `Usuário: `;
+  titulo = $localize`Usuário: `;
 
   acoesTela: RegisterActionToolbar[] = [
     {
@@ -53,30 +51,30 @@ export class UsuarioDetalheComponent implements OnInit {
         this.goBackFn();
       },
       icon: 'close',
-      title: $localize `Cancelar`,
+      title: $localize`Cancelar` + ' (esc)',
+      shortcut: 'escape',
     },
     {
       action: () => {
         this.salvar();
       },
       icon: 'save',
-      title: $localize `Salvar`,
+      title: $localize`Salvar` + ' (enter)',
+      shortcut: 'enter',
     },
   ];
 
-  constructor(    
-    private service: UsuarioService,    
-    private messages: MessageService,
-    private translateBackendMessages: UsuarioBackendMessages,
-    private location: Location
-  ) { }
+  constructor(
+    private service: UsuarioService,
+    private messages: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
 
     if (this.detailId === RouteConstants.P_ADD) {
       this.modoEdicao = false;
-      this.titulo += $localize `Novo`;
+      this.titulo += $localize`Novo`;
     } else {
       this.modoEdicao = true;
       this.service.findById(this.detailId!).subscribe((response) => {
@@ -102,7 +100,7 @@ export class UsuarioDetalheComponent implements OnInit {
 
   salvar() {
     if (!this.form.valid) {
-      this.messages.erro($localize `Existem campo inválidos.`);
+      this.messages.erro($localize`Existem campo inválidos.`);
       return;
     }
 

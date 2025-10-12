@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
@@ -28,11 +28,37 @@ export class BaseComponent {
 
     this.location.back();
   }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    console.log('key', event);
+    const key = event.key.toLowerCase();
+    const shortcut = this.buildShortcutString(event);
+    console.log('shortcut', shortcut);
+
+    const action = this.actions.find(a => a.shortcut?.toLowerCase() === shortcut);
+
+    if (action) {
+      event.preventDefault();
+      action.action();
+    }
+  }
+
+  private buildShortcutString(event: KeyboardEvent): string {
+    const parts: string[] = [];
+    if (event.ctrlKey) parts.push('control');
+    if (event.altKey) parts.push('alt');
+    if (event.shiftKey) parts.push('shift');
+    
+    parts.push(event.key.toLowerCase());
+    return parts.join('.');
+  }
 }
 
 export interface RegisterActionToolbar {
   action: Function;
   icon: string;
   title: string;
+  shortcut?: string;
   value?: string;
 }

@@ -38,7 +38,7 @@ import { Router } from '@angular/router';
   styleUrl: './usuario-grid.component.css',
 })
 export class UsuarioGridComponent {
-  titulo: string = $localize `Cadastro de usuários`;
+  titulo: string = $localize`Cadastro de usuários`;
 
   @Output() openDetail = new EventEmitter<string>();
 
@@ -51,21 +51,21 @@ export class UsuarioGridComponent {
   colunas: DataSourceColumn[] = [
     {
       name: 'nome',
-      label: $localize `Nome`,
+      label: $localize`Nome`,
       getValue: (element: UsuarioGridDTO) => {
         return element.nome;
       },
     },
     {
       name: 'login',
-      label: $localize `Login`,
+      label: $localize`Login`,
       getValue: (element: UsuarioGridDTO) => {
         return element.login;
       },
     },
     {
       name: 'createdAt',
-      label: $localize `Criado em`,
+      label: $localize`Criado em`,
       getValue: (element: UsuarioGridDTO) => {
         return this.datePipe.transform(element.createdAt, 'dd/MM/yyyy');
       },
@@ -95,39 +95,42 @@ export class UsuarioGridComponent {
         this.refreshList();
       },
       icon: 'refresh',
-      title: $localize `Atualizar`,
+      title: $localize`Atualizar` + ' (alt + r)',
+      shortcut: 'alt.r',
     },
     {
       action: () => {
         this.openDetail.emit('add');
       },
       icon: 'add',
-      title: $localize `Adicionar`,
+      title: $localize`Adicionar` + ' (alt + a)',
+      shortcut: 'alt.a',
     },
     {
       action: () => {
         this.alternarMostrarFiltros();
       },
       icon: 'search',
-      title: $localize `Pesquisar`,
+      title: $localize`Pesquisar` + ' (alt + p)',
       value: '0',
+      shortcut: 'alt.p',
     },
   ];
 
   filtros: FilterProperty[] = [
     {
       property: 'login',
-      label: $localize `Login`,
+      label: $localize`Login`,
       filterType: FilterType.TEXTO,
     },
     {
       property: 'nome',
-      label: $localize `Nome`,
+      label: $localize`Nome`,
       filterType: FilterType.TEXTO,
     },
     {
       property: 'createdAt',
-      label: $localize `Criado em`,
+      label: $localize`Criado em`,
       filterType: FilterType.DATA,
     },
   ];
@@ -139,10 +142,7 @@ export class UsuarioGridComponent {
     []
   );
 
-  constructor(
-    private service: UsuarioService,
-    private datePipe: DatePipe,
-  ) {
+  constructor(private service: UsuarioService, private datePipe: DatePipe) {
     this.listarUsuarios();
   }
 

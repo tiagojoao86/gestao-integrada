@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -104,6 +105,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
 
         log.error(title + ": " + detail);
+
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), status, request);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        String title = HttpStatus.UNAUTHORIZED.getReasonPhrase();
+        String detail = ex.getMessage();
+        List<String> userMessageKeys = List.of(ErrorKeys.BAD_CREDENTIAL);
+
+        ApiError apiError = ApiError.builder()
+                .status(status.value())
+                .timestamp(OffsetDateTime.now())
+                .title(title)
+                .userMessageKey(userMessageKeys)
+                .detail(List.of(detail))
+                .build();
 
         return handleExceptionInternal(ex, apiError, new HttpHeaders(), status, request);
     }
