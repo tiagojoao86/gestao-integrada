@@ -24,8 +24,9 @@ public class DataSourceConfig {
 
     private static final String[] ENTITY_PACKAGES = new String[] {
             "br.com.grupopipa.gestaointegrada.core.entity",
-            "br.com.grupopipa.gestaointegrada.cadastro.usuario.entity"
-    };
+            "br.com.grupopipa.gestaointegrada.cadastro.usuario.entity",
+            "br.com.grupopipa.gestaointegrada.cadastro.perfil.entity",
+        };
 
     @Value("${spring.datasource.url}")
     private String dbUrl;

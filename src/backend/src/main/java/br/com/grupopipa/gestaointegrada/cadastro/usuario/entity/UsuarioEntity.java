@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.UsuarioPerfilEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.UsuarioDTO;
@@ -16,6 +17,7 @@ import br.com.grupopipa.gestaointegrada.core.valueobject.Nome;
 import br.com.grupopipa.gestaointegrada.core.valueobject.Senha;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 
 @Entity(name = "usuario")
 public class UsuarioEntity extends BaseEntity {
@@ -28,6 +30,9 @@ public class UsuarioEntity extends BaseEntity {
     
     @Embedded
     private Senha senha;
+
+    @OneToMany(mappedBy = "usuario")
+    private Set<UsuarioPerfilEntity> perfis = new HashSet<>();
 
     private UsuarioEntity(Nome nome, Login login, Senha senha) {
         this.nome = nome;

@@ -39,7 +39,7 @@ public class JwtService {
     }
 
     public String generateAuthToken(String username, Collection<? extends GrantedAuthority> authorities) {
-        return generateToken(username, authorities, 10);
+        return generateToken(username, authorities, 60);
     }
 
     public String generateRefreshToken(String username, Collection<? extends GrantedAuthority> authorities) {

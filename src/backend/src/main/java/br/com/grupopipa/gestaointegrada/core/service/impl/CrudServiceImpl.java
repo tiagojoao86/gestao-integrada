@@ -22,6 +22,7 @@ import br.com.grupopipa.gestaointegrada.core.entity.BaseEntity;
 import br.com.grupopipa.gestaointegrada.core.enums.FilterLogicOperator;
 import br.com.grupopipa.gestaointegrada.core.exception.EntityNotFoundException;
 import br.com.grupopipa.gestaointegrada.core.service.CrudService;
+import jakarta.transaction.Transactional;
 
 @Service
 public abstract class CrudServiceImpl<D extends DTO, G extends GridDTO, T extends BaseEntity, R extends JpaRepository<T, UUID>>
@@ -68,6 +69,7 @@ public abstract class CrudServiceImpl<D extends DTO, G extends GridDTO, T extend
 
     }
 
+    @Transactional
     public D findById(UUID id) {
         return buildDTOFromEntity(this.findEntityById(id));
     }

@@ -22,7 +22,7 @@ import lombok.Getter;
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue // Permite que o JPA saiba que é gerado.
+    @GeneratedValue
     @UuidGenerator(style = UuidGenerator.Style.TIME)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
