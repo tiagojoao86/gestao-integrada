@@ -1,5 +1,6 @@
 package br.com.grupopipa.gestaointegrada.cadastro.perfil.entity;
 
+import br.com.grupopipa.gestaointegrada.cadastro.modulo.entity.ModuloEntity;
 import br.com.grupopipa.gestaointegrada.core.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -91,5 +92,10 @@ public class PerfilModuloEntity extends BaseEntity {
         public PerfilModuloEntity build() {
             return new PerfilModuloEntity(perfil, modulo, podeListar, podeVisualizar, podeEditar, podeDeletar);
         }
+    }
+
+    /* package-private setter to keep both sides consistent when managed by PerfilEntity */
+    void setPerfil(PerfilEntity perfil) {
+        this.perfil = perfil;
     }
 }

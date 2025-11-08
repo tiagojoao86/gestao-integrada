@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 
+import br.com.grupopipa.gestaointegrada.cadastro.modulo.ModuloRepository;
 import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilEntity;
 import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilModuloEntity;
 import br.com.grupopipa.gestaointegrada.core.dao.Specifications;
@@ -18,54 +19,52 @@ public class PerfilServiceImpl
         extends CrudServiceImpl<PerfilDTO, PerfilGridDTO, PerfilEntity, PerfilRepository>
         implements PerfilService {
 
-    private final PerfilModuloRepository perfilModuloRepository;
     private final ModuloRepository moduloRepository;
 
     public PerfilServiceImpl(PerfilRepository repository,
                              Specifications<PerfilEntity> specifications,
-                             PerfilModuloRepository perfilModuloRepository,
                              ModuloRepository moduloRepository) {
         super(repository, specifications);
-        this.perfilModuloRepository = perfilModuloRepository;
         this.moduloRepository = moduloRepository;
     }
 
     @Override
     @Transactional
-    public PerfilDTO save(PerfilDTO dto) {        
-        PerfilDTO perfilDTO = super.save(dto);
-        PerfilEntity entity = repository.findById(perfilDTO.getId()).get();
-
-        // Apaga as permissões antigas e recria com base no DTO
-        perfilModuloRepository.deleteByPerfilId(dto.getId());
-        if (Objects.nonNull(dto.getPermissoes())) {
-            for (PerfilModuloDTO permissaoDTO : dto.getPermissoes()) {
-                PerfilModuloEntity permissaoEntity = buildPerfilModuloEntity(entity, permissaoDTO);
-                perfilModuloRepository.save(permissaoEntity);
-            }
-        }
-
-        return buildDTOFromEntity(entity);
+    public PerfilDTO save(PerfilDTO dto) {                
+        return super.save(dto);
     }
 
     @Override
     protected PerfilEntity mergeEntityAndDTO(PerfilEntity entity, PerfilDTO dto) {
         if (Objects.isNull(entity)) {
-            return new PerfilEntity.Builder()
+            PerfilEntity newEntity = new PerfilEntity.Builder()
                     .nome(dto.getNome())
                     .build();
+            addPermissoesToEntity(newEntity, dto);
+            return newEntity;
         }
 
         entity.updatePerfilFromDTO(dto);
+        entity.getPermissoes().clear();
+        addPermissoesToEntity(entity, dto);
+
         return entity;
+    }
+    
+    private void addPermissoesToEntity(PerfilEntity entity, PerfilDTO dto) {
+        if (Objects.nonNull(dto.getPermissoes())) {
+            for (PerfilModuloDTO permissaoDTO : dto.getPermissoes()) {
+                PerfilModuloEntity permissaoEntity = buildPerfilModuloEntity(entity, permissaoDTO);
+                entity.addPermissao(permissaoEntity);
+            }
+        }
     }
 
     @Override
     protected PerfilDTO buildDTOFromEntity(PerfilEntity entity) {
-        List<PerfilModuloEntity> permissoes = perfilModuloRepository.findByPerfilId(entity.getId());
         List<PerfilModuloDTO> permissoesDTO = new ArrayList<>();
 
-        for (PerfilModuloEntity pme : permissoes) {
+        for (PerfilModuloEntity pme : entity.getPermissoes()) {
             PerfilModuloDTO dto = new PerfilModuloDTO();
             dto.setModuloId(pme.getModulo().getId());
             dto.setModuloNome(pme.getModulo().getNome());

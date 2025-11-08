@@ -26,6 +26,7 @@ public class DataSourceConfig {
             "br.com.grupopipa.gestaointegrada.core.entity",
             "br.com.grupopipa.gestaointegrada.cadastro.usuario.entity",
             "br.com.grupopipa.gestaointegrada.cadastro.perfil.entity",
+            "br.com.grupopipa.gestaointegrada.cadastro.modulo.entity",
         };
 
     @Value("${spring.datasource.url}")

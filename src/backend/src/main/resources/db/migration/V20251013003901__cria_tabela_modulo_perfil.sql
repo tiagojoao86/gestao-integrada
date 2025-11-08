@@ -1,28 +1,24 @@
--- Tabela para os grupos de módulos
-CREATE TABLE modulo_grupo (
-    id UUID NOT NULL,
-    nome VARCHAR(100) NOT NULL,
-    CONSTRAINT pk_modulo_grupo PRIMARY KEY (id),
-    CONSTRAINT uk_modulo_grupo_nome UNIQUE (nome)
-);
-
-COMMENT ON TABLE modulo_grupo IS 'Grupos para organização dos módulos do sistema.';
-
 -- Tabela para armazenar os módulos do sistema (cadastrados manualmente)
 CREATE TABLE modulo (
     id UUID NOT NULL,
     chave VARCHAR(50) NOT NULL,
     nome VARCHAR(100) NOT NULL,
-    grupo_id UUID NOT NULL,
+    grupo VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    created_by VARCHAR(255),
+    updated_by VARCHAR(255),
     CONSTRAINT pk_modulo PRIMARY KEY (id),
-    CONSTRAINT uk_modulo_chave UNIQUE (chave),
-    CONSTRAINT fk_modulo_grupo FOREIGN KEY (grupo_id) REFERENCES modulo_grupo (id)
+    CONSTRAINT uk_modulo_chave UNIQUE (chave)
 );
 
 COMMENT ON TABLE modulo IS 'Módulos do sistema para controle de acesso.';
 COMMENT ON COLUMN modulo.chave IS 'Chave única textual para identificar o módulo no código.';
 COMMENT ON COLUMN modulo.nome IS 'Nome amigável do módulo para exibição em tela.';
-COMMENT ON COLUMN modulo.grupo_id IS 'Referência para o grupo ao qual o módulo pertence.';
+COMMENT ON COLUMN modulo.created_at IS 'Data de criação do registro (audit)';
+COMMENT ON COLUMN modulo.updated_at IS 'Data da última modificação do registro (audit)';
+COMMENT ON COLUMN modulo.created_by IS 'Usuário que criou o registro (audit)';
+COMMENT ON COLUMN modulo.updated_by IS 'Usuário que atualizou o registro (audit)';
 
 -- Tabela para os perfis de acesso
 CREATE TABLE perfil (
@@ -76,19 +72,16 @@ CREATE TABLE perfil_modulo (
 
 COMMENT ON TABLE perfil_modulo IS 'Define as permissões de um perfil para um determinado módulo.';
 
--- INSERTS INICIAIS PARA OS GRUPOS E MÓDULOS
-INSERT INTO modulo_grupo (id, nome) VALUES (gen_random_uuid(), 'Cadastros');
-
-INSERT INTO modulo (id, chave, nome, grupo_id)
+INSERT INTO modulo (id, chave, nome, grupo)
 VALUES (
         gen_random_uuid (),
         'USUARIO',
         'Cadastro de Usuários',
-        (SELECT id FROM modulo_grupo WHERE nome = 'Cadastros')
+        'CADASTROS'
     ),
     (
         gen_random_uuid (),
         'PERFIL',
         'Perfis de Acesso',
-        (SELECT id FROM modulo_grupo WHERE nome = 'Cadastros')
+        'CADASTROS'
     );

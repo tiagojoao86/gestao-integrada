@@ -3,7 +3,8 @@ package br.com.grupopipa.gestaointegrada.core.dao;
 public enum DatabaseConstraintsEnum {
 
     DEFAULT("errors.internalServerError"),
-    UK_USUARIO_LOGIN("usuario.login.unique");
+    UK_USUARIO_LOGIN("usuario.login.unique"),
+    UK_PERFIL_NOME("perfil.nome.unique");
     
     String userMessageKey;
 

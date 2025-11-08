@@ -1,23 +1,16 @@
-package br.com.grupopipa.gestaointegrada.cadastro.perfil.entity;
+package br.com.grupopipa.gestaointegrada.cadastro.modulo.entity;
 
-import java.util.UUID;
-
+import br.com.grupopipa.gestaointegrada.cadastro.modulo.GrupoModuloEnum;
+import br.com.grupopipa.gestaointegrada.core.entity.BaseEntity;
 import br.com.grupopipa.gestaointegrada.core.valueobject.Chave;
 import br.com.grupopipa.gestaointegrada.core.valueobject.Nome;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity(name = "modulo")
-public class ModuloEntity {
-
-    @Id
-    @GeneratedValue
-    private UUID id;
+public class ModuloEntity extends BaseEntity {
 
     @Embedded
     private Chave chave;
@@ -25,15 +18,10 @@ public class ModuloEntity {
     @Embedded
     private Nome nome;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "grupo_id", nullable = false)
-    private ModuloGrupoEntity grupo;
+    @Enumerated(EnumType.STRING)
+    private GrupoModuloEnum grupo;
 
     protected ModuloEntity() {
-    }
-
-    public UUID getId() {
-        return id;
     }
 
     public String getChave() {
@@ -44,7 +32,8 @@ public class ModuloEntity {
         return this.nome != null ? this.nome.getValue() : null;
     }
 
-    public ModuloGrupoEntity getGrupo() {
+    public GrupoModuloEnum getGrupo() {
         return grupo;
     }
+
 }

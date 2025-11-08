@@ -9,6 +9,9 @@ import br.com.grupopipa.gestaointegrada.core.exception.beanvalidation.BeanValida
 import br.com.grupopipa.gestaointegrada.core.exception.beanvalidation.BeanValidationMessage;
 import br.com.grupopipa.gestaointegrada.core.validation.ValidationUtils;
 import br.com.grupopipa.gestaointegrada.core.valueobject.Nome;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 
@@ -17,6 +20,9 @@ public class PerfilEntity extends BaseEntity {
 
     @Embedded
     private Nome nome;
+    
+    @OneToMany(mappedBy = "perfil", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PerfilModuloEntity> permissoes = new HashSet<>();
     
     protected PerfilEntity() {
     }
@@ -27,6 +33,27 @@ public class PerfilEntity extends BaseEntity {
 
     public String getNome() {
         return this.nome != null ? this.nome.getValue() : null;
+    }
+
+    public Set<PerfilModuloEntity> getPermissoes() {
+        return this.permissoes;
+    }
+
+    public void addPermissao(PerfilModuloEntity permissao) {
+        if (permissao == null) return;
+        // ensure the child points to this perfil
+        permissao.setPerfil(this);
+        this.permissoes.add(permissao);
+    }
+
+    public void removePermissao(PerfilModuloEntity permissao) {
+        if (permissao == null) return;
+        this.permissoes.remove(permissao);
+        try {
+            permissao.setPerfil(null);
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     private static class ValidatedData {
