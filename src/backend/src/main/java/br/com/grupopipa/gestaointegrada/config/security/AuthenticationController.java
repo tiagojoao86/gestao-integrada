@@ -1,10 +1,9 @@
 package br.com.grupopipa.gestaointegrada.config.security;
 
-import java.util.List;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.UsuarioDTO;
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.UsuarioService;
+import br.com.grupopipa.gestaointegrada.config.security.dto.AuthRequest;
+import br.com.grupopipa.gestaointegrada.config.security.dto.AuthResponse;
 import br.com.grupopipa.gestaointegrada.core.controller.Response;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
 
 import static br.com.grupopipa.gestaointegrada.core.constants.Constants.R_AUTHENTICATE;
 import static br.com.grupopipa.gestaointegrada.core.controller.Response.forbidden;
@@ -29,13 +29,16 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
     private UsuarioService usuarioService;
     private AuthenticationManager authenticationManager;
+    private UserDetailsServiceImpl userDetailsService;
 
     public AuthenticationController(AuthenticationService authenticationService, 
             UsuarioService usuarioEntityBusiness,
-            AuthenticationManager authenticationManager) {
+            AuthenticationManager authenticationManager,
+            UserDetailsServiceImpl userDetailsService) {
         this.authenticationService = authenticationService;
         this.usuarioService = usuarioEntityBusiness;
         this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping
@@ -58,7 +61,8 @@ public class AuthenticationController {
 
         UsuarioDTO userDTO = this.usuarioService.findUsuarioDTOByLogin(authentication.getName());
 
-        AuthResponse authResponse = new AuthResponse(accessToken, userDTO.getLogin(), userDTO.getNome());
+        AuthResponse authResponse = new AuthResponse(accessToken, userDTO.getLogin(), userDTO.getNome(),
+                authentication.getAuthorities());
 
         return ok(authResponse);
 
@@ -71,31 +75,14 @@ public class AuthenticationController {
         }
 
         String username = authenticationService.getUsernameFromToken(refreshToken);
-        String newAccessToken = authenticationService.authenticate(username, List.of(() -> "read"));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        String newAccessToken = authenticationService.authenticate(username, userDetails.getAuthorities());
 
         UsuarioDTO userDTO = this.usuarioService.findUsuarioDTOByLogin(username);
 
-        AuthResponse authResponse = new AuthResponse(newAccessToken, userDTO.getLogin(), userDTO.getNome());
+        AuthResponse authResponse = new AuthResponse(newAccessToken, userDTO.getLogin(), userDTO.getNome(),
+                userDetails.getAuthorities());
 
         return ok(authResponse);
     }
-}
-
-@Getter
-class AuthResponse {
-    private String username;
-    private String name;
-    private String token;
-
-    public AuthResponse(String token, String username, String name) {
-        this.token = token;
-        this.username = username;
-        this.name = name;
-    }
-}
-
-@Getter
-class AuthRequest {
-    private String username;
-    private String password;
 }

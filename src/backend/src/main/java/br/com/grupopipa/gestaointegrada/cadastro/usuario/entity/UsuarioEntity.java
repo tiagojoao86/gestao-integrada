@@ -17,6 +17,7 @@ import br.com.grupopipa.gestaointegrada.core.valueobject.Nome;
 import br.com.grupopipa.gestaointegrada.core.valueobject.Senha;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
 @Entity(name = "usuario")
@@ -31,7 +32,7 @@ public class UsuarioEntity extends BaseEntity {
     @Embedded
     private Senha senha;
 
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
     private Set<UsuarioPerfilEntity> perfis = new HashSet<>();
 
     private UsuarioEntity(Nome nome, Login login, Senha senha) {
@@ -53,6 +54,10 @@ public class UsuarioEntity extends BaseEntity {
 
     public String getSenha() {
         return this.senha != null ? this.senha.getValue() : null;
+    }
+
+    public Set<UsuarioPerfilEntity> getPerfis() {
+        return perfis;
     }
 
     private static class ValidatedData {

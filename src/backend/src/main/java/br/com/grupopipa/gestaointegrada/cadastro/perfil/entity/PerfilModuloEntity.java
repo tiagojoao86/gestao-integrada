@@ -22,7 +22,7 @@ public class PerfilModuloEntity extends BaseEntity {
     @JoinColumn(name = "perfil_id", nullable = false)
     private PerfilEntity perfil;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "modulo_id", nullable = false)
     private ModuloEntity modulo;
 

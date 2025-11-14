@@ -21,7 +21,7 @@ public class UsuarioPerfilEntity extends BaseEntity {
     @JoinColumn(name = "usuario_id", nullable = false)
     private UsuarioEntity usuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "perfil_id", nullable = false)
     private PerfilEntity perfil;
     

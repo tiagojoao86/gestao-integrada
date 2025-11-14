@@ -21,7 +21,7 @@ public class PerfilEntity extends BaseEntity {
     @Embedded
     private Nome nome;
     
-    @OneToMany(mappedBy = "perfil", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PerfilModuloEntity> permissoes = new HashSet<>();
     
     protected PerfilEntity() {
