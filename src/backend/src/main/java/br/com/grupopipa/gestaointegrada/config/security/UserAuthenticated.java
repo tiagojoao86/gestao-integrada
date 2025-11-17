@@ -5,31 +5,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilEntity;
 import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilModuloEntity;
 import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.UsuarioPerfilEntity;
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.entity.UsuarioEntity;
-import lombok.Getter;
 
 public class UserAuthenticated implements UserDetails {
-
-  @Getter
-  public static class CustomAuthority implements GrantedAuthority {
-    private final PerfilModuloEntity perfilModuloEntity;
-    private final String authority;
-
-    public CustomAuthority(String role, PerfilModuloEntity perfilModuloEntity) {
-      this.authority = role;
-      this.perfilModuloEntity = perfilModuloEntity;
-    }
-
-    @Override
-    public String getAuthority() {
-      return this.authority;
-    }
-  }
 
   private final UsuarioEntity user;
 
@@ -56,16 +40,16 @@ public class UserAuthenticated implements UserDetails {
         for (PerfilModuloEntity permissao : perfil.getPermissoes()) {
           String moduloChave = permissao.getModulo().getChave();
           if (permissao.isPodeListar()) {
-            authorities.add(new CustomAuthority(moduloChave + "_LISTAR", permissao));
+            authorities.add(new SimpleGrantedAuthority(moduloChave + "_LISTAR"));
           }
           if (permissao.isPodeVisualizar()) {
-            authorities.add(new CustomAuthority(moduloChave + "_VISUALIZAR", permissao));
+            authorities.add(new SimpleGrantedAuthority(moduloChave + "_VISUALIZAR"));
           }
           if (permissao.isPodeEditar()) {
-            authorities.add(new CustomAuthority(moduloChave + "_EDITAR", permissao));
+            authorities.add(new SimpleGrantedAuthority(moduloChave + "_EDITAR"));
           }
           if (permissao.isPodeDeletar()) {
-            authorities.add(new CustomAuthority(moduloChave + "_DELETAR", permissao));
+            authorities.add(new SimpleGrantedAuthority(moduloChave + "_DELETAR"));
           }
         }
       }

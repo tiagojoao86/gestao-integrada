@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -28,6 +29,22 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String RESOURCE_NOT_FOUND = "Resource not found";
     private static final String INTERNAL_SERVER_ERROR = "Internal server error";
     private static final String UNEXPECTED_ERROR_DETAIL = "An unexpected internal system error has occurred.";
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<Object> handleAuthorizationDeniedException(AuthorizationDeniedException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        String title = HttpStatus.FORBIDDEN.getReasonPhrase();
+        String detail = ex.getMessage();
+        List<String> userMessageKeys = List.of(ErrorKeys.NOT_AUTHORIZED);
+        ApiError apiError = ApiError.builder()
+                .status(status.value())
+                .timestamp(OffsetDateTime.now())
+                .title(title)
+                .userMessageKey(userMessageKeys)
+                .detail(List.of(detail))
+                .build();
+        return handleExceptionInternal(ex, apiError, new HttpHeaders(), status, request);
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntidadeNaoEncontrada(EntityNotFoundException ex, WebRequest request) {

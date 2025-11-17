@@ -1,5 +1,6 @@
 package br.com.grupopipa.gestaointegrada.config.security;
 
+import java.util.List;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.UsuarioDTO;
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.UsuarioService;
+import br.com.grupopipa.gestaointegrada.config.security.dto.AuthorityDTO;
 import br.com.grupopipa.gestaointegrada.config.security.dto.AuthRequest;
 import br.com.grupopipa.gestaointegrada.config.security.dto.AuthResponse;
 import br.com.grupopipa.gestaointegrada.core.controller.Response;
@@ -60,9 +62,10 @@ public class AuthenticationController {
         response.addCookie(refreshCookie);
 
         UsuarioDTO userDTO = this.usuarioService.findUsuarioDTOByLogin(authentication.getName());
+        List<AuthorityDTO> authorities = this.usuarioService.findAuthoritiesByLogin(authentication.getName());
 
         AuthResponse authResponse = new AuthResponse(accessToken, userDTO.getLogin(), userDTO.getNome(),
-                authentication.getAuthorities());
+                authorities);
 
         return ok(authResponse);
 
@@ -79,9 +82,10 @@ public class AuthenticationController {
         String newAccessToken = authenticationService.authenticate(username, userDetails.getAuthorities());
 
         UsuarioDTO userDTO = this.usuarioService.findUsuarioDTOByLogin(username);
+        List<AuthorityDTO> authorities = this.usuarioService.findAuthoritiesByLogin(username);
 
         AuthResponse authResponse = new AuthResponse(newAccessToken, userDTO.getLogin(), userDTO.getNome(),
-                userDetails.getAuthorities());
+                authorities);
 
         return ok(authResponse);
     }

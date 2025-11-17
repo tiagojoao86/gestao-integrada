@@ -1,12 +1,19 @@
 package br.com.grupopipa.gestaointegrada.cadastro.usuario;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.grupopipa.gestaointegrada.cadastro.modulo.entity.ModuloEntity;
+import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilEntity;
+import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilModuloEntity;
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.entity.UsuarioEntity;
+import br.com.grupopipa.gestaointegrada.config.security.dto.AuthorityDTO;
 import br.com.grupopipa.gestaointegrada.core.dao.Specifications;
 import br.com.grupopipa.gestaointegrada.core.exception.EntityNotFoundException;
 import br.com.grupopipa.gestaointegrada.core.service.impl.CrudServiceImpl;
@@ -30,6 +37,42 @@ public class UsuarioServiceImpl
                 .orElseThrow(() -> new EntityNotFoundException(getEntityClass().getSimpleName(), "login", login));
 
         return buildDTOFromEntity(entity);
+    }
+
+    @Override
+    public List<AuthorityDTO> findAuthoritiesByLogin(String login) {
+        UsuarioEntity usuario = this.repository.findUsuarioByLoginValue(login)
+                .orElseThrow(() -> new EntityNotFoundException(getEntityClass().getSimpleName(), "login", login));
+
+        Map<String, List<String>> permissoesPorModulo = new HashMap<>();
+        Map<String, ModuloEntity> modulos = new HashMap<>();
+
+        for (PerfilEntity perfil : usuario.getPerfis().stream().map(up -> up.getPerfil()).toList()) {
+            for (PerfilModuloEntity permissao : perfil.getPermissoes()) {
+                String moduloChave = permissao.getModulo().getChave();
+                modulos.putIfAbsent(moduloChave, permissao.getModulo());
+
+                List<String> listaPermissoes = permissoesPorModulo.computeIfAbsent(moduloChave, k -> new ArrayList<>());
+
+                if (permissao.isPodeListar() && !listaPermissoes.contains("LISTAR")) listaPermissoes.add("LISTAR");
+                if (permissao.isPodeVisualizar() && !listaPermissoes.contains("VISUALIZAR")) listaPermissoes.add("VISUALIZAR");
+                if (permissao.isPodeEditar() && !listaPermissoes.contains("EDITAR")) listaPermissoes.add("EDITAR");
+                if (permissao.isPodeDeletar() && !listaPermissoes.contains("DELETAR")) listaPermissoes.add("DELETAR");
+            }
+        }
+
+        List<AuthorityDTO> authorities = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : permissoesPorModulo.entrySet()) {
+            ModuloEntity modulo = modulos.get(entry.getKey());
+            authorities.add(new AuthorityDTO(
+                modulo.getChave(),
+                modulo.getNome(),
+                modulo.getGrupo().name(),
+                entry.getValue()
+            ));
+        }
+
+        return authorities;
     }
 
     @Override
