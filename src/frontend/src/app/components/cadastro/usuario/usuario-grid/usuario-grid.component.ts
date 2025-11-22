@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import {
   RegisterActionToolbar,
   BaseComponent,
@@ -22,10 +22,9 @@ import {
   FilterType,
 } from '../../../base/filter/filter.component';
 import { FilterDTO, FilterLogicOperator } from '../../../base/model/filter-dto';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-usuario-grid',
+  selector: 'gi-usuario-grid',
   imports: [
     BaseComponent,
     CommonModule,
@@ -84,7 +83,7 @@ export class UsuarioGridComponent {
       action: (element: UsuarioGridDTO) => {
         this.service
           .delete(element.id)
-          .subscribe((it) => this.listarUsuarios());
+          .subscribe((_it) => this.listarUsuarios());
       },
     },
   ];
@@ -142,7 +141,10 @@ export class UsuarioGridComponent {
     []
   );
 
-  constructor(private service: UsuarioService, private datePipe: DatePipe) {
+  private service: UsuarioService = inject(UsuarioService);
+  private datePipe: DatePipe = inject(DatePipe);
+
+  constructor() {
     this.listarUsuarios();
   }
 
@@ -178,7 +180,7 @@ export class UsuarioGridComponent {
   }
 
   ajustaBadgePesquisa(filter: FilterDTO) {
-    let acao = this.acoesTela.filter((it) => it.icon === 'search');
+    const acao = this.acoesTela.filter((it) => it.icon === 'search');
     if (acao.length > 0) {
       if (filter) {
         acao[0].value = filter.items.length + '';

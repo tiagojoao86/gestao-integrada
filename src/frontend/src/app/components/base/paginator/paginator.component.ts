@@ -5,18 +5,18 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 
 @Component({
-  selector: 'paginator-component',
+  selector: 'gi-paginator-component',
   imports: [CommonModule, ButtonModule, SelectModule, FormsModule],
   templateUrl: './paginator.component.html',
   styleUrl: './paginator.component.css',
 })
 export class PaginatorComponent {
-  @Output('paginationEvent') paginationEvent: EventEmitter<PaginationEvent> =
-    new EventEmitter();
+  @Output() paginationEvent =
+    new EventEmitter<PaginationEvent>();
 
-  @Input('pageNumber') pageNumber: number = 0;
-  @Input('totalRegisters') totalRegisters: number = 1;
-  @Input('itemsPerPage') itemsPerPage = PaginationEvent.DEFAULT_PAGE_SIZE;
+  @Input() pageNumber = 0;
+  @Input() totalRegisters = 1;
+  @Input() itemsPerPage = PaginationEvent.DEFAULT_PAGE_SIZE;
 
   itemsPerPageList = [5, 10, 15, 25, 50];
 
@@ -64,9 +64,8 @@ export class PaginatorComponent {
     };
   }
 
-  changeItemsPerPage(event: any) {
-    console.log(event);
-    this.itemsPerPage = event.value;
+  changeItemsPerPage(value: number) {
+    this.itemsPerPage = value;
     this.paginationEvent.emit(this.getPaginationEvent());
   }
 

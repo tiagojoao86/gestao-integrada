@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/prefer-inject */
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
@@ -13,15 +14,25 @@ export interface ExecutionCallbacks<T> {
 }
 
 @Injectable()
-export class BaseService<G,D> {
-  urlBase: string = '/api/';
+export abstract class BaseService<D> {
+  urlBase = '/api/';
+
+  private httpClient: HttpClient;
+  private messageService: MessageService;
+  private backendMessageService: AbstractBackendMessageService;
+
 
   constructor(
-    private httpClient: HttpClient,
-    private dominio: String,
-    private messageService: MessageService,
-    private backendMessageService: AbstractBackendMessageService
-  ) {}
+    httpClient: HttpClient,
+    messageService: MessageService,
+    backendMessageService: AbstractBackendMessageService
+  ) {
+    this.httpClient = httpClient;
+    this.messageService = messageService;
+    this.backendMessageService = backendMessageService;
+  }
+
+  abstract getDominio(): string;
 
   list(request: PageRequest): Observable<Response> {
     return this.httpClient
@@ -64,8 +75,8 @@ export class BaseService<G,D> {
       .pipe(take(1));
   }
 
-  getUrl(contexto: string = ''): string {
-    return this.urlBase + this.dominio + contexto;
+  getUrl(contexto = ''): string {
+    return this.urlBase + this.getDominio() + contexto;
   }
 
   getHeaders(): HttpHeaders {

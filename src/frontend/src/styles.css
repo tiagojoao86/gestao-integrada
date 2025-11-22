@@ -54,7 +54,7 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-app-root {
+gi-app-root {
   width: 100%;
   height: 100%;
   display: flex;

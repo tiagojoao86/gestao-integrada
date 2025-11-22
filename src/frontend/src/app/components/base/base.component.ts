@@ -1,24 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostListener, inject, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
 import { BadgeModule } from 'primeng/badge';
 
 @Component({
-  selector: 'app-base',
+  selector: 'gi-app-base',
   imports: [CommonModule, ButtonModule, Toolbar, BadgeModule],
   templateUrl: './base.component.html',
   styleUrl: './base.component.css',
 })
 export class BaseComponent {
-  constructor(private location: Location) {}
+  private location: Location = inject(Location);
 
-  @Input('title') title: string = $localize `Título`;
-  @Input('actions') actions: RegisterActionToolbar[] = [];
-  @Input('hideFooter') hideFooter: boolean = false;
-  @Input('hideToolbar') hideToolbar: boolean = false;
-  @Input('goBackFn') goBackFn: Function | null = null;
+  @Input() title: string = $localize `Título`;
+  @Input() actions: RegisterActionToolbar[] = [];
+  @Input() hideFooter = false;
+  @Input() hideToolbar = false;
+  @Input() goBackFn: (() => void) | null = null;
   
   goBack() {
     if (this.goBackFn) {
@@ -30,8 +30,7 @@ export class BaseComponent {
   }
 
   @HostListener('window:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    const key = event.key.toLowerCase();
+  handleKeyboardEvent(event: KeyboardEvent) {    
     const shortcut = this.buildShortcutString(event);
 
     const action = this.actions.find(a => a.shortcut?.toLowerCase() === shortcut);
@@ -54,7 +53,7 @@ export class BaseComponent {
 }
 
 export interface RegisterActionToolbar {
-  action: Function;
+  action: () => void;
   icon: string;
   title: string;
   shortcut?: string;

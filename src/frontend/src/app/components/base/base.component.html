@@ -10,12 +10,12 @@
     </ng-template>
     <ng-template #end>
       <div *ngFor="let action of actions" aria-label="Botão ações do usuário">
-        <div class="badge" (click)="action.action()" [title]="action.title">
+        <div class="badge" (click)="action.action()" (keyup.enter)="action.action()" [title]="action.title" tabindex="0">
           <i *ngIf="action.value" pBadge [value]="action.value">
             <span class="material-icons">{{ action.icon }}</span>
           </i>
           <i *ngIf="!action.value">
-            <span class="material-icons">{{ action.icon }}</span>
+            <span class="material-icons" >{{ action.icon }}</span>
           </i>
         </div>
       </div>

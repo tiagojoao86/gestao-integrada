@@ -4,7 +4,6 @@ import { Injectable } from "@angular/core";
   providedIn: 'root',
 })
 export abstract class AbstractBackendMessageService {
-  constructor() {}
 
   getMessage(code: string): string {
     return this.messages()[code] || code;
@@ -14,6 +13,6 @@ export abstract class AbstractBackendMessageService {
     return codes.map((code) => this.getMessage(code));
   }
 
-  abstract messages(): { [key: string]: string };
+  abstract messages(): Record<string, string>;
 
 }

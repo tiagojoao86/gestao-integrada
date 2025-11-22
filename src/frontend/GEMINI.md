@@ -22,7 +22,7 @@ Este projeto contém a interface de usuário (UI) para o sistema Gestão Integra
   npm install
   ```
 
-- **Executar a Aplicação (desenvolvimento):**
+- **Executar a Aplicação (desenvolvimento):
   ```bash
   ng serve
   ```
@@ -42,6 +42,42 @@ Este projeto contém a interface de usuário (UI) para o sistema Gestão Integra
   ng build
   ```
 
+## Linting e Regras (ESLint)
+
+Para garantir a qualidade e consistência do código, o projeto utiliza ESLint. As configurações estão em `eslint.config.js`.
+
+### Comandos Essenciais de Linting
+
+- **Executar o Lint (apenas verificar erros):**
+  ```bash
+  npm run lint
+  ```
+
+- **Executar o Lint e tentar corrigir automaticamente os problemas (incluindo remoção de imports não utilizados):**
+  ```bash
+  npm run lint -- --fix
+  ```
+
+### Regras Específicas
+
+As seguintes regras foram configuradas para padronizar o desenvolvimento:
+
+-   **Remoção de Imports Não Utilizados:**
+    -   Utiliza o plugin `eslint-plugin-unused-imports`.
+    -   `"unused-imports/no-unused-imports": "error"`: Identifica imports desnecessários.
+    -   `"unused-imports/no-unused-vars"`: Configura o tratamento de variáveis não utilizadas (atualmente como `warn`).
+    -   As regras padrão `no-unused-vars` do ESLint e `@typescript-eslint/no-unused-vars` foram desativadas para evitar conflitos e permitir que este plugin gerencie a remoção com `--fix`.
+
+-   **Seletores de Angular (prefixos e estilo):**
+    -   `@angular-eslint/directive-selector`:
+        -   `type: "attribute"`
+        -   `prefix: "gi"`: Diretivas devem usar o prefixo `gi` (ex: `[giMinhaDiretiva]`).
+        -   `style: "camelCase"`: O estilo do seletor da diretiva deve ser `camelCase`.
+    -   `@angular-eslint/component-selector`:
+        -   `type: "element"`
+        -   `prefix: "gi"`: Componentes devem usar o prefixo `gi` (ex: `<gi-meu-componente>`).
+        -   `style: "kebab-case"`: O estilo do seletor do componente deve ser `kebab-case`.
+
 ## Arquitetura e Convenções
 
 - A arquitetura é baseada em componentes, seguindo as melhores práticas do Angular.
@@ -49,6 +85,9 @@ Este projeto contém a interface de usuário (UI) para o sistema Gestão Integra
 - **Componentes de Tela (Features):** Organizados por funcionalidade, como em `src/app/components/cadastro`.
 - **Serviços e Modelos de Dados:** Para manter a coesão, os serviços e modelos (DTOs) específicos de uma funcionalidade estão localizados dentro do diretório do seu respectivo componente. Por exemplo, `usuario.service.ts` e os DTOs de usuário estão em `src/app/components/cadastro/usuario/`.
 - **Serviços e Modelos Compartilhados:** Lógica e modelos que são compartilhados por toda a aplicação ou por múltiplos componentes base ficam em `src/app/components/base/`, dentro de subdiretórios apropriados (ex: `auth`, `model`).
+
+### Comentários no Código
+- Adicione comentários no código de forma esparsa. Concentre-se no *porquê* algo é feito, especialmente para lógicas complexas, em vez de *o quê* é feito. Apenas adicione comentários de alto valor se necessário para clareza ou se solicitado pelo usuário.
 
 ## Autorização e Proteção de Rotas
 

@@ -5,7 +5,7 @@ import { UsuarioDetalheComponent } from './usuario-detalhe/usuario-detalhe.compo
 import { UsuarioGridComponent } from './usuario-grid/usuario-grid.component';
 
 @Component({
-  selector: 'app-usuario',
+  selector: 'gi-usuario',
   imports: [CommonModule, UsuarioDetalheComponent, UsuarioGridComponent],
   providers: [],
   templateUrl: './usuario.component.html',
@@ -13,16 +13,14 @@ import { UsuarioGridComponent } from './usuario-grid/usuario-grid.component';
 })
 export class UsuariosComponent {
   viewMode: ViewMode = ViewMode.GRID;
-  detailId: any = 'add';
-
-  constructor() {}
+  detailId: string | number = 'add';
 
   toggleView() {
     this.viewMode =
       this.viewMode === ViewMode.GRID ? ViewMode.DETAIL : ViewMode.GRID;
   }
 
-  openDetail($event: any) {
+  openDetail($event: string | number) {
     this.detailId = $event;
     this.toggleView();
   }

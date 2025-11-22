@@ -10,7 +10,7 @@ export class PageRequest {
     this.filter = filter;
     this.page = page;
     this.size = size;
-    this.order = [];
+    this.order = sort;
   }
 }
 

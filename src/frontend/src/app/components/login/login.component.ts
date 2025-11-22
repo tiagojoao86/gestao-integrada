@@ -1,5 +1,5 @@
 // login.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -13,10 +13,10 @@ import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../base/auth/auth-service';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { FormUtilsService } from '../form-utils.service';
-import { MessageService } from '../base/messages/messages.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-login',
+  selector: 'gi-login',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,23 +26,17 @@ import { MessageService } from '../base/messages/messages.service';
     ButtonModule,
     IftaLabelModule,
   ],
-  providers: [MessageService, FormUtilsService],
+  providers: [FormUtilsService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit {
   form: FormGroup = new FormGroup({});
-  formUtils;
+  formUtils = inject(FormUtilsService);
   showError = false;
   errorMessage = '';
 
-  constructor(
-    private authService: AuthService,
-    private messageService: MessageService,
-    private formUtilsService: FormUtilsService
-  ) {
-    this.formUtils = this.formUtilsService;
-  }
+  private authService = inject(AuthService);
 
   ngOnInit(): void {
     const fb = new FormBuilder().nonNullable;
@@ -51,20 +45,20 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    let login = this.form.value.login;
-    let senha = this.form.value.senha;
+    const login = this.form.value.login;
+    const senha = this.form.value.senha;
 
     if (login && senha) {
       this.authService.login(login, senha).subscribe({
         next: () => {
           console.log('Login bem-sucedido');
         },
-        error: (error) => {
+        error: (error: HttpErrorResponse) => {
           this.showError = true;
           if (error.status === 401) {
-            this.errorMessage = $localize `Login ou senha inválidos`;
+            this.errorMessage = $localize`Login ou senha inválidos`;
           } else {
-            this.errorMessage = $localize `Erro inesperado, tente novamente mais tarde`;
+            this.errorMessage = $localize`Erro inesperado, tente novamente mais tarde`;
           }
         },
       });

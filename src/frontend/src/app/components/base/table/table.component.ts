@@ -3,25 +3,23 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Order, Direction } from '../model/page-request';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { SortMeta } from 'primeng/api';
 
 @Component({
-  selector: 'table-component',
+  selector: 'gi-table-component',
   imports: [CommonModule, TableModule, ButtonModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.css',
   providers: [],
 })
 export class TableComponent implements OnInit {
-  @Input('dataSource') dataSource: any[] = [];
-  @Input('columnDefinition') columnDefinition: DataSourceColumn[] = [];
-  @Input('actions') actions: Action[] = [];
+  @Input() dataSource: unknown[] = [];
+  @Input() columnDefinition: DataSourceColumn[] = [];
+  @Input() actions: Action[] = [];
 
-  @Output('sortingEvent') sortingEvent: EventEmitter<Order[]> =
-    new EventEmitter();
+  @Output() sortingEvent = new EventEmitter<Order[]>();
 
   columns: string[] = [];
-
-  constructor() {}
 
   ngOnInit(): void {
     this.columns = this.columnDefinition.map((it) => it.name);
@@ -31,12 +29,12 @@ export class TableComponent implements OnInit {
     }
   }
 
-  sortChange(sortState: any) {
-    let ordem: Order[] = [];
+  sortChange(multisortmeta: SortMeta[]) {
+    const ordem: Order[] = [];
 
-    sortState.multisortmeta.forEach((sort: any) => {
-      let property = sort.field;
-      let direction = sort.order === 1 ? Direction.ASC : Direction.DESC;
+    multisortmeta.forEach((sort: SortMeta) => {
+      const property = sort.field;
+      const direction = sort.order === 1 ? Direction.ASC : Direction.DESC;
 
       ordem.push({ property, direction });
     });
@@ -48,10 +46,12 @@ export class TableComponent implements OnInit {
 export interface DataSourceColumn {
   name: string;
   label: string;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   getValue: Function;
 }
 
 export interface Action {
   icon: string;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   action: Function;
 }

@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { GrupoRecurso, RecursoGrupoComponent } from "../base/menu/recurso-grupo/recurso-grupo.component";
 
 @Component({
-    selector: 'cadastro',
+    selector: 'gi-cadastro',
     imports: [BaseComponent, CommonModule, RecursoGrupoComponent],
     templateUrl: './cadastro.component.html',
     styleUrl: './cadastro.component.css'

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { BehaviorSubject, catchError, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, tap } from 'rxjs';
 import { Response } from '../model/response';
 import { AuthorityDTO } from '../model/authority-dto';
 
@@ -15,7 +15,8 @@ export class AuthService {
   private authorities = new BehaviorSubject<AuthorityDTO[] | null>(null);
   token$ = this.tokenSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  private http: HttpClient = inject(HttpClient);
+  private router: Router = inject(Router);  
 
   login(username: string, password: string) {
     return this.http

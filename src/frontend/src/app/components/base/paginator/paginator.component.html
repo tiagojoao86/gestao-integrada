@@ -16,10 +16,9 @@
   </div>
   <div class="page-size-selector">
     <span i18n>Itens por página: </span>
-    <p-select
-      [(ngModel)]="itemsPerPage"
-      [options]="itemsPerPageList"
-      (onChange)="changeItemsPerPage($event)"
-    />
-  </div>
+          <p-select
+            [(ngModel)]="itemsPerPage"
+            [options]="itemsPerPageList"
+            (onChange)="changeItemsPerPage($event.value)"
+          />  </div>
 </div>

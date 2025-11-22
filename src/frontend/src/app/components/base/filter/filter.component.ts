@@ -12,7 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
 @Component({
-  selector: 'filter-component',
+  selector: 'gi-filter-component',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,10 +27,10 @@ import { DatePicker } from 'primeng/datepicker';
 export class FiltroComponent implements OnInit {
   readonly FilterType = FilterType;
 
-  @Input('filters') filters: FilterProperty[] = [];
+  @Input() filters: FilterProperty[] = [];
   selectedFilters: FilterProperty[] = [];
-  @Output('doFilter') doFilter: EventEmitter<FilterDTO> = new EventEmitter();
-  @Output('cancel') cancel: EventEmitter<boolean> = new EventEmitter();
+  @Output() doFilter = new EventEmitter<FilterDTO>();
+  @Output() doCancel = new EventEmitter<boolean>();
 
   operations: FilterOperator[] = FilterOperator.getAll();
   logicOperators: FilterLogicOperator[] = FilterLogicOperator.getAll();
@@ -115,7 +115,7 @@ export class FiltroComponent implements OnInit {
   }
 
   removerFiltro(property: FilterProperty) {
-    let index = this.selectedFilters.indexOf(property);
+    const index = this.selectedFilters.indexOf(property);
     if (index !== -1) {
       this.selectedFilters.splice(index, 1);
       this.onFiltrar();
@@ -128,12 +128,12 @@ export class FiltroComponent implements OnInit {
       return;
     }
 
-    let itens: FilterItem[] = [];
+    const itens: FilterItem[] = [];
     this.selectedFilters.forEach((selected) => {
-      let operador = this.form
+      const operador = this.form
         .get(selected.property + '_operacao')
         ?.getRawValue().key;
-      let valores = this.form.get(selected.property)?.getRawValue();
+      const valores = this.form.get(selected.property)?.getRawValue();
 
       if (selected.filterType === FilterType.DATA) {
         itens.push({
@@ -160,7 +160,7 @@ export class FiltroComponent implements OnInit {
   }
 
   onCancelar() {
-    this.cancel.emit();
+    this.doCancel.emit();
   }
 }
 

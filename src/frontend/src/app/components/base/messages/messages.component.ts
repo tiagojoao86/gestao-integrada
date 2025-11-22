@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MessageService, MessageType } from './messages.service';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { messageServiceProvider } from './message.factory';
 
 @Component({
-  selector: 'messages',
+  selector: 'gi-messages',
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css',
   imports: [CommonModule, ButtonModule],
@@ -15,11 +15,11 @@ export class MessagesComponent implements OnInit {
   messages: string[] = [];
   messageType: MessageType = MessageType.INFO;
 
-  show: boolean = false;
+  show = false;
 
-  timer = setTimeout(() => {});
-
-  constructor(private service: MessageService) {}
+  timer: ReturnType<typeof setTimeout> | undefined;
+  
+  private service: MessageService = inject(MessageService);
 
   ngOnInit() {
     this.service.stateSubject.subscribe((message) => {

@@ -1,4 +1,4 @@
-<p-table [value]="dataSource" sortMode="multiple" [resizableColumns]="true" (onSort)="sortChange($event)" [lazy]="true">
+<p-table [value]="dataSource" sortMode="multiple" [resizableColumns]="true" (onSort)="sortChange($event.multisortmeta)" [lazy]="true">
     <ng-template #header>
         <tr>
             <th *ngFor="let col of columnDefinition" [pSortableColumn]="col.name" pResizableColumn>

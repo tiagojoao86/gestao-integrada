@@ -27,7 +27,7 @@ import { messageServiceProvider } from './components/base/messages/message.facto
 
 registerLocaleData(localePt);
 
-var isRefreshing = false;
+let isRefreshing = false;
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -50,7 +50,7 @@ export function tokenInterceptor(
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
   if (req.url !== '/api/authenticate' && req.url !== '/authenticate/refresh') {
-    let authService: AuthService = inject(AuthService);
+    const authService: AuthService = inject(AuthService);
     const token = authService.getToken();
     if (token) {
       const authReq = req.clone({
@@ -66,9 +66,9 @@ export function tokenInterceptor(
 }
 
 export function refreshTokenInterceptor(
-  req: HttpRequest<any>,
+  req: HttpRequest<unknown>,
   next: HttpHandlerFn
-): Observable<HttpEvent<any>> {
+): Observable<HttpEvent<unknown>> {
   if (
     req.url === '/api/authenticate' ||
     req.url === '/api/authenticate/refresh'
@@ -76,7 +76,7 @@ export function refreshTokenInterceptor(
     return next(req);
   }
 
-  let authService: AuthService = inject(AuthService);
+  const authService: AuthService = inject(AuthService);
 
   const token = authService.getToken();
 

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
 import {
   GrupoMenu,
   MenuPrincipalItemComponent,
@@ -18,7 +18,7 @@ import { MessagesComponent } from '../base/messages/messages.component';
 import { AuthService } from '../base/auth/auth-service';
 
 @Component({
-  selector: 'principal-component',
+  selector: 'gi-principal-component',
   imports: [
     RouterModule,
     CommonModule,
@@ -49,8 +49,9 @@ import { AuthService } from '../base/auth/auth-service';
   ],
 })
 export class PrincipalComponent implements OnInit{
-  showDrawer: boolean = false;
-
+  showDrawer = false;
+  private router: Router = inject(Router);
+  private authService: AuthService = inject(AuthService);
   tituloApp: string = $localize `Gestão Integrada`;
 
   openDrawerMenu = {
@@ -59,8 +60,6 @@ export class PrincipalComponent implements OnInit{
   };
 
   menu: GrupoMenu[] = [];
-
-  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.buildMenu();

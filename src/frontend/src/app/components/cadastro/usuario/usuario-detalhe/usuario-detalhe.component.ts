@@ -1,29 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { RouteConstants } from '../../../base/constants/route-constants';
 import { UsuarioService } from '../usuario.service';
 import {
   RegisterActionToolbar,
   BaseComponent,
 } from '../../../base/base.component';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { MessageService } from '../../../base/messages/messages.service';
-import { messageServiceProvider } from '../../../base/messages/message.factory';
 import { UsuarioDTO } from '../model/usuario-dto';
-import { UsuarioBackendMessages } from '../usuario-backend-message.service';
 
 @Component({
-  selector: 'app-usuario-detalhe',
+  selector: 'gi-usuario-detalhe',
   imports: [
     CommonModule,
     BaseComponent,
@@ -38,10 +34,13 @@ import { UsuarioBackendMessages } from '../usuario-backend-message.service';
 })
 export class UsuarioDetalheComponent implements OnInit {
   form: FormGroup = new FormGroup([]);
-  modoEdicao: boolean = false;
+  modoEdicao = false;
   usuario: UsuarioDTO = {} as UsuarioDTO;
-  @Input('detailId') detailId: string | null = null;
-  @Output('closeDetail') closeDetail = new EventEmitter<void>();
+  @Input() detailId: string | number | null = null;
+  @Output() closeDetail = new EventEmitter<void>();
+
+  private service: UsuarioService = inject(UsuarioService);
+  private messages: MessageService = inject(MessageService);
 
   titulo = $localize`Usuário: `;
 
@@ -64,11 +63,6 @@ export class UsuarioDetalheComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private service: UsuarioService,
-    private messages: MessageService
-  ) {}
-
   ngOnInit(): void {
     this.initForm();
 
@@ -77,7 +71,7 @@ export class UsuarioDetalheComponent implements OnInit {
       this.titulo += $localize`Novo`;
     } else {
       this.modoEdicao = true;
-      this.service.findById(this.detailId!).subscribe((response) => {
+      this.service.findById(String(this.detailId!)).subscribe((response) => {
         this.usuario = response.body;
         this.titulo += this.usuario.nome;
         this.fillForm();
@@ -118,6 +112,7 @@ export class UsuarioDetalheComponent implements OnInit {
   }
 
   isControlInvalid(campo: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fc: AbstractControl<any, any> | null = this.form.get(campo);
 
     if (fc !== null && fc.invalid && (fc.touched || fc.dirty)) {
