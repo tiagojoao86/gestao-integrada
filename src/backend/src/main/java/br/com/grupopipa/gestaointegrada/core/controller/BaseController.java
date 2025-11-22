@@ -26,31 +26,31 @@ import br.com.grupopipa.gestaointegrada.core.service.CrudService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class BaseController<D extends DTO, G extends GridDTO> {
+public abstract class BaseController<D extends DTO, G extends GridDTO, S extends CrudService<D, G>> {
 
     @Autowired
-    protected CrudService<D, G> business;
+    protected S service;    
 
     @PostMapping(R_QUERY)
     public Response list(@RequestBody PageRequest request) {
         Sort sort = Sort.by(request.getOrder().stream().map(OrderDTO::getOrder).toList());
         Pageable pageable = org.springframework.data.domain.PageRequest.of(request.getPage(), request.getSize(),
                 sort);
-       return ok(business.list(request.getFilter(), pageable));
+       return ok(service.list(request.getFilter(), pageable));
     }
 
     @PostMapping
     public Response save(@RequestBody D body) {
-        return ok(business.save(body));
+        return ok(service.save(body));
     }
 
     @GetMapping(R_FIND_BY_ID)
     public Response findById(@RequestParam(F_ID) UUID id) {
-        return ok(business.findById(id));
+        return ok(service.findById(id));
     }
 
     @DeleteMapping(PV_ID)
     public Response delete(@PathVariable(F_ID) UUID id) {
-        return ok(business.delete(id));
+        return ok(service.delete(id));
     }
 }

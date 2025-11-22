@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {
@@ -15,7 +15,7 @@ import {
 import { Toolbar } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { MessagesComponent } from '../base/messages/messages.component';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../base/auth/auth-service';
 
 @Component({
   selector: 'principal-component',
@@ -48,7 +48,7 @@ import { AuthService } from '../../services/auth-service';
     ]),
   ],
 })
-export class PrincipalComponent {
+export class PrincipalComponent implements OnInit{
   showDrawer: boolean = false;
 
   tituloApp: string = $localize `Gestão Integrada`;
@@ -58,25 +58,39 @@ export class PrincipalComponent {
     icone: 'menu',
   };
 
-  menu: GrupoMenu[] = [
-    {
-      nome: $localize `Cadastros`,
-      icone: 'widgets',
-      url: '/cadastro',
-    },
-    {
-      nome: $localize `Financeiro`,
-      icone: 'attach_money',
-      url: '/financeiro',
-    },
-    {
-      nome: $localize `Atendimento`,
-      icone: 'child_care',
-      url: '/atendimento',
-    },
-  ];
+  menu: GrupoMenu[] = [];
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService) { }
+
+  ngOnInit(): void {
+    this.buildMenu();
+  }
+  
+  buildMenu() {
+    if (this.authService.hasAuthorityToGrupo('CADASTROS')) {
+      this.menu.push({
+        nome: $localize`Cadastros`,
+        icone: 'widgets',
+        url: '/cadastro',
+      });
+    }
+
+    if (this.authService.hasAuthorityToGrupo('FINANCEIRO')) {
+      this.menu.push({
+        nome: $localize`Financeiro`,
+        icone: 'attach_money',
+        url: '/financeiro',
+      });
+    }
+
+    if (this.authService.hasAuthorityToGrupo('ATENDIMENTO')) {
+      this.menu.push({
+        nome: $localize`Atendimento`,
+        icone: 'child_care',
+        url: '/atendimento',
+      });
+    }
+  }
 
   toogleDrawer() {
     this.showDrawer = !this.showDrawer;
@@ -99,6 +113,6 @@ export class PrincipalComponent {
   }
 
   getName() {
-    return this.authService.getName();
+    return this.authService.getNome();
   }
 }

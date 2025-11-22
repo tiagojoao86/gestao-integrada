@@ -19,7 +19,7 @@ import {
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-import { AuthService } from './services/auth-service';
+import { AuthService } from './components/base/auth/auth-service';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { MessageService } from './components/base/messages/messages.service';

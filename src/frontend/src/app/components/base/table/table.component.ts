@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Order, Direction } from '../../../model/page-request';
+import { Order, Direction } from '../model/page-request';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 

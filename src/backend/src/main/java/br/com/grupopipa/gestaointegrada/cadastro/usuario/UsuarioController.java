@@ -21,7 +21,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(R_USUARIO)
-public class UsuarioController extends BaseController<UsuarioDTO, UsuarioGridDTO> {
+public class UsuarioController extends BaseController<UsuarioDTO, UsuarioGridDTO, UsuarioService> {
     
     @Override
     @PreAuthorize("hasAuthority('CADASTRO_USUARIO_LISTAR')")

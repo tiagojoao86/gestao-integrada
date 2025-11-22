@@ -3,9 +3,9 @@ import {
   RegisterActionToolbar,
   BaseComponent,
 } from '../../../base/base.component';
-import { UsuarioService } from '../../../../services/usuario.service';
-import { Order, PageRequest } from '../../../../model/page-request';
-import { UsuarioGridDTO } from '../../../../model/usuario-grid-dto';
+import { UsuarioService } from '../usuario.service';
+import { Order, PageRequest } from '../../../base/model/page-request';
+import { UsuarioGridDTO } from '../model/usuario-grid-dto';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   Action,
@@ -21,7 +21,7 @@ import {
   FiltroComponent,
   FilterType,
 } from '../../../base/filter/filter.component';
-import { FilterDTO, FilterLogicOperator } from '../../../../model/filter-dto';
+import { FilterDTO, FilterLogicOperator } from '../../../base/model/filter-dto';
 import { Router } from '@angular/router';
 
 @Component({

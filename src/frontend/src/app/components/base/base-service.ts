@@ -1,11 +1,11 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take } from 'rxjs';
-import { PageRequest } from '../model/page-request';
-import { Response } from '../model/response';
-import { HttpConstants } from '../constants/http-constants';
-import { MessageService } from '../components/base/messages/messages.service';
-import { AbstractBackendMessageService } from './backend-messsages/abstract-backend-message.service';
+import { PageRequest } from './model/page-request';
+import { Response } from './model/response';
+import { HttpConstants } from './constants/http-constants';
+import { MessageService } from './messages/messages.service';
+import { AbstractBackendMessageService } from './services/backend-messsages/abstract-backend-message.service';
 
 export interface ExecutionCallbacks<T> {
   onSuccess: (data: T) => void;

@@ -5,7 +5,7 @@ import {
   FilterItem,
   FilterOperator,
   FilterLogicOperator,
-} from '../../../model/filter-dto';
+} from '../model/filter-dto';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';

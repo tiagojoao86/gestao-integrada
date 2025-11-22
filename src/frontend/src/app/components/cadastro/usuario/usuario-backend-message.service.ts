@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { AbstractBackendMessageService } from "../../../services/backend-messsages/abstract-backend-message.service";
+import { AbstractBackendMessageService } from "../../base/services/backend-messsages/abstract-backend-message.service";
 
 @Injectable({
   providedIn: 'root',

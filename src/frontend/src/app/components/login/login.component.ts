@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../services/auth-service';
+import { AuthService } from '../base/auth/auth-service';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { FormUtilsService } from '../form-utils.service';
 import { MessageService } from '../base/messages/messages.service';

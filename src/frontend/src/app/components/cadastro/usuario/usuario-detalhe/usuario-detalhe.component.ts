@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouteConstants } from '../../../../constants/route-constants';
-import { UsuarioService } from '../../../../services/usuario.service';
+import { RouteConstants } from '../../../base/constants/route-constants';
+import { UsuarioService } from '../usuario.service';
 import {
   RegisterActionToolbar,
   BaseComponent,
@@ -19,7 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { MessageService } from '../../../base/messages/messages.service';
 import { messageServiceProvider } from '../../../base/messages/message.factory';
-import { UsuarioDTO } from '../../../../model/usuario-dto';
+import { UsuarioDTO } from '../model/usuario-dto';
 import { UsuarioBackendMessages } from '../usuario-backend-message.service';
 
 @Component({
