@@ -133,3 +133,12 @@ Para o primeiro acesso ao sistema, utilize as seguintes credenciais:
 - **Senha:** `@RLthotr$&u=Huge1e-r`
 
 **DISCLAIMER:** É **imprescindível** que a senha seja alterada no primeiro acesso, através do módulo de cadastro de usuários, para garantir a segurança do sistema.
+
+## Copilot / Gemini Instructions
+
+Este repositório inclui instruções para agentes (Copilot / Gemini). Consulte:
+
+- `COPILOT_INSTRUCTIONS.md` na raiz para políticas e orientações globais.
+- Instruções específicas por domínio em `.github/instructions/` (backend e frontend) que contêm os conteúdos dos arquivos GEMINI do projeto.
+
+Há também um workflow de exemplo em `.github/workflows/copilot-context.yml` que demonstra como expor as instruções aos agentes via a variável de ambiente `COPILOT_CUSTOM_INSTRUCTIONS_DIRS`.
