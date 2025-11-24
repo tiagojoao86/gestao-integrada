@@ -84,10 +84,39 @@ As seguintes regras foram configuradas para padronizar o desenvolvimento:
 - **Componentes Reutilizáveis:** Ficam em `src/app/components/base`.
 - **Componentes de Tela (Features):** Organizados por funcionalidade, como em `src/app/components/cadastro`.
 - **Serviços e Modelos de Dados:** Para manter a coesão, os serviços e modelos (DTOs) específicos de uma funcionalidade estão localizados dentro do diretório do seu respectivo componente. Por exemplo, `usuario.service.ts` e os DTOs de usuário estão em `src/app/components/cadastro/usuario/`.
+  - **Extração de Interfaces:** Interfaces (como DTOs ou modelos de formulário) não devem ser definidas dentro de arquivos de componente (`.component.ts`). Elas devem ser extraídas para seus próprios arquivos na pasta `model` (ex: `permissao-form-group-value.dto.ts`) para promover a reutilização e a organização do código.
+- **DTOs de Backend:** Quando a estrutura de um payload retornado por uma API do backend é diferente do DTO principal utilizado pelo componente, deve-se criar um DTO específico para representar esse payload. Este DTO deve seguir a convenção de nomenclatura `backend-*.dto.ts`. Um exemplo é o `backend-permissao-dto.ts`, que representa a estrutura de permissões como enviada pela API, facilitando a conversão para o `FormGroup` dentro do componente.
 - **Serviços e Modelos Compartilhados:** Lógica e modelos que são compartilhados por toda a aplicação ou por múltiplos componentes base ficam em `src/app/components/base/`, dentro de subdiretórios apropriados (ex: `auth`, `model`).
 
 ### Comentários no Código
 - Adicione comentários no código de forma esparsa. Concentre-se no *porquê* algo é feito, especialmente para lógicas complexas, em vez de *o quê* é feito. Apenas adicione comentários de alto valor se necessário para clareza ou se solicitado pelo usuário.
+
+## Internacionalização (i18n)
+
+O projeto suporta múltiplos idiomas (português e inglês) usando as ferramentas de internacionalização do Angular.
+
+### Processo de Tradução
+
+Ao adicionar ou modificar qualquer texto que será visível para o usuário, siga estes passos:
+
+1.  **Marcar a String:** No código TypeScript ou no template HTML, marque a nova string para tradução usando a tag `$localize`.
+    ```typescript
+    // Em um arquivo .ts
+    const titulo = $localize`Meu Título`;
+    
+    // Em um arquivo .html
+    <h1 i18n>Meu Título no Template</h1>
+    ```
+
+2.  **Extrair as Strings:** Execute o comando `ng extract-i18n` para escanear o projeto e adicionar as novas strings ao arquivo de origem principal.
+    ```bash
+    # Executar a partir do diretório src/frontend
+    ng extract-i18n --output-path src/locale
+    ```
+
+3.  **Atualizar Arquivos de Tradução:**
+    -   **Português (`messages.xlf`):** A extração adiciona um novo bloco `<trans-unit>` com a tag `<source>`. Para validar a tradução, adicione uma tag `<target>` com o mesmo conteúdo da tag `<source>`.
+    -   **Inglês (`messages.en.xlf`):** Copie o novo bloco `<trans-unit>` do `messages.xlf` e cole-o no `messages.en.xlf`. Em seguida, preencha a tag `<target>` com a tradução correta em inglês.
 
 ## Autorização e Proteção de Rotas
 

@@ -119,6 +119,62 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="712018710969851047" datatype="html">
+        <source>Perfis</source>
+        <target>Profiles</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/cadastro.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8475530154031003938" datatype="html">
+        <source>Cadastro de perfis</source>
+        <target>Profile Registration</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-grid/perfil-grid.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5219663693456969053" datatype="html">
+        <source>Permissões</source>
+        <target>Permissions</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.html</context>
+          <context context-type="linenumber">10,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1777375436309765158" datatype="html">
+        <source>Perfil: </source>
+        <target>Profile: </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8617344470616298001" datatype="html">
+        <source>Perfil salvo com sucesso.</source>
+        <target>Profile saved successfully.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.ts</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="perfil.nome.notBlank" datatype="html">
+        <source>O nome do perfil não pode ser em branco.</source>
+        <target>The profile name cannot be blank.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-backend-message.service.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8069920121472148431" datatype="html">
+        <source>Existem campos inválidos.</source>
+        <target>There are invalid fields.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="usuario.nome.notBlank" datatype="html">
         <source>O nome do usuário não pode ser em branco.</source>
         <target>The user name cannot be blank.</target>
@@ -389,6 +445,46 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/services/base-service.ts</context>
           <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3913112174757511822" datatype="html">
+        <source>Módulo</source>
+        <target>Module</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4305708877467028579" datatype="html">
+        <source>Listar</source>
+        <target>List</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5375123886772261767" datatype="html">
+        <source>Visualizar</source>
+        <target>View</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2153980152639237955" datatype="html">
+        <source>Editar</source>
+        <target>Edit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1235808024197131529" datatype="html">
+        <source>Excluir</source>
+        <target>Delete</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/cadastro/perfil/perfil-detalhe/perfil-detalhe.component.html</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
     </body>

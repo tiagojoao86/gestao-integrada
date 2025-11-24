@@ -41,7 +41,7 @@ public class PerfilEntity extends BaseEntity {
 
     public void addPermissao(PerfilModuloEntity permissao) {
         if (permissao == null) return;
-        // ensure the child points to this perfil
+        
         permissao.setPerfil(this);
         this.permissoes.add(permissao);
     }

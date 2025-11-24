@@ -41,7 +41,10 @@ public abstract class CrudServiceImpl<D extends DTO, G extends GridDTO, T extend
             T entity = this.findEntityById(dto.getId());
 
             if (Objects.nonNull(entity)) {
-                return this.buildDTOFromEntity(repository.save(this.mergeEntityAndDTO(entity, dto)));
+                T mergedEntity = this.mergeEntityAndDTO(entity, dto);
+                T newEntity = repository.save(mergedEntity);
+                D newDTO = this.buildDTOFromEntity(newEntity);
+                return newDTO;
             }
         }
         return this.buildDTOFromEntity(repository.save(this.mergeEntityAndDTO(null, dto)));

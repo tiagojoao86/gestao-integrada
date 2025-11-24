@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.EqualsAndHashCode; // Adicionado import
 import lombok.Getter;
 
 @Entity(name = "perfil_modulo")
@@ -16,6 +17,7 @@ import lombok.Getter;
         @UniqueConstraint(name = "uk_perfil_modulo", columnNames = { "perfil_id", "modulo_id" })
 })
 @Getter
+@EqualsAndHashCode(of = {"perfil", "modulo"}, callSuper = false)
 public class PerfilModuloEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

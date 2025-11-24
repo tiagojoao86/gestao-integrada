@@ -64,15 +64,14 @@ public class Specifications<T extends BaseEntity> {
         Class<?> targetType = getFieldType(klazz, property);
         Object value = convertValue(property, item.getValues().get(0), klazz, targetType);
 
-        if (targetType.equals(LocalDateTime.class)) {
-            // Para LocalDateTime, 'igual' significa 'dentro do mesmo dia'
+        if (targetType.equals(LocalDateTime.class)) {            
             Expression<Comparable> propertyExpression = root.get(property);
             Comparable startOfDay = getStartOfDay(value);
             Comparable endOfDay = getEndOfDay(value);
             return criteriaBuilder.between(propertyExpression, startOfDay, endOfDay);
         }
 
-        return criteriaBuilder.equal(root.get(property), value); // Para LocalDate e outros tipos, a comparação é direta.
+        return criteriaBuilder.equal(root.get(property), value);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

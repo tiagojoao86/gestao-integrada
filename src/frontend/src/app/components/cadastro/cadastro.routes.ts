@@ -24,4 +24,15 @@ export const routes: Routes = [
       moduleKey: 'CADASTRO_USUARIO'
     }
   },
+  {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./perfil/perfil.component').then(
+        (app) => app.PerfilComponent
+      ),
+    canActivate: [authGuard, moduleAuthorityGuard],
+    data: {
+      moduleKey: 'CADASTRO_PERFIL'
+    }
+  },
 ];

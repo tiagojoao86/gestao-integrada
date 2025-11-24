@@ -12,42 +12,43 @@ import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilModuloEntit
 import br.com.grupopipa.gestaointegrada.core.dao.Specifications;
 import br.com.grupopipa.gestaointegrada.core.exception.EntityNotFoundException;
 import br.com.grupopipa.gestaointegrada.core.service.impl.CrudServiceImpl;
-import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional; // Adicionado para @Transactional
 
 @Service
 public class PerfilServiceImpl
         extends CrudServiceImpl<PerfilDTO, PerfilGridDTO, PerfilEntity, PerfilRepository>
         implements PerfilService {
 
-    private final ModuloRepository moduloRepository;
+    private final ModuloRepository moduloRepository;    
 
     public PerfilServiceImpl(PerfilRepository repository,
                              Specifications<PerfilEntity> specifications,
-                             ModuloRepository moduloRepository) {
+                             ModuloRepository moduloRepository,
+                             PerfilModuloRepository perfilModuloRepository) { // <--- INJETAR NO CONSTRUTOR
         super(repository, specifications);
-        this.moduloRepository = moduloRepository;
+        this.moduloRepository = moduloRepository;        
     }
 
     @Override
-    @Transactional
-    public PerfilDTO save(PerfilDTO dto) {                
-        return super.save(dto);
-    }
-
-    @Override
+    @Transactional  
     protected PerfilEntity mergeEntityAndDTO(PerfilEntity entity, PerfilDTO dto) {
         if (Objects.isNull(entity)) {
             PerfilEntity newEntity = new PerfilEntity.Builder()
                     .nome(dto.getNome())
                     .build();
+            
             addPermissoesToEntity(newEntity, dto);
             return newEntity;
         }
 
         entity.updatePerfilFromDTO(dto);
-        entity.getPermissoes().clear();
-        addPermissoesToEntity(entity, dto);
 
+        if (entity.getId() != null) {
+            entity.getPermissoes().clear();
+            entity = this.repository.save(entity);            
+        }
+        
+        addPermissoesToEntity(entity, dto);
         return entity;
     }
     
@@ -66,6 +67,8 @@ public class PerfilServiceImpl
 
         for (PerfilModuloEntity pme : entity.getPermissoes()) {
             PerfilModuloDTO dto = new PerfilModuloDTO();
+            dto.setId(pme.getId());
+            dto.setPerfilId(entity.getId());
             dto.setModuloId(pme.getModulo().getId());
             dto.setModuloNome(pme.getModulo().getNome());
             dto.setPodeListar(pme.isPodeListar());
