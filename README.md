@@ -124,3 +124,12 @@ Após todos os serviços estarem rodando (Nginx, Backend e Frontend), você pode
 [http://localhost](http://localhost)
 
 O Nginx fará a orquestração e você verá o frontend, que se comunicará com o backend através do proxy `/api/`.
+
+## Acesso Inicial
+
+Para o primeiro acesso ao sistema, utilize as seguintes credenciais:
+
+- **Usuário:** `admin`
+- **Senha:** `@RLthotr$&u=Huge1e-r`
+
+**DISCLAIMER:** É **imprescindível** que a senha seja alterada no primeiro acesso, através do módulo de cadastro de usuários, para garantir a segurança do sistema.
