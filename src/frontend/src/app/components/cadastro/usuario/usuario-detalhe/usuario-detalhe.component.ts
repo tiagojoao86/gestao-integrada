@@ -131,12 +131,10 @@ export class UsuarioDetalheComponent implements OnInit {
   }
 
   onPerfilSelect(perfil: PerfilDTO) {
+    // clear input immediately to avoid displaying object in the input
+    this.perfilInput = '';
+    this.suggestions = [];
     this.adicionarPerfil(perfil);
-    // clear input and suggestions after selection; use timeout to override the component's model update
-    setTimeout(() => {
-      this.perfilInput = null;
-      this.suggestions = [];
-    }, 0);
   }
 
   private loadPerfisAndInitLists() {
