@@ -21,6 +21,7 @@ import { MessageService } from '../../../base/messages/messages.service';
 import { UsuarioDTO } from '../model/usuario-dto';
 import { PerfilDTO } from '../../perfil/model/perfil-dto';
 import { PageRequest } from '../../../base/model/page-request';
+import { FilterLogicOperator } from '../../../base/model/filter-dto';
 
 @Component({
   selector: 'gi-usuario-detalhe',
@@ -78,26 +79,19 @@ export class UsuarioDetalheComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
 
-    // load perfis
-    this.perfilService.list(new PageRequest(null, 1000, 0, [])).subscribe((r) => {
-      this.allPerfis = r.body.content || [];
-    });
-
     if (this.detailId === RouteConstants.P_ADD) {
       this.modoEdicao = false;
       this.titulo += $localize`Novo`;
+      // no usuario yet, ensure lists will be initialized after loading perfis
+      this.usuario = {} as UsuarioDTO;
+      this.loadPerfisAndInitLists();
     } else {
       this.modoEdicao = true;
       this.service.findById(String(this.detailId!)).subscribe((response) => {
         this.usuario = response.body;
         this.titulo += this.usuario.nome;
         this.fillForm();
-
-        // initialize selected and available perfis
-        this.selectedPerfis = this.usuario.perfis || [];
-        this.availablePerfis = this.allPerfis.filter(
-          (p) => !this.selectedPerfis.some((sp) => sp.id === p.id)
-        );
+        this.loadPerfisAndInitLists();
       });
     }
   }
@@ -130,7 +124,17 @@ export class UsuarioDetalheComponent implements OnInit {
   getAvailablePerfisFiltered(): PerfilDTO[] {
     const f = this.perfilFilter ? this.perfilFilter.toLowerCase() : '';
     if (!f) return this.availablePerfis;
-    return this.availablePerfis.filter(p => (p.nome || '').toLowerCase().includes(f));
+    return this.availablePerfis.filter((p) => (p.nome || '').toLowerCase().includes(f));
+  }
+
+  private loadPerfisAndInitLists() {
+    this.perfilService
+      .list(new PageRequest({ filterLogicOperator: FilterLogicOperator.AND.getKey(), items: [] }, 9999, 0, []))
+      .subscribe((r) => {
+        this.allPerfis = r.body.content || [];
+        this.selectedPerfis = this.usuario.perfis || [];
+        this.availablePerfis = this.allPerfis.filter((p) => !this.selectedPerfis.some((sp) => sp.id === p.id));
+      });
   }
 
   salvar() {
