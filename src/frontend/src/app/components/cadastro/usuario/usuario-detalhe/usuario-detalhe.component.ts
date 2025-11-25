@@ -127,6 +127,12 @@ export class UsuarioDetalheComponent implements OnInit {
     this.selectedPerfis = this.selectedPerfis.filter((p) => p.id !== perfil.id);
   }
 
+  getAvailablePerfisFiltered(): PerfilDTO[] {
+    const f = this.perfilFilter ? this.perfilFilter.toLowerCase() : '';
+    if (!f) return this.availablePerfis;
+    return this.availablePerfis.filter(p => (p.nome || '').toLowerCase().includes(f));
+  }
+
   salvar() {
     if (!this.form.valid) {
       this.messages.erro($localize`Existem campo inválidos.`);

@@ -31,7 +31,7 @@
           <label i18n>Perfis disponíveis</label>
           <input pInputText placeholder="Filtrar" [(ngModel)]="perfilFilter" />
           <ul class="perfis-list">
-            <li *ngFor="let p of availablePerfis.filter(p => !perfilFilter || p.nome?.toLowerCase().includes(perfilFilter.toLowerCase()))">
+            <li *ngFor="let p of getAvailablePerfisFiltered()">
               <span>{{ p.nome }}</span>
               <button type="button" (click)="adicionarPerfil(p)">+</button>
             </li>
