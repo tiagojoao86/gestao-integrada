@@ -58,7 +58,8 @@ export class UsuarioDetalheComponent implements OnInit {
   allPerfis: PerfilDTO[] = [];
   selectedPerfis: PerfilDTO[] = [];
   suggestions: PerfilDTO[] = [];
-  perfilInput: string | null = null;
+  // perfilInput can be string or selected object; allow any to avoid [object Object] rendering
+  perfilInput: any = null;
   perfilFilter = '';
 
   acoesTela: RegisterActionToolbar[] = [
@@ -131,9 +132,11 @@ export class UsuarioDetalheComponent implements OnInit {
 
   onPerfilSelect(perfil: PerfilDTO) {
     this.adicionarPerfil(perfil);
-    // clear input and suggestions after selection
-    this.perfilInput = null;
-    this.suggestions = [];
+    // clear input and suggestions after selection; use timeout to override the component's model update
+    setTimeout(() => {
+      this.perfilInput = null;
+      this.suggestions = [];
+    }, 0);
   }
 
   private loadPerfisAndInitLists() {
