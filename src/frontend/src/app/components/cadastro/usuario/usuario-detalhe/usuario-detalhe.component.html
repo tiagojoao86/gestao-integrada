@@ -33,7 +33,7 @@
           <ul class="perfis-list">
             <li *ngFor="let p of getAvailablePerfisFiltered()">
               <span>{{ p.nome }}</span>
-              <button type="button" (click)="adicionarPerfil(p)">+</button>
+              <button type="button" class="btn-add" (click)="adicionarPerfil(p)">+</button>
             </li>
           </ul>
         </div>
@@ -43,7 +43,7 @@
           <ul class="perfis-list">
             <li *ngFor="let p of selectedPerfis">
               <span>{{ p.nome }}</span>
-              <button type="button" (click)="removerPerfil(p)">-</button>
+              <button type="button" class="btn-remove" (click)="removerPerfil(p)">-</button>
             </li>
           </ul>
         </div>
