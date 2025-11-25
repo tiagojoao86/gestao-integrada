@@ -1,11 +1,14 @@
-.perfis-selection {
+.detail-columns {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
 }
 
-.perfis-column {
+.left-column, .right-column {
   flex: 1 1 0;
+}
+
+.perfis-column {
   box-sizing: border-box;
   border-style: solid;
   border-width: thin;

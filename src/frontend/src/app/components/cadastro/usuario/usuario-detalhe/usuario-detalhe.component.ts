@@ -17,6 +17,7 @@ import {
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessageService } from '../../../base/messages/messages.service';
 import { UsuarioDTO } from '../model/usuario-dto';
 import { PerfilDTO } from '../../perfil/model/perfil-dto';
@@ -34,6 +35,7 @@ import { FilterLogicOperator } from '../../../base/model/filter-dto';
     FormsModule,
     InputTextModule,
     PasswordModule,
+    AutoCompleteModule,
   ],
   templateUrl: './usuario-detalhe.component.html',
   styleUrl: './usuario-detalhe.component.css',
@@ -54,8 +56,8 @@ export class UsuarioDetalheComponent implements OnInit {
 
   // perfis
   allPerfis: PerfilDTO[] = [];
-  availablePerfis: PerfilDTO[] = [];
   selectedPerfis: PerfilDTO[] = [];
+  suggestions: PerfilDTO[] = [];
   perfilFilter = '';
 
   acoesTela: RegisterActionToolbar[] = [
@@ -112,14 +114,22 @@ export class UsuarioDetalheComponent implements OnInit {
 
   adicionarPerfil(perfil: PerfilDTO) {
     if (!perfil) return;
+    if (this.selectedPerfis.some(p => p.id === perfil.id)) return;
     this.selectedPerfis.push(perfil);
-    this.availablePerfis = this.availablePerfis.filter((p) => p.id !== perfil.id);
   }
 
   removerPerfil(perfil: PerfilDTO) {
     if (!perfil) return;
-    this.availablePerfis.push(perfil);
     this.selectedPerfis = this.selectedPerfis.filter((p) => p.id !== perfil.id);
+  }
+
+  searchPerfis(event: { query: string }) {
+    const q = event.query ? event.query.toLowerCase() : '';
+    this.suggestions = this.allPerfis.filter(p => p.nome && p.nome.toLowerCase().includes(q) && !this.selectedPerfis.some(sp => sp.id === p.id));
+  }
+
+  onPerfilSelect(perfil: PerfilDTO) {
+    this.adicionarPerfil(perfil);
   }
 
   getAvailablePerfisFiltered(): PerfilDTO[] {
@@ -134,7 +144,6 @@ export class UsuarioDetalheComponent implements OnInit {
       .subscribe((r) => {
         this.allPerfis = r.body.content || [];
         this.selectedPerfis = this.usuario.perfis || [];
-        this.availablePerfis = this.allPerfis.filter((p) => !this.selectedPerfis.some((sp) => sp.id === p.id));
       });
   }
 
