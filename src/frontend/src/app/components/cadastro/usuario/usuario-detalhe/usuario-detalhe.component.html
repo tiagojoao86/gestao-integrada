@@ -28,7 +28,7 @@
             [suggestions]="suggestions"
             (completeMethod)="searchPerfis($event)"
             field="nome"
-            (onSelect)="onPerfilSelect($event)"
+            (onSelect)="onPerfilSelect($event.value)"
             [forceSelection]="true"
             [minLength]="1"
             placeholder="Buscar perfil"
