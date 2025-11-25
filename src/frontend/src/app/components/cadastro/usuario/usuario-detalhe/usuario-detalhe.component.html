@@ -22,9 +22,10 @@
 
       <div class="right-column">
         <div class="perfis-column">
-          <label class="perfis-label" i18n>Perfis Vinculados</label>
+          <label for="perfilAutoComplete" class="perfis-label" i18n>Perfis Vinculados</label>
 
           <p-autoComplete
+            inputId="perfilAutoComplete"
             [suggestions]="suggestions"
             (completeMethod)="searchPerfis($event)"
             (onSelect)="onPerfilSelect($event.value)"
@@ -32,7 +33,7 @@
             [forceSelection]="true"
             [minLength]="1"
             placeholder="Buscar perfil"
-            style="width:100%">
+            [style]="{ 'width': '100%' }">
             <ng-template let-item pTemplate="item">
               <div>{{ item.nome }}</div>
             </ng-template>
