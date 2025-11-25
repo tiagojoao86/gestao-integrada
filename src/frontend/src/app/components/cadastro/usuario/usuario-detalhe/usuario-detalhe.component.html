@@ -27,12 +27,16 @@
           <p-autoComplete
             [suggestions]="suggestions"
             (completeMethod)="searchPerfis($event)"
-            field="nome"
+            (completeMethod)="searchPerfis($event)"
             (onSelect)="onPerfilSelect($event.value)"
+            [(ngModel)]="perfilInput"
             [forceSelection]="true"
             [minLength]="1"
-            placeholder="Buscar perfil"
-          ></p-autoComplete>
+            placeholder="Buscar perfil">
+            <ng-template let-item pTemplate="item">
+              <div>{{ item.nome }}</div>
+            </ng-template>
+          </p-autoComplete>
 
           <ul class="perfis-list mt-3">
             <li *ngFor="let p of selectedPerfis">

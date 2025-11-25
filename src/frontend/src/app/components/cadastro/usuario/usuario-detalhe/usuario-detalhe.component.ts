@@ -58,6 +58,7 @@ export class UsuarioDetalheComponent implements OnInit {
   allPerfis: PerfilDTO[] = [];
   selectedPerfis: PerfilDTO[] = [];
   suggestions: PerfilDTO[] = [];
+  perfilInput: string | null = null;
   perfilFilter = '';
 
   acoesTela: RegisterActionToolbar[] = [
@@ -130,12 +131,9 @@ export class UsuarioDetalheComponent implements OnInit {
 
   onPerfilSelect(perfil: PerfilDTO) {
     this.adicionarPerfil(perfil);
-  }
-
-  getAvailablePerfisFiltered(): PerfilDTO[] {
-    const f = this.perfilFilter ? this.perfilFilter.toLowerCase() : '';
-    if (!f) return this.availablePerfis;
-    return this.availablePerfis.filter((p) => (p.nome || '').toLowerCase().includes(f));
+    // clear input and suggestions after selection
+    this.perfilInput = null;
+    this.suggestions = [];
   }
 
   private loadPerfisAndInitLists() {
