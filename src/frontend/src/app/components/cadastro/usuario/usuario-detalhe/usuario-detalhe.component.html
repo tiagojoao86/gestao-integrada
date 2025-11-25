@@ -28,7 +28,7 @@
       <!-- Perfis selection -->
       <div class="perfis-selection w-100 mt-4">
         <div class="perfis-column">
-          <label for="perfilFilterInput" i18n>Perfis disponíveis</label>
+          <label for="perfilFilterInput" i18n style="font-weight:normal">Perfis disponíveis</label>
           <input id="perfilFilterInput" pInputText placeholder="Filtrar" [(ngModel)]="perfilFilter" [ngModelOptions]="{standalone: true}" />
           <ul class="perfis-list">
             <li *ngFor="let p of getAvailablePerfisFiltered()">
@@ -39,7 +39,7 @@
         </div>
 
         <div class="perfis-column">
-          <h4 i18n>Perfis vinculados</h4>
+          <h4 i18n style="font-weight:normal; margin:0">Perfis vinculados</h4>
           <ul class="perfis-list">
             <li *ngFor="let p of selectedPerfis">
               <span>{{ p.nome }}</span>
