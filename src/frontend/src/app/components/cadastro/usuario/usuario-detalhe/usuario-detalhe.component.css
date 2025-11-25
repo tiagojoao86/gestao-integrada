@@ -1,0 +1,50 @@
+.perfis-selection {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.perfis-column {
+  flex: 1 1 0;
+  box-sizing: border-box;
+  border-style: solid;
+  border-width: thin;
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+}
+
+.perfis-list {
+  list-style: none;
+  margin: 0.5rem 0 0 0;
+  padding: 0;
+}
+
+.perfis-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.perfis-list li span {
+  flex: 1 1 auto;
+}
+
+.perfis-list li .btn-add,
+.perfis-list li .btn-remove {
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.perfis-list li .btn-add {
+  background-color: var(--success-color);
+  color: #fff;
+}
+
+.perfis-list li .btn-remove {
+  background-color: var(--error-color);
+  color: #fff;
+}
