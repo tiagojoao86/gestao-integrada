@@ -25,6 +25,7 @@ import { FilterLogicOperator } from '../../../base/model/filter-dto';
 
 @Component({
   selector: 'gi-usuario-detalhe',
+  standalone: true,
   imports: [
     CommonModule,
     BaseComponent,

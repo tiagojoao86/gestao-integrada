@@ -29,7 +29,7 @@
       <div class="perfis-selection w-100 mt-4">
         <div class="perfis-column">
           <label i18n>Perfis disponíveis</label>
-          <input pInputText placeholder="Filtrar" [(ngModel)]="perfilFilter" />
+          <input pInputText placeholder="Filtrar" [(ngModel)]="perfilFilter" [ngModelOptions]="{standalone: true}" />
           <ul class="perfis-list">
             <li *ngFor="let p of getAvailablePerfisFiltered()">
               <span>{{ p.nome }}</span>
