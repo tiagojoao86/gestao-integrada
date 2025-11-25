@@ -24,6 +24,30 @@
         />
         <label for="senhaUsuario" i18n>Senha</label>
       </p-iftalabel>
+
+      <!-- Perfis selection -->
+      <div class="perfis-selection w-100 mt-4">
+        <div class="perfis-column">
+          <label i18n>Perfis disponíveis</label>
+          <input pInputText placeholder="Filtrar" [(ngModel)]="perfilFilter" />
+          <ul class="perfis-list">
+            <li *ngFor="let p of availablePerfis.filter(p => !perfilFilter || p.nome?.toLowerCase().includes(perfilFilter.toLowerCase()))">
+              <span>{{ p.nome }}</span>
+              <button type="button" (click)="adicionarPerfil(p)">+</button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="perfis-column">
+          <label i18n>Perfis vinculados</label>
+          <ul class="perfis-list">
+            <li *ngFor="let p of selectedPerfis">
+              <span>{{ p.nome }}</span>
+              <button type="button" (click)="removerPerfil(p)">-</button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </gi-app-base>

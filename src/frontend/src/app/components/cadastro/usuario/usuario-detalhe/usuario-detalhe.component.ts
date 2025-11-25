@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { RouteConstants } from '../../../base/constants/route-constants';
 import { UsuarioService } from '../usuario.service';
+import { PerfilService } from '../../perfil/perfil.service';
 import {
   RegisterActionToolbar,
   BaseComponent,
@@ -12,11 +13,14 @@ import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  FormsModule,
 } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { MessageService } from '../../../base/messages/messages.service';
 import { UsuarioDTO } from '../model/usuario-dto';
+import { PerfilDTO } from '../../perfil/model/perfil-dto';
+import { PageRequest } from '../../../base/model/page-request';
 
 @Component({
   selector: 'gi-usuario-detalhe',
@@ -25,12 +29,13 @@ import { UsuarioDTO } from '../model/usuario-dto';
     BaseComponent,
     IftaLabelModule,
     ReactiveFormsModule,
+    FormsModule,
     InputTextModule,
     PasswordModule,
   ],
   templateUrl: './usuario-detalhe.component.html',
   styleUrl: './usuario-detalhe.component.css',
-  providers: [UsuarioService],
+  providers: [UsuarioService, PerfilService],
 })
 export class UsuarioDetalheComponent implements OnInit {
   form: FormGroup = new FormGroup([]);
@@ -40,9 +45,16 @@ export class UsuarioDetalheComponent implements OnInit {
   @Output() closeDetail = new EventEmitter<void>();
 
   private service: UsuarioService = inject(UsuarioService);
+  private perfilService: PerfilService = inject(PerfilService);
   private messages: MessageService = inject(MessageService);
 
   titulo = $localize`Usuário: `;
+
+  // perfis
+  allPerfis: PerfilDTO[] = [];
+  availablePerfis: PerfilDTO[] = [];
+  selectedPerfis: PerfilDTO[] = [];
+  perfilFilter = '';
 
   acoesTela: RegisterActionToolbar[] = [
     {
@@ -66,6 +78,11 @@ export class UsuarioDetalheComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
 
+    // load perfis
+    this.perfilService.list(new PageRequest(null, 1000, 0, [])).subscribe((r) => {
+      this.allPerfis = r.body.content || [];
+    });
+
     if (this.detailId === RouteConstants.P_ADD) {
       this.modoEdicao = false;
       this.titulo += $localize`Novo`;
@@ -75,6 +92,12 @@ export class UsuarioDetalheComponent implements OnInit {
         this.usuario = response.body;
         this.titulo += this.usuario.nome;
         this.fillForm();
+
+        // initialize selected and available perfis
+        this.selectedPerfis = this.usuario.perfis || [];
+        this.availablePerfis = this.allPerfis.filter(
+          (p) => !this.selectedPerfis.some((sp) => sp.id === p.id)
+        );
       });
     }
   }
@@ -92,6 +115,18 @@ export class UsuarioDetalheComponent implements OnInit {
     this.form.get('senha')?.setValue(this.usuario.senha);
   }
 
+  adicionarPerfil(perfil: PerfilDTO) {
+    if (!perfil) return;
+    this.selectedPerfis.push(perfil);
+    this.availablePerfis = this.availablePerfis.filter((p) => p.id !== perfil.id);
+  }
+
+  removerPerfil(perfil: PerfilDTO) {
+    if (!perfil) return;
+    this.availablePerfis.push(perfil);
+    this.selectedPerfis = this.selectedPerfis.filter((p) => p.id !== perfil.id);
+  }
+
   salvar() {
     if (!this.form.valid) {
       this.messages.erro($localize`Existem campo inválidos.`);
@@ -101,6 +136,7 @@ export class UsuarioDetalheComponent implements OnInit {
     this.usuario.nome = this.form.value.nome;
     this.usuario.login = this.form.value.login;
     this.usuario.senha = this.form.value.senha;
+    this.usuario.perfis = this.selectedPerfis;
 
     this.service.save(this.usuario, {
       onSuccess: (data: UsuarioDTO) => {

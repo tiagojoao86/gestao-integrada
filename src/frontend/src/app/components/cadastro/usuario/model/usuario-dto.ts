@@ -1,3 +1,5 @@
+import { PerfilDTO } from '../../perfil/model/perfil-dto';
+
 export interface UsuarioDTO {
   id: string;
   nome: string;
@@ -7,4 +9,5 @@ export interface UsuarioDTO {
   updatedAt?: Date;
   createdBy?: string;
   updatedBy?: string;
+  perfis?: PerfilDTO[];
 }
