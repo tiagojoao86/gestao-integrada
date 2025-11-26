@@ -4,7 +4,6 @@ import {
   BaseComponent,
 } from '../../../base/base.component';
 import { PerfilService } from '../perfil.service';
-import { AuthService } from '../../../base/auth/auth-service';
 import { Order, PageRequest } from '../../../base/model/page-request';
 import { PerfilGridDTO } from '../model/perfil-grid-dto';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -133,74 +132,8 @@ export class PerfilGridComponent {
 
   private service: PerfilService = inject(PerfilService);
   private datePipe: DatePipe = inject(DatePipe);
-  private auth: AuthService = inject(AuthService);
 
   constructor() {
-    // build actions based on authorities
-    const canEdit = this.auth.hasAuthorityEditarToModulo('CADASTRO_PERFIL');
-
-    if (canEdit) {
-      this.acoesTabela = [
-        {
-          icon: 'edit_note',
-          action: (element: PerfilGridDTO) => this.openDetail.emit(element.id),
-        },
-        {
-          icon: 'delete',
-          action: (element: PerfilGridDTO) => {
-            this.service.delete(element.id).subscribe(() => this.listarPerfis());
-          },
-        },
-      ];
-
-      this.acoesTela = [
-        {
-          action: () => this.refreshList(),
-          icon: 'refresh',
-          title: $localize`Atualizar` + ' (alt + r)',
-          shortcut: 'alt.r',
-        },
-        {
-          action: () => this.openDetail.emit('add'),
-          icon: 'add',
-          title: $localize`Adicionar` + ' (alt + a)',
-          shortcut: 'alt.a',
-        },
-        {
-          action: () => this.alternarMostrarFiltros(),
-          icon: 'search',
-          title: $localize`Pesquisar` + ' (alt + p)',
-          value: '0',
-          shortcut: 'alt.p',
-        },
-      ];
-    } else {
-      this.acoesTabela = [
-        {
-          icon: 'delete',
-          action: (element: PerfilGridDTO) => {
-            this.service.delete(element.id).subscribe(() => this.listarPerfis());
-          },
-        },
-      ];
-
-      this.acoesTela = [
-        {
-          action: () => this.refreshList(),
-          icon: 'refresh',
-          title: $localize`Atualizar` + ' (alt + r)',
-          shortcut: 'alt.r',
-        },
-        {
-          action: () => this.alternarMostrarFiltros(),
-          icon: 'search',
-          title: $localize`Pesquisar` + ' (alt + p)',
-          value: '0',
-          shortcut: 'alt.p',
-        },
-      ];
-    }
-
     this.listarPerfis();
   }
 

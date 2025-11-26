@@ -4,7 +4,6 @@ import {
   BaseComponent,
 } from '../../../base/base.component';
 import { UsuarioService } from '../usuario.service';
-import { AuthService } from '../../../base/auth/auth-service';
 import { Order, PageRequest } from '../../../base/model/page-request';
 import { UsuarioGridDTO } from '../model/usuario-grid-dto';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -144,73 +143,8 @@ export class UsuarioGridComponent {
 
   private service: UsuarioService = inject(UsuarioService);
   private datePipe: DatePipe = inject(DatePipe);
-  private auth: AuthService = inject(AuthService);
 
   constructor() {
-    const canEdit = this.auth.hasAuthorityEditarToModulo('CADASTRO_USUARIO');
-
-    if (canEdit) {
-      this.acoesTabela = [
-        {
-          icon: 'edit_note',
-          action: (element: UsuarioGridDTO) => this.openDetail.emit(element.id),
-        },
-        {
-          icon: 'delete',
-          action: (element: UsuarioGridDTO) => {
-            this.service.delete(element.id).subscribe(() => this.listarUsuarios());
-          },
-        },
-      ];
-
-      this.acoesTela = [
-        {
-          action: () => this.refreshList(),
-          icon: 'refresh',
-          title: $localize`Atualizar` + ' (alt + r)',
-          shortcut: 'alt.r',
-        },
-        {
-          action: () => this.openDetail.emit('add'),
-          icon: 'add',
-          title: $localize`Adicionar` + ' (alt + a)',
-          shortcut: 'alt.a',
-        },
-        {
-          action: () => this.alternarMostrarFiltros(),
-          icon: 'search',
-          title: $localize`Pesquisar` + ' (alt + p)',
-          value: '0',
-          shortcut: 'alt.p',
-        },
-      ];
-    } else {
-      this.acoesTabela = [
-        {
-          icon: 'delete',
-          action: (element: UsuarioGridDTO) => {
-            this.service.delete(element.id).subscribe(() => this.listarUsuarios());
-          },
-        },
-      ];
-
-      this.acoesTela = [
-        {
-          action: () => this.refreshList(),
-          icon: 'refresh',
-          title: $localize`Atualizar` + ' (alt + r)',
-          shortcut: 'alt.r',
-        },
-        {
-          action: () => this.alternarMostrarFiltros(),
-          icon: 'search',
-          title: $localize`Pesquisar` + ' (alt + p)',
-          value: '0',
-          shortcut: 'alt.p',
-        },
-      ];
-    }
-
     this.listarUsuarios();
   }
 
