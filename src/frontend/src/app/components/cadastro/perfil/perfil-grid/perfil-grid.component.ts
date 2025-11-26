@@ -7,6 +7,7 @@ import { PerfilService } from '../perfil.service';
 import { Order, PageRequest } from '../../../base/model/page-request';
 import { PerfilGridDTO } from '../model/perfil-grid-dto';
 import { CommonModule, DatePipe } from '@angular/common';
+import { AuthService } from '../../../base/auth/auth-service';
 import {
   Action,
   DataSourceColumn,
@@ -65,50 +66,9 @@ export class PerfilGridComponent {
     },
   ];
 
-  acoesTabela: Action[] = [
-    {
-      icon: 'edit_note',
-      action: (element: PerfilGridDTO) => {
-        this.openDetail.emit(element.id);
-      },
-    },
-    {
-      icon: 'delete',
-      action: (element: PerfilGridDTO) => {
-        this.service
-          .delete(element.id)
-          .subscribe((_it) => this.listarPerfis());
-      },
-    },
-  ];
+  acoesTabela: Action[] = [];
 
-  acoesTela: RegisterActionToolbar[] = [
-    {
-      action: () => {
-        this.refreshList();
-      },
-      icon: 'refresh',
-      title: $localize`Atualizar` + ' (alt + r)',
-      shortcut: 'alt.r',
-    },
-    {
-      action: () => {
-        this.openDetail.emit('add');
-      },
-      icon: 'add',
-      title: $localize`Adicionar` + ' (alt + a)',
-      shortcut: 'alt.a',
-    },
-    {
-      action: () => {
-        this.alternarMostrarFiltros();
-      },
-      icon: 'search',
-      title: $localize`Pesquisar` + ' (alt + p)',
-      value: '0',
-      shortcut: 'alt.p',
-    },
-  ];
+  acoesTela: RegisterActionToolbar[] = [];
 
   filtros: FilterProperty[] = [
     {
@@ -132,8 +92,36 @@ export class PerfilGridComponent {
 
   private service: PerfilService = inject(PerfilService);
   private datePipe: DatePipe = inject(DatePipe);
+  private auth: AuthService = inject(AuthService);
 
   constructor() {
+    const canView = this.auth.hasAuthorityVisualizarToModulo('CADASTRO_PERFIL');
+    const canDelete = this.auth.hasAuthorityDeletarToModulo('CADASTRO_PERFIL');
+
+    if (canView) {
+      this.acoesTabela.push({ icon: 'edit_note', action: (element: PerfilGridDTO) => this.openDetail.emit(element.id)});
+    }
+    if (canDelete) {
+      this.acoesTabela.push({ icon: 'delete', action: (element: PerfilGridDTO) => { this.service.delete(element.id).subscribe(() => this.listarPerfis()); }});
+    }
+
+    this.acoesTela = [
+      {
+        action: () => {
+          this.refreshList();
+        },
+        icon: 'refresh',
+        title: $localize`Atualizar` + ' (alt + r)',
+        shortcut: 'alt.r',
+      },
+    ];
+
+    if (this.auth.hasAuthorityEditarToModulo('CADASTRO_PERFIL')) {
+      this.acoesTela.push({action: () => { this.openDetail.emit('add'); }, icon: 'add', title: $localize`Adicionar` + ' (alt + a)', shortcut: 'alt.a'});
+    }
+
+    this.acoesTela.push({ action: () => { this.alternarMostrarFiltros(); }, icon: 'search', title: $localize`Pesquisar` + ' (alt + p)', value: '0', shortcut: 'alt.p'});
+
     this.listarPerfis();
   }
 
