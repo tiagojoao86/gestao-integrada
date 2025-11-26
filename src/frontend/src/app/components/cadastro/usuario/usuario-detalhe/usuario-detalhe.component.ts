@@ -21,6 +21,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessageService } from '../../../base/messages/messages.service';
 import { UsuarioDTO } from '../model/usuario-dto';
 import { PerfilDTO } from '../../perfil/model/perfil-dto';
+import { AuthService } from '../../../base/auth/auth-service';
 import { PageRequest } from '../../../base/model/page-request';
 import { FilterLogicOperator } from '../../../base/model/filter-dto';
 
@@ -61,27 +62,28 @@ export class UsuarioDetalheComponent implements OnInit {
   perfilInput: PerfilDTO | string | null = null;
   perfilFilter = '';
 
-  acoesTela: RegisterActionToolbar[] = [
-    {
-      action: () => {
-        this.goBackFn();
-      },
-      icon: 'close',
-      title: $localize`Cancelar` + ' (esc)',
-      shortcut: 'escape',
-    },
-    {
-      action: () => {
-        this.salvar();
-      },
-      icon: 'save',
-      title: $localize`Salvar` + ' (enter)',
-      shortcut: 'enter',
-    },
-  ];
+  acoesTela: RegisterActionToolbar[] = [];
+  private auth: AuthService = inject(AuthService);
 
   ngOnInit(): void {
     this.initForm();
+
+    // configure actions based on permission
+    const canEdit = this.auth.hasAuthorityEditarToModulo('CADASTRO_USUARIO');
+    this.acoesTela = [
+      {
+        action: () => {
+          this.goBackFn();
+        },
+        icon: 'close',
+        title: $localize`Cancelar` + ' (esc)',
+        shortcut: 'escape',
+      },
+    ];
+
+    if (canEdit) {
+      this.acoesTela.push({ action: () => { this.salvar(); }, icon: 'save', title: $localize`Salvar` + ' (enter)', shortcut: 'enter' });
+    }
 
     if (this.detailId === RouteConstants.P_ADD) {
       this.modoEdicao = false;
@@ -109,7 +111,6 @@ export class UsuarioDetalheComponent implements OnInit {
   fillForm() {
     this.form.get('nome')?.setValue(this.usuario.nome);
     this.form.get('login')?.setValue(this.usuario.login);
-    this.form.get('senha')?.setValue(this.usuario.senha);
   }
 
   async adicionarPerfil(perfil: PerfilDTO) {
@@ -163,7 +164,8 @@ export class UsuarioDetalheComponent implements OnInit {
 
     this.usuario.nome = this.form.value.nome;
     this.usuario.login = this.form.value.login;
-    this.usuario.senha = this.form.value.senha;
+    // only send senha if non-empty — otherwise send null to avoid re-hashing existing hash
+    this.usuario.senha = this.form.value.senha && this.form.value.senha.trim() !== '' ? this.form.value.senha : null;
     this.usuario.perfis = this.selectedPerfis;
 
     this.service.save(this.usuario, {

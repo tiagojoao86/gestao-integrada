@@ -15,6 +15,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { PerfilModuloDTO } from '../model/perfil-modulo-dto';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { Response } from '../../../base/model/response'; 
+import { AuthService } from '../../../base/auth/auth-service';
 
 interface PermissaoFormGroupValue {
   id?: string;
@@ -61,10 +62,9 @@ export class PerfilDetalheComponent implements OnInit {
 
   titulo = $localize`Perfil: `;
 
-  acoesTela: RegisterActionToolbar[] = [
-    { action: () => this.goBackFn(), icon: 'close', title: $localize`Cancelar` + ' (esc)', shortcut: 'escape' },
-    { action: () => this.salvar(), icon: 'save', title: $localize`Salvar` + ' (enter)', shortcut: 'enter' },
-  ];
+  acoesTela: RegisterActionToolbar[] = [];
+  
+  private auth: AuthService = inject(AuthService);
 
   get permissoes(): FormArray {
     return this.form.get('permissoes') as FormArray;
@@ -72,6 +72,16 @@ export class PerfilDetalheComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+    // configure actions based on permission
+    const canEdit = this.auth.hasAuthorityEditarToModulo('CADASTRO_PERFIL');
+    this.acoesTela = [
+      { action: () => this.goBackFn(), icon: 'close', title: $localize`Cancelar` + ' (esc)', shortcut: 'escape' },
+    ];
+
+    if (canEdit) {
+      this.acoesTela.push({ action: () => this.salvar(), icon: 'save', title: $localize`Salvar` + ' (enter)', shortcut: 'enter' });
+    }
+
     this.loadData();
   }
 
@@ -161,9 +171,7 @@ export class PerfilDetalheComponent implements OnInit {
       ...this.form.value,
       id: this.perfil.id,
       permissoes: payloadPermissoes,
-    };
-
-    console.log('[DEBUG] Payload enviado ao backend:', payload);
+    };   
   
     this.service.save(payload, {
       onSuccess: (data: PerfilDTO) => {
