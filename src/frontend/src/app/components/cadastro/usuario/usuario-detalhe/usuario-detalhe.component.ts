@@ -54,12 +54,11 @@ export class UsuarioDetalheComponent implements OnInit {
 
   titulo = $localize`Usuário: `;
 
-  // perfis
+  
   allPerfis: PerfilDTO[] = [];
   selectedPerfis: PerfilDTO[] = [];
-  suggestions: PerfilDTO[] = [];
-  // perfilInput can be string or selected object; allow any to avoid [object Object] rendering
-  perfilInput: any = null;
+  suggestions: PerfilDTO[] = [];  
+  perfilInput: PerfilDTO | string | null = null;
   perfilFilter = '';
 
   acoesTela: RegisterActionToolbar[] = [
@@ -86,8 +85,7 @@ export class UsuarioDetalheComponent implements OnInit {
 
     if (this.detailId === RouteConstants.P_ADD) {
       this.modoEdicao = false;
-      this.titulo += $localize`Novo`;
-      // no usuario yet, ensure lists will be initialized after loading perfis
+      this.titulo += $localize`Novo`;      
       this.usuario = {} as UsuarioDTO;
       this.loadPerfisAndInitLists();
     } else {
@@ -114,9 +112,9 @@ export class UsuarioDetalheComponent implements OnInit {
     this.form.get('senha')?.setValue(this.usuario.senha);
   }
 
-  adicionarPerfil(perfil: PerfilDTO) {
+  async adicionarPerfil(perfil: PerfilDTO) {
     if (!perfil) return;
-    if (this.selectedPerfis.some(p => p.id === perfil.id)) return;
+    if (this.selectedPerfis.some((p) => p.id === perfil.id)) return;
     this.selectedPerfis.push(perfil);
   }
 
@@ -127,24 +125,30 @@ export class UsuarioDetalheComponent implements OnInit {
 
   searchPerfis(event: { query: string }) {
     const q = event.query ? String(event.query).toLowerCase() : '';
-    this.suggestions = this.allPerfis.filter(p => {
+    this.suggestions = this.allPerfis.filter((p) => {
       const nome = p?.nome ? String(p.nome).toLowerCase() : '';
-      return nome.includes(q) && !this.selectedPerfis.some(sp => sp.id === p.id);
+      return (
+        nome.includes(q) && !this.selectedPerfis.some((sp) => sp.id === p.id)
+      );
     });
   }
 
-  onPerfilSelect(perfil: PerfilDTO) {
-    // Defer clearing to allow AutoComplete to process selection internals, then reset
-    this.adicionarPerfil(perfil);
-    setTimeout(() => {
-      this.perfilInput = '';
-      this.suggestions = [];
-    }, 50);
+  async onPerfilSelect(perfil: PerfilDTO) {    
+    await this.adicionarPerfil(perfil);    
+    this.perfilInput = '';
+    this.suggestions = [];
   }
 
   private loadPerfisAndInitLists() {
     this.perfilService
-      .list(new PageRequest({ filterLogicOperator: FilterLogicOperator.AND.getKey(), items: [] }, 9999, 0, []))
+      .list(
+        new PageRequest(
+          { filterLogicOperator: FilterLogicOperator.AND.getKey(), items: [] },
+          9999,
+          0,
+          []
+        )
+      )
       .subscribe((r) => {
         this.allPerfis = r.body.content || [];
         this.selectedPerfis = this.usuario.perfis || [];

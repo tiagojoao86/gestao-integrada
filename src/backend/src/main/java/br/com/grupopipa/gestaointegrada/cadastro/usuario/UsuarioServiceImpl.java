@@ -10,8 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.grupopipa.gestaointegrada.cadastro.modulo.entity.ModuloEntity;
+import br.com.grupopipa.gestaointegrada.cadastro.perfil.PerfilDTO;
+import br.com.grupopipa.gestaointegrada.cadastro.perfil.PerfilRepository;
 import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilEntity;
 import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.PerfilModuloEntity;
+import br.com.grupopipa.gestaointegrada.cadastro.perfil.entity.UsuarioPerfilEntity;
 import br.com.grupopipa.gestaointegrada.cadastro.usuario.entity.UsuarioEntity;
 import br.com.grupopipa.gestaointegrada.config.security.dto.AuthorityDTO;
 import br.com.grupopipa.gestaointegrada.core.dao.Specifications;
@@ -24,11 +27,13 @@ public class UsuarioServiceImpl
         implements UsuarioService {
 
     private PasswordEncoder passwordEncoder;
+    private final PerfilRepository perfilRepository;
 
     public UsuarioServiceImpl(PasswordEncoder passwordEncoder, UsuarioRepository repository,
-            Specifications<UsuarioEntity> specifications) {
+            Specifications<UsuarioEntity> specifications, PerfilRepository perfilRepository) {
         super(repository, specifications);
         this.passwordEncoder = passwordEncoder;
+        this.perfilRepository = perfilRepository;
     }
 
     @Override
@@ -86,11 +91,46 @@ public class UsuarioServiceImpl
         }
 
         entity.updateUsuarioFromDTO(dto, passwordEncoder);
+
+        // Sync perfis if provided in DTO
+        if (dto.getPerfis() != null) {
+            var perfilIds = dto.getPerfis().stream().map(p -> p.getId()).toList();
+
+            // remove perfis not present
+            entity.getPerfis().removeIf(up -> up.getPerfil() == null || !perfilIds.contains(up.getPerfil().getId()));
+
+            // add new perfis
+            var existingPerfilIds = entity.getPerfis().stream().map(up -> up.getPerfil().getId()).toList();
+            for (var perfilDTO : dto.getPerfis()) {
+                if (perfilDTO == null || perfilDTO.getId() == null) continue;
+                if (!existingPerfilIds.contains(perfilDTO.getId())) {
+                    PerfilEntity perfilEntity = perfilRepository.findById(perfilDTO.getId())
+                            .orElseThrow(() -> new EntityNotFoundException("Perfil", "id", perfilDTO.getId().toString()));
+                    UsuarioPerfilEntity up = new UsuarioPerfilEntity(entity, perfilEntity);
+                    entity.getPerfis().add(up);
+                }
+            }
+        }
+
         return entity;
     }
 
     @Override
     protected UsuarioDTO buildDTOFromEntity(UsuarioEntity entity) {
+        var perfis = entity.getPerfis().stream()
+                .map(up -> up.getPerfil())
+                .filter(p -> p != null)
+                .map(p -> PerfilDTO
+                        .builder()
+                        .id(p.getId())
+                        .nome(p.getNome())
+                        .createdAt(p.getCreatedAt())
+                        .createdBy(p.getCreatedBy())
+                        .updatedAt(p.getUpdatedAt())
+                        .updatedBy(p.getUpdatedBy())
+                        .build())
+                .toList();
+
         return UsuarioDTO
                 .builder()
                 .id(entity.getId())
@@ -101,6 +141,7 @@ public class UsuarioServiceImpl
                 .updatedBy(entity.getUpdatedBy())
                 .createdAt(entity.getCreatedAt())
                 .createdBy(entity.getCreatedBy())
+                .perfis(perfis)
                 .build();
     }
 
