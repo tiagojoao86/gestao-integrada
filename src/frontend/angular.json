@@ -33,12 +33,16 @@
                 "input": "public"
               }
             ],
+            "optimization": {
+              "fonts": { "inline": false }
+            },
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],
             "scripts": []
           },
+
           "configurations": {
             "production": {
               "budgets": [
