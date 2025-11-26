@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { LoadingService } from './loading.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'gi-loading',
@@ -41,11 +42,11 @@ import { LoadingService } from './loading.service';
     `,
   ],
 })
-export class LoadingComponent {
-  loading$ = this.getLoading();
+export class LoadingComponent implements OnInit {
+  loading$!: Observable<boolean>;
   constructor(private loadingService: LoadingService) {}
 
-  private getLoading() {
-    return this.loadingService.loading$;
+  ngOnInit(): void {
+    this.loading$ = this.loadingService.loading$;
   }
 }
