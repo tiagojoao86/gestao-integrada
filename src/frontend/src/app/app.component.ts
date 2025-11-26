@@ -6,6 +6,7 @@ import { LoadingComponent } from './components/base/loading/loading.component';
 
 @Component({
     selector: 'gi-app-root',
+    standalone: true,
     imports: [RouterOutlet, LoadingComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
