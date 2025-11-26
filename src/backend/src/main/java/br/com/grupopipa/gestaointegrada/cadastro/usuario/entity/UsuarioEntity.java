@@ -32,7 +32,7 @@ public class UsuarioEntity extends BaseEntity {
     @Embedded
     private Senha senha;
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = jakarta.persistence.CascadeType.ALL, orphanRemoval = true)
     private Set<UsuarioPerfilEntity> perfis = new HashSet<>();
 
     private UsuarioEntity(Nome nome, Login login, Senha senha) {

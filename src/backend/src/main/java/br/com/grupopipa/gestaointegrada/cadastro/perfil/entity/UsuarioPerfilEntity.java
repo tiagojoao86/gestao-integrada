@@ -27,4 +27,17 @@ public class UsuarioPerfilEntity extends BaseEntity {
     
     protected UsuarioPerfilEntity() {
     }
+
+    public UsuarioPerfilEntity(UsuarioEntity usuario, PerfilEntity perfil) {
+        this.usuario = usuario;
+        this.perfil = perfil;
+    }
+
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setPerfil(PerfilEntity perfil) {
+        this.perfil = perfil;
+    }
 }

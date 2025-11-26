@@ -4,8 +4,13 @@
   align-items: flex-start;
 }
 
-.left-column, .right-column {
+.left-column {
   flex: 1 1 0;
+}
+
+.right-column {
+  flex: 1 1 0;  
+  padding: 0.2rem !important;
 }
 
 .perfis-column {

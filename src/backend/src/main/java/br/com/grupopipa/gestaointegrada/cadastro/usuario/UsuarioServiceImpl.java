@@ -136,7 +136,6 @@ public class UsuarioServiceImpl
                 .id(entity.getId())
                 .nome(entity.getNome())
                 .login(entity.getLogin())
-                .senha(entity.getSenha())
                 .updatedAt(entity.getUpdatedAt())
                 .updatedBy(entity.getUpdatedBy())
                 .createdAt(entity.getCreatedAt())

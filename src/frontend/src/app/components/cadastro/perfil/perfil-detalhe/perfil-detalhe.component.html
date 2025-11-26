@@ -34,10 +34,10 @@
                         <label [for]="'perm_sel_' + i" class="ml-2">{{ permissao.get('moduloNome')?.value }}</label>
                       </div>
                     </td>
-                    <td><p-checkbox formControlName="podeListar" [binary]="true" [inputId]="'perm_listar_' + i" [disabled]="!permissao.get('selecionado')?.value"></p-checkbox></td>
-                    <td><p-checkbox formControlName="podeVisualizar" [binary]="true" [inputId]="'perm_visualizar_' + i" [disabled]="!permissao.get('selecionado')?.value"></p-checkbox></td>
-                    <td><p-checkbox formControlName="podeEditar" [binary]="true" [inputId]="'perm_editar_' + i" [disabled]="!permissao.get('selecionado')?.value"></p-checkbox></td>
-                    <td><p-checkbox formControlName="podeDeletar" [binary]="true" [inputId]="'perm_excluir_' + i" [disabled]="!permissao.get('selecionado')?.value"></p-checkbox></td>
+                    <td><p-checkbox formControlName="podeListar" [binary]="true" [inputId]="'perm_listar_' + i"></p-checkbox></td>
+                    <td><p-checkbox formControlName="podeVisualizar" [binary]="true" [inputId]="'perm_visualizar_' + i"></p-checkbox></td>
+                    <td><p-checkbox formControlName="podeEditar" [binary]="true" [inputId]="'perm_editar_' + i"></p-checkbox></td>
+                    <td><p-checkbox formControlName="podeDeletar" [binary]="true" [inputId]="'perm_excluir_' + i"></p-checkbox></td>
                   </tr>
                 </ng-container>
               </ng-container>
