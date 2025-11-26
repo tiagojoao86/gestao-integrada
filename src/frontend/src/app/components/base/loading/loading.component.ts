@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { LoadingService } from './loading.service';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'gi-loading',
@@ -43,6 +42,10 @@ import { AsyncPipe } from '@angular/common';
   ],
 })
 export class LoadingComponent {
-  loading$ = this.loadingService.loading$;
+  loading$ = this.getLoading();
   constructor(private loadingService: LoadingService) {}
+
+  private getLoading() {
+    return this.loadingService.loading$;
+  }
 }
