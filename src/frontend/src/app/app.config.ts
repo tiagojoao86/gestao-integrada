@@ -47,7 +47,7 @@ export const appConfig: ApplicationConfig = {
 };
 
 export function loadingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-  const loadingService = inject(LoadingService as any);
+  const loadingService = inject(LoadingService) as LoadingService;
   // opt-out header
   if (req.headers.get('x-ignore-loading') === 'true') return next(req);
   loadingService.show();
