@@ -126,15 +126,20 @@ export class UsuarioDetalheComponent implements OnInit {
   }
 
   searchPerfis(event: { query: string }) {
-    const q = event.query ? event.query.toLowerCase() : '';
-    this.suggestions = this.allPerfis.filter(p => p.nome && p.nome.toLowerCase().includes(q) && !this.selectedPerfis.some(sp => sp.id === p.id));
+    const q = event.query ? String(event.query).toLowerCase() : '';
+    this.suggestions = this.allPerfis.filter(p => {
+      const nome = p?.nome ? String(p.nome).toLowerCase() : '';
+      return nome.includes(q) && !this.selectedPerfis.some(sp => sp.id === p.id);
+    });
   }
 
   onPerfilSelect(perfil: PerfilDTO) {
-    // clear input immediately to avoid displaying object in the input
-    this.perfilInput = '';
-    this.suggestions = [];
+    // Defer clearing to allow AutoComplete to process selection internals, then reset
     this.adicionarPerfil(perfil);
+    setTimeout(() => {
+      this.perfilInput = '';
+      this.suggestions = [];
+    }, 50);
   }
 
   private loadPerfisAndInitLists() {

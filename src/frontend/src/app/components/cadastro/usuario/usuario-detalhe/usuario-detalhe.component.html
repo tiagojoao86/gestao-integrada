@@ -28,6 +28,7 @@
             inputId="perfilAutoComplete"
             [suggestions]="suggestions"
             (completeMethod)="searchPerfis($event)"
+            optionLabel="nome"
             (onSelect)="onPerfilSelect($event.value)"
             [(ngModel)]="perfilInput"
             [forceSelection]="true"
