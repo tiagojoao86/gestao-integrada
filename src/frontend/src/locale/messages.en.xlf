@@ -495,6 +495,14 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4711539933884989412" datatype="html">
+        <source>Sair</source>
+        <target>Sign out</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/principal/principal.component.html</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -30,9 +30,9 @@
       <gi-messages></gi-messages>
       <router-outlet></router-outlet>
     </div>
-    <div class="drawer" [@openClose]="showDrawer ? 'open' : 'closed'">
+    <div class="mini-drawer" [@openClose]="showDrawer ? 'open' : 'closed'">
       <ng-container *ngIf="showDrawer">
-        <div class="titulo">
+        <!--div class="titulo">
           <div class="foto">
             <img src="assets/img/useravatar.webp" alt="avatar"/>
           </div>
@@ -53,6 +53,22 @@
                 (click)="logout()"
               />
             </div>
+          </div>
+        </div-->
+        <div class="mini-drawer-content">
+          <div class="icon">
+            <i><span class="material-icons">person_pin_circle</span></i>
+          </div>
+          <div class="dados">
+              <div class="info">{{ getUsername() }}</div>
+              <div class="info">{{ getName() }}</div>
+            </div>
+          <div class="logout-button">
+            <p-button
+            icon="pi pi-sign-out"
+            severity="info"
+            (click)="logout()"
+            />
           </div>
         </div>
       </ng-container>

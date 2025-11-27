@@ -44,6 +44,43 @@
     border: 1px solid var(--border-color);
   }
 
+  .mini-drawer {
+    width: 24vw;    
+    background-color: var(--secondary-color);
+    color: var(--inverted-text-color);
+    top: 54px;
+    position: absolute;
+    z-index: 9999;
+    border: 1px solid;
+    border-color: var(--border-color);
+    left: 76vw;
+    padding: 10px 6px 10px 6px;
+
+    .mini-drawer-content {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+
+      .icon {
+        .material-icons {
+          font-size: 2.2rem !important;
+        }
+      }
+
+      .dados {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        .info {
+          color: var(--inverted-text-color);
+        }
+      }
+    }
+
+  }
+
   .drawer {
     height: 9rem;
     width: 35vw;

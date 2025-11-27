@@ -40,7 +40,7 @@ import { AuthService } from '../base/auth/auth-service';
       state(
         'closed',
         style({
-          transform: 'translateY(-200%)',
+          transform: 'translateY(-400%)',
         })
       ),
       transition('open => closed', [animate('0.2s')]),
@@ -48,14 +48,15 @@ import { AuthService } from '../base/auth/auth-service';
     ]),
   ],
 })
-export class PrincipalComponent implements OnInit{
+export class PrincipalComponent implements OnInit {
   showDrawer = false;
   private router: Router = inject(Router);
   private authService: AuthService = inject(AuthService);
-  tituloApp: string = $localize `Gestão Integrada`;
+  tituloApp: string = $localize`Gestão Integrada`;
+  labelBotaoSair: string = $localize`Sair`;
 
   openDrawerMenu = {
-    nome: $localize `Menu`,
+    nome: $localize`Menu`,
     icone: 'menu',
   };
 
@@ -64,7 +65,7 @@ export class PrincipalComponent implements OnInit{
   ngOnInit(): void {
     this.buildMenu();
   }
-  
+
   buildMenu() {
     if (this.authService.hasAuthorityToGrupo('CADASTROS')) {
       this.menu.push({
