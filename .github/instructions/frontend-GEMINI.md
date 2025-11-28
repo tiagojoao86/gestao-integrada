@@ -88,6 +88,24 @@ As seguintes regras foram configuradas para padronizar o desenvolvimento:
 - **DTOs de Backend:** Quando a estrutura de um payload retornado por uma API do backend é diferente do DTO principal utilizado pelo componente, deve-se criar um DTO específico para representar esse payload. Este DTO deve seguir a convenção de nomenclatura `backend-*.dto.ts`. Um exemplo é o `backend-permissao-dto.ts`, que representa a estrutura de permissões como enviada pela API, facilitando a conversão para o `FormGroup` dentro do componente.
 - **Serviços e Modelos Compartilhados:** Lógica e modelos que são compartilhados por toda a aplicação ou por múltiplos componentes base ficam em `src/app/components/base/`, dentro de subdiretórios apropriados (ex: `auth`, `model`).
 
+## Princípios de Desenvolvimento
+
+### Componentização
+- **Sempre que possível, componentize** funcionalidades reutilizáveis.
+- Identifique padrões que se repetem e extraia-os em componentes separados.
+- Componentes devem ter uma responsabilidade bem definida e única.
+- Prefira criar componentes menores e especializados a componentes grandes e genéricos.
+- Use `@Input()` e `@Output()` para comunicação entre componentes.
+
+### Baixo Acoplamento
+- **Priorize a criação de componentes com baixo acoplamento**.
+- Componentes não devem depender diretamente de outros componentes específicos.
+- Use serviços para compartilhar estado e lógica entre componentes.
+- Evite acessar diretamente o DOM de componentes filhos; use `@ViewChild` apenas quando necessário.
+- Prefira comunicação por eventos (`@Output`) ao invés de chamadas diretas entre componentes.
+- Mantenha a lógica de negócio nos serviços, não nos componentes.
+- Componentes devem ser testáveis isoladamente com mocks/stubs de suas dependências.
+
 ### Comentários no Código
 - Adicione comentários no código de forma esparsa. Concentre-se no *porquê* algo é feito, especialmente para lógicas complexas, em vez de *o quê* é feito. Apenas adicione comentários de alto valor se necessário para clareza ou se solicitado pelo usuário.
 

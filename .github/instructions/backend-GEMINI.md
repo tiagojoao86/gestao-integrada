@@ -51,6 +51,31 @@ Este projeto contém a API RESTful para o sistema Gestão Integrada. É respons�
 - Os serviços (lógica de negócio) estão em `src/main/java/br/com/grupopipa/gestaointegrada/core/service`.
 - As migrações de banco de dados com Flyway estão em `src/main/resources/db/migration`. Crie novos scripts de migração para qualquer alteração no schema.
 
+## Princípios de Desenvolvimento
+
+### Clean Code
+- Escreva código legível e autoexplicativo.
+- Use nomes descritivos para classes, métodos e variáveis.
+- Mantenha métodos pequenos e com responsabilidade única.
+- Evite comentários desnecessários; prefira código que se explica.
+- Remova código morto e duplicações.
+
+### Value Objects
+- **Evite tipos primitivos** sempre que possível.
+- Encapsule conceitos de domínio em **Value Objects**.
+- Exemplos: ao invés de `String email`, use `Email email`; ao invés de `BigDecimal valor`, use `Money valor`.
+- Value Objects devem ser imutáveis e conter validações de negócio.
+- Benefícios: type safety, validações centralizadas, expressividade do domínio.
+
+### Domain-Driven Design (DDD)
+- **Priorize o uso de DDD** para modelar o domínio.
+- As **Entities devem concentrar a maior parte das regras de domínio**.
+- Use **Aggregates** para garantir consistência transacional.
+- Separe claramente as camadas: Domain, Application (Services), Infrastructure.
+- Use **Domain Events** quando apropriado para comunicação entre agregados.
+- Modele o domínio usando **Ubiquitous Language** (linguagem ubíqua).
+- Services devem orquestrar a lógica, mas as regras de negócio ficam no domínio.
+
 ## Estrutura de Diretórios
 
 - `src/main/java`: Código-fonte da aplicação.
